@@ -1,13 +1,33 @@
 ## Path to source folders
 SRCPATH=src/
 SRCWEBPATH=web/
+DEBUGPATH=debug/
+
+## Header directories
+INCLUDES= -I$(SRCPATH) \
+          -I$(SRCPATH)chunk/ \
+          -I$(SRCPATH)common/ \
+          -I$(SRCPATH)memory/ \
+		  -I$(SRCPATH)value/ \
+		  -I$(SRCPATH)vm/ \
+          -I$(DEBUGPATH)
 
 ## List all C files (.c) that our project includes
-SRCFILES= $(SRCPATH)zia.c
+SRCFILES= $(SRCPATH)zia.c \
+          $(SRCPATH)chunk/chunk.c \
+		  $(SRCPATH)memory/memory.c \
+		  $(SRCPATH)value/value.c \
+		  $(SRCPATH)vm/vm.c \
+          $(DEBUGPATH)debug.c
 
 ## List all C files included in our WebAssembly build
 WEBFILES= $(SRCWEBPATH)webMain.c \
-$(SRCPATH)zia.c
+          $(SRCPATH)zia.c \
+          $(SRCPATH)chunk/chunk.c \
+		  $(SRCPATH)memory/memory.c \
+		  $(SRCPATH)value/value.c \
+		  $(SRCPATH)vm/vm.c \
+          $(DEBUGPATH)debug.c
 
 ## Name of our executable we build to run
 BINARY=zia.out
@@ -17,7 +37,7 @@ WASMJS=$(SRCWEBPATH)zia.js
 
 # Build the native binary
 build:
-	gcc -o $(BINARY) $(SRCFILES) -Wall -O2
+	gcc -o $(BINARY) $(SRCFILES) $(INCLUDES) -Wall -O2
 
 # Run in interactive mode (if implemented)
 run: build
