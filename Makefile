@@ -1,5 +1,3 @@
-# As long as project compiles in under a few seconds no need to get fancy and just build everything
-
 ## Path to source folders
 SRCPATH=src/
 SRCWEBPATH=web/
