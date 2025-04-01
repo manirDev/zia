@@ -3,7 +3,7 @@
 #include "debug.h"
 
 VM vm;
-static void restStack()
+static void resetStack()
 {
     vm.stackTop = vm.stack;
 }
