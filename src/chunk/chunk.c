@@ -23,7 +23,7 @@ void writeChunk(Chunk* chunk, ZUInt8 byte, ZInt32 line)
 {
     if (chunk->capacity < (chunk->count + 1))
     {
-        int oldCapacity = chunk->capacity;
+        ZInt32 oldCapacity = chunk->capacity;
         chunk->capacity = GROW_CAPACITY(oldCapacity);
         chunk->code = GROW_ARRAY(
             ZUInt8, 
