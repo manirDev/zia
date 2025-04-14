@@ -17,5 +17,6 @@ typedef int32_t ZInt32;
 typedef int64_t ZInt64;
 typedef float ZReal32;
 typedef double ZReal64;
+typedef bool ZBool;
 
 #endif
