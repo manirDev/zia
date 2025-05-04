@@ -8,6 +8,8 @@
         "memory.h": "c",
         "stdlib.h": "c",
         "vm.h": "c",
-        "scanner.h": "c"
+        "scanner.h": "c",
+        "common.h": "c",
+        "compiler.h": "c"
     }
 }

@@ -10,6 +10,7 @@ INCLUDES= -I$(SRCPATH) \
           -I$(SRCPATH)memory/ \
 		  -I$(SRCPATH)value/ \
 		  -I$(SRCPATH)vm/ \
+		  -I$(SRCPATH)scanner/ \
           -I$(DEBUGPATH)
 
 ## List all C files (.c) that our project includes
@@ -17,6 +18,7 @@ SRCFILES= $(SRCPATH)zia.c \
           $(SRCPATH)chunk/chunk.c \
 		  $(SRCPATH)memory/memory.c \
 		  $(SRCPATH)value/value.c \
+		  $(SRCPATH)scanner/scanner.c \
 		  $(SRCPATH)vm/vm.c \
           $(DEBUGPATH)debug.c
 
@@ -26,6 +28,7 @@ WEBFILES= $(SRCWEBPATH)webMain.c \
           $(SRCPATH)chunk/chunk.c \
 		  $(SRCPATH)memory/memory.c \
 		  $(SRCPATH)value/value.c \
+		  $(SRCPATH)scanner/scanner.c \
 		  $(SRCPATH)vm/vm.c \
           $(DEBUGPATH)debug.c
 
