@@ -34,10 +34,12 @@ static void runtimeError(const ZChar* format, ...)
 void initVM()
 {
     resetStack();
+    vm.objects = NULL;
 }
 
 void freeVM()
 {
+    freeObjects();
 }
 
 static InterpretResult run()

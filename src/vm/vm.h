@@ -13,6 +13,7 @@ typedef struct
    ZUInt8* ip;
    Value stack[STACK_MAX];
    Value* stackTop;
+   Obj* objects;
 }VM;
 
 typedef enum
@@ -21,6 +22,8 @@ typedef enum
     INTERPRET_COMPILE_ERROR,
     INTERPRET_RUNUTIME_ERROR,
 }InterpretResult;
+
+extern VM vm;
 
 void initVM();
 void freeVM();

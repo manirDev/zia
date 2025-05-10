@@ -1,4 +1,5 @@
-#include "memory.h"
+#include "memory/memory.h"
+#include "vm/vm.h"
 #include <stdlib.h>
 
 
@@ -18,4 +19,32 @@ void* reallocate(void* pointer, size_t oldSize, size_t newSize)
     }
     
     return result;
+}
+
+static void freeObject(Obj* object)
+{
+    switch (object->type)
+    {
+    case OBJ_STRING:
+    {
+        ObjString* string = (ObjString*)object;
+        FREE_ARRAY(char, string->chars, string->length + 1);
+        FREE(ObjString, object);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+void freeObjects()
+{
+    Obj* object = vm.objects;
+    while (NULL != object)
+    {
+       Obj* next = object->next;
+       freeObject(object);
+       object = next;
+    }
+    
 }
