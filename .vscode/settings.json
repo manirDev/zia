@@ -10,6 +10,7 @@
         "vm.h": "c",
         "scanner.h": "c",
         "common.h": "c",
-        "compiler.h": "c"
+        "compiler.h": "c",
+        "object.h": "c"
     }
 }

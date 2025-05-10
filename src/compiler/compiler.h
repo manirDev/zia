@@ -4,6 +4,7 @@
 #include "common/common.h"
 #include "common/commonTypes.h"
 #include "chunk/chunk.h"
+#include "object/object.h"
 
 ZBool compile(const ZChar* source, Chunk* chunk);
 

@@ -4,8 +4,13 @@
 #include "common/common.h"
 #include "common/commonTypes.h"
 
+
 #define INIT_CAPACITY   0x0008
 #define CAPACITY_FACTOR 0x0002
+
+#define ALLOCATE(type, count) \
+        (type*)reallocate(NULL, 0, sizeof(type) * (count))
+
 #define GROW_CAPACITY(capacity) \
         ((capacity) < INIT_CAPACITY ? INIT_CAPACITY : (capacity) * CAPACITY_FACTOR)
 
