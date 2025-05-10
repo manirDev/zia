@@ -13,6 +13,12 @@ typedef struct
 }Parser;
 
 Parser parser;
+Chunk* compilingChunk;
+
+static Chunk* currentChunk()
+{
+    return compilingChunk;
+}
 
 static void errorAt(Token* token, const ZChar* message)
 {
@@ -75,13 +81,41 @@ static void consume(TokenType type, const ZChar* message)
     errorAtCurrent(message);
 }
 
+static void emitByte(ZUInt8 byte)
+{
+    writeChunk(currentChunk(), byte, parser.previous.line);
+}
+
+static void emitBytes(ZUInt8 byte1, ZUInt8 byte2)
+{
+    emitByte(byte1);
+    emitByte(byte2);
+}
+
+static void emitReturn()
+{
+    emitByte(OP_RETURN);
+}
+
+static void endCompiler()
+{
+    emitReturn();
+}
+
+static void expression()
+{
+    
+}
+
 ZBool compile(const char* source, Chunk* chunk)
 {
     initScanner(source);
+    compilingChunk = chunk;
     parser.hadError = false;
     parser.panicMode = false;
     advance();
     expression();
     consume(TOKEN_EOF, "Fin d'expression attendue.");
+    endCompiler();
     return (!parser.hadError);
 }
