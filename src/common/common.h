@@ -12,6 +12,7 @@
 #define COMMENT_SLASH '/'
 #define NULL_CHAR '\0'
 
+#define DEBUG_PRINT_CODE
 #define DEBUG_TRACE_EXECUTION
 
 #endif

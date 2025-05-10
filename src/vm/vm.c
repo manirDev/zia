@@ -1,12 +1,31 @@
 #include "vm.h"
 #include <stdio.h>
+#include <stdarg.h>
 #include "debug.h"
 #include "compiler/compiler.h"
 
 VM vm;
+
+static Value peek(ZInt32 distance);
+static ZBool isFalsey(Value value);
+
 static void resetStack()
 {
     vm.stackTop = vm.stack;
+}
+
+static void runtimeError(const ZChar* format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    vfprintf(stderr, format, args);
+    va_end(args);
+    fputs("\n", stderr);
+
+    size_t instruction = vm.ip - vm.chunk->code - 1;
+    int line = vm.chunk->lines[instruction];
+    fprintf(stderr, "[ligne %d] dans le script.\n", line);
+    resetStack();
 }
 void initVM()
 {
@@ -21,11 +40,16 @@ static InterpretResult run()
 {
 #define READ_BYTE() (*vm.ip++)
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
-#define BINARY_OP(op)\
-    do {\
-        ZReal64 b = pop(); \
-        ZReal64 a = pop(); \
-        push(a op b); \
+#define BINARY_OP(valueType, op)\
+    do { \
+        if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) \
+        { \
+           runtimeError("Les opérandes doivent être des nombres."); \
+           return INTERPRET_RUNUTIME_ERROR; \
+        } \
+        ZReal64 b = AS_NUMBER(pop()); \
+        ZReal64 a = AS_NUMBER(pop()); \
+        push(valueType(a op b)); \
     } while(ZFALSE)
 
     for (;;)
@@ -50,29 +74,72 @@ static InterpretResult run()
             push(constant);
             break;
         }
+        case OP_NULL:
+        {
+            push(NUL_VAL);
+            break;
+        }
+        case OP_TRUE:
+        {
+            push(BOOL_VAL(true));
+            break;
+        }
+        case OP_FALSE:
+        {
+            push(BOOL_VAL(false));
+            break;
+        }
+        case OP_EQUAL:
+        {
+            Value b = pop();
+            Value a = pop();
+            push(BOOL_VAL(valuesEqual(a, b)));
+            break;
+        }
+        case OP_GREATER:
+        {
+            BINARY_OP(BOOL_VAL, >);
+            break;
+        }
+        case OP_LESS:
+        {
+            BINARY_OP(BOOL_VAL, <);
+            break;
+        }
         case OP_ADD:
         {
-            BINARY_OP(+);
+            BINARY_OP(NUMBER_VAL, +);
             break;
         }
         case OP_SUBTRACT:
         {
-            BINARY_OP(-);
+            BINARY_OP(NUMBER_VAL, -);
             break;
         }
         case OP_MULTIPLY:
         {
-            BINARY_OP(*);
+            BINARY_OP(NUMBER_VAL, *);
             break;
         }
         case OP_DIVIDE:
         {
-            BINARY_OP(/);
+            BINARY_OP(NUMBER_VAL, /);
+            break;
+        }
+        case OP_NOT:
+        {
+            push(BOOL_VAL(isFalsey(pop())));
             break;
         }
         case OP_NEGATE:
         {
-            push(-pop());
+            if (!IS_NUMBER(peek(0)))
+            {
+                runtimeError("L'opérande doit être un nombre.");
+                return INTERPRET_RUNUTIME_ERROR;
+            }
+            
+            push(NUMBER_VAL(-AS_NUMBER(pop())));
             break;
         }
         case OP_RETURN:
@@ -121,4 +188,14 @@ Value pop()
 {
     vm.stackTop--;
     return *vm.stackTop;
+}
+
+static Value peek(ZInt32 distance)
+{
+    return vm.stackTop[-1 - distance];
+}
+
+static ZBool isFalsey(Value value)
+{
+    return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value));
 }

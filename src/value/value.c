@@ -33,5 +33,38 @@ void freeValueArray(ValueArray* array)
 
 void printValue(Value value)
 {
-    printf("%g", value);
+    switch (value.type)
+    {
+    case VAL_BOOL:
+        printf(AS_BOOL(value) ? "vrai" : "faux");
+        break;
+    case VAL_NUL:
+        printf("nul");
+        break;
+    case VAL_NUMBER:
+        printf("%g", AS_NUMBER(value));
+        break;
+    }
+}
+
+ZBool valuesEqual(Value a, Value b)
+{
+    if (a.type != b.type)
+    {
+        return false;
+    }
+    switch (a.type)
+    {
+    case VAL_BOOL:
+        return AS_BOOL(a) == AS_BOOL(b);
+        break;
+    case VAL_NUL:
+        return true;
+        break;
+    case VAL_NUMBER:
+        return AS_NUMBER(a) == AS_NUMBER(b);
+        break;
+    default:
+        return false;
+    }
 }

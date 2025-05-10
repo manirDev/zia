@@ -134,7 +134,7 @@ static TokenType checkKeyword(ZInt32 start, ZInt32 length, const ZChar* rest, To
 
 static TokenType identifierType()
 {
-    ZInt32 length = 0;
+    ZInt32 length = scanner.current - scanner.start;
     switch (scanner.start[0])
     {
         case 'e': return checkKeyword(1, 1, "t", TOKEN_AND);
@@ -144,9 +144,6 @@ static TokenType identifierType()
         case 'a': return checkKeyword(1, 7, "fficher", TOKEN_PRINT);
         case 'r': return checkKeyword(1, 8, "etourner", TOKEN_RETURN);
         case 't': return checkKeyword(1, 7, "ant_que", TOKEN_WHILE);
-
-        length = scanner.current - scanner.start;
-
         case 'c': 
         {
             if (length > 1)

@@ -18,15 +18,14 @@ static void repl()
             break;
         }
 
-        interpret(line);
-        
+        interpret(line);     
     }
 }
 
 static char* readFile(const char* path)
 {
     FILE* file = fopen(path, "rb");
-    if (fileno(stdin) == -1)
+    if (NULL == file)
     {
         fprintf(stderr, "Impossible d'ouvrir le fichier \"%s\".\n", path);
         exit(74);

@@ -11,6 +11,7 @@ INCLUDES= -I$(SRCPATH) \
 		  -I$(SRCPATH)value/ \
 		  -I$(SRCPATH)vm/ \
 		  -I$(SRCPATH)scanner/ \
+		   -I$(SRCPATH)compiler/ \
           -I$(DEBUGPATH)
 
 ## List all C files (.c) that our project includes
@@ -19,6 +20,7 @@ SRCFILES= $(SRCPATH)zia.c \
 		  $(SRCPATH)memory/memory.c \
 		  $(SRCPATH)value/value.c \
 		  $(SRCPATH)scanner/scanner.c \
+		  $(SRCPATH)compiler/compiler.c \
 		  $(SRCPATH)vm/vm.c \
           $(DEBUGPATH)debug.c
 
@@ -29,6 +31,7 @@ WEBFILES= $(SRCWEBPATH)webMain.c \
 		  $(SRCPATH)memory/memory.c \
 		  $(SRCPATH)value/value.c \
 		  $(SRCPATH)scanner/scanner.c \
+		  $(SRCPATH)compiler/compiler.c \
 		  $(SRCPATH)vm/vm.c \
           $(DEBUGPATH)debug.c
 
@@ -40,7 +43,7 @@ WASMJS=$(SRCWEBPATH)zia.js
 
 # Build the native binary
 build:
-	gcc -o $(BINARY) $(SRCFILES) $(INCLUDES) -Wall -O2
+	gcc -g -o $(BINARY) $(SRCFILES) $(INCLUDES) -Wall
 
 # Run in interactive mode (if implemented)
 run: build
