@@ -27,6 +27,7 @@ struct ObjString
     Obj obj;
     ZInt32 length;
     ZChar* chars;
+    ZUInt32 hash;
 };
 
 ObjString* takeString(ZChar* chars, ZInt32 length);

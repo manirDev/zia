@@ -13,6 +13,7 @@ INCLUDES= -I$(SRCPATH) \
 		  -I$(SRCPATH)scanner/ \
 		  -I$(SRCPATH)compiler/ \
 		  -I$(SRCPATH)object/ \
+		  -I$(SRCPATH)table/ \
           -I$(DEBUGPATH)
 
 ## List all C files (.c) that our project includes
@@ -23,6 +24,7 @@ SRCFILES= $(SRCPATH)zia.c \
 		  $(SRCPATH)value/value.c \
 		  $(SRCPATH)scanner/scanner.c \
 		  $(SRCPATH)compiler/compiler.c \
+		  $(SRCPATH)table/table.c \
 		  $(SRCPATH)vm/vm.c \
           $(DEBUGPATH)debug.c
 
@@ -35,6 +37,7 @@ WEBFILES= $(SRCWEBPATH)webMain.c \
 		  $(SRCPATH)value/value.c \
 		  $(SRCPATH)scanner/scanner.c \
 		  $(SRCPATH)compiler/compiler.c \
+		  $(SRCPATH)table/table.c \
 		  $(SRCPATH)vm/vm.c \
           $(DEBUGPATH)debug.c
 

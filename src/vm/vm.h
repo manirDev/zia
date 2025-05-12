@@ -4,6 +4,7 @@
 #include "common/common.h"
 #include "common/commonTypes.h"
 #include "chunk/chunk.h"
+#include "table/table.h"
 
 #define STACK_MAX 256
 
@@ -12,6 +13,7 @@ typedef struct
    Chunk* chunk;
    ZUInt8* ip;
    Value stack[STACK_MAX];
+   Table* strings;
    Value* stackTop;
    Obj* objects;
 }VM;

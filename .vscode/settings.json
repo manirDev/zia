@@ -11,6 +11,17 @@
         "scanner.h": "c",
         "common.h": "c",
         "compiler.h": "c",
-        "object.h": "c"
+        "object.h": "c",
+        "stdbool.h": "c",
+        "__bit_reference": "c",
+        "__node_handle": "c",
+        "bitset": "c",
+        "deque": "c",
+        "limits": "c",
+        "locale": "c",
+        "optional": "c",
+        "ratio": "c",
+        "vector": "c",
+        "table.h": "c"
     }
 }
