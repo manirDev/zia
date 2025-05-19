@@ -20,7 +20,7 @@ static Obj* allocateObject(size_t size, ObjType type)
     return object;
 }
 
-static ZUInt32 hashString(ZChar* key, ZInt32 length)
+static ZUInt32 hashString(const ZChar* key, ZInt32 length)
 {
     ZUInt32 hash = 2166136261u;
     for (ZInt32 i = 0; i < length; i++)

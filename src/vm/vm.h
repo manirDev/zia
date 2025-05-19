@@ -13,8 +13,9 @@ typedef struct
    Chunk* chunk;
    ZUInt8* ip;
    Value stack[STACK_MAX];
-   Table* strings;
    Value* stackTop;
+   Table strings;
+   Table globals;
    Obj* objects;
 }VM;
 

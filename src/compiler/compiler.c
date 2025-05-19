@@ -8,7 +8,9 @@
 #include "debug.h"
 #endif
 
-typedef void (*ParseFn)();
+typedef void (*ParseFn)(ZBool canAssign);
+
+static ZUInt8 identifierConstant(Token* name);
 
 //ZIA's precedence order from lowest to the highest
 typedef enum
@@ -110,6 +112,22 @@ static void consume(TokenType type, const ZChar* message)
     errorAtCurrent(message);
 }
 
+static ZBool check(TokenType type)
+{
+    return parser.current.type == type;
+}
+
+static ZBool match(TokenType type){
+    if (!check(type))
+    {
+        return ZFALSE;
+    }
+
+    advance();
+
+    return ZTRUE;
+}
+
 static void emitByte(ZUInt8 byte)
 {
     writeChunk(currentChunk(), byte, parser.previous.line);
@@ -154,10 +172,12 @@ static void endCompiler()
 }
 
 static void expression();
+static void statement();
+static void declaration();
 static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 
-static void binary()
+static void binary(ZBool canAssign)
 {
     TokenType operatorType = parser.previous.type;
     ParseRule* rule = getRule(operatorType);
@@ -200,7 +220,7 @@ static void binary()
     }
 }
 
-static void literal()
+static void literal(ZBool canAssign)
 {
     switch (parser.previous.type)
     {
@@ -218,25 +238,45 @@ static void literal()
     }
 }
 
-static void grouping()
+static void grouping(ZBool canAssign)
 {
     expression();
     consume(TOKEN_RIGHT_PAREN, "Parenthèse fermante ')' attendue après l'expression.");
 }
 
-static void number()
+static void number(ZBool canAssign)
 {
     double value = strtod(parser.previous.start, NULL);
     emitConstant(NUMBER_VAL(value));
 }
 
-static void string()
+static void string(ZBool canAssign)
 {
     //@TBD:  string escape sequences like \n, we’d translate those here
     emitConstant(OBJ_VAL(copyString(parser.previous.start + 1, parser.previous.length - 2)));
 }
 
-static void unary()
+static void namedVariable(Token name, ZBool canAssign)
+{
+    ZUInt8 arg = identifierConstant(&name);
+
+    if (canAssign && match(TOKEN_EQUAL))
+    {
+        expression();
+        emitBytes(OP_SET_GLOBAL, arg);
+    }
+    else
+    {
+        emitBytes(OP_GET_GLOBAL, arg);
+    }  
+}
+
+static void variable(ZBool canAssign)
+{
+    namedVariable(parser.previous, canAssign);
+}
+
+static void unary(ZBool canAssign)
 {
     TokenType operatorType = parser.previous.type;
 
@@ -276,7 +316,7 @@ ParseRule rules[] =
     [TOKEN_GREATER_EQUAL] = {NULL,     binary, PREC_COMPARISON},
     [TOKEN_LESS]          = {NULL,     binary, PREC_COMPARISON},
     [TOKEN_LESS_EQUAL]    = {NULL,     binary, PREC_COMPARISON},
-    [TOKEN_IDENTIFIER]    = {NULL,     NULL,   PREC_NONE},
+    [TOKEN_IDENTIFIER]    = {variable, NULL,   PREC_NONE},
     [TOKEN_STRING]        = {string,   NULL,   PREC_NONE},
     [TOKEN_NUMBER]        = {number,   NULL,   PREC_NONE},
     [TOKEN_AND]           = {NULL,     NULL,   PREC_NONE},
@@ -312,15 +352,37 @@ static void parsePrecedence(Precedence precedence)
         return;
     }
 
-    prefixRule();
+    ZBool canAssign = precedence <= PREC_ASSIGNMENT;
+    prefixRule(canAssign);
 
     while (precedence <= getRule(parser.current.type)->precedence)
     {
         advance();
         ParseFn infixRule = getRule(parser.previous.type)->infix;
-        infixRule();
+        infixRule(canAssign);
     }
     
+    if (canAssign && match(TOKEN_EQUAL))
+    {
+        error("Impossible d’assigner une valeur ici.");
+    }
+    
+}
+
+static ZUInt8 identifierConstant(Token* name)
+{
+    return makeConstant(OBJ_VAL(copyString(name->start, name->length)));
+}
+
+static ZUInt8 parseVariable(const ZChar* errorMessage)
+{
+    consume(TOKEN_IDENTIFIER, errorMessage);
+    return identifierConstant(&parser.previous);
+}
+
+static void defineVariable(ZUInt8 global)
+{
+    emitBytes(OP_DEFINE_GLOBAL, global);
 }
 
 static ParseRule* getRule(TokenType type)
@@ -333,6 +395,98 @@ static void expression()
     parsePrecedence(PREC_ASSIGNMENT);
 }
 
+static void varDeclaration()
+{
+    ZUInt8 global = parseVariable("Nom de variable attendu.");
+
+    if (match(TOKEN_EQUAL))
+    {
+        expression();
+    }
+    else
+    {
+        //if the user does not initialize a variable zia compiler should initialize it to nul.
+        emitByte(OP_NULL);
+    }
+
+    consume(TOKEN_SEMICOLON, "Point-virgule attendu après la déclaration de variable.");
+    defineVariable(global);
+}
+
+static void expressionStatement()
+{
+    expression();
+    consume(TOKEN_SEMICOLON, "Erreur : point-virgule manquant après la valeur.");
+    emitByte(OP_POP);
+}
+
+static void printStatement()
+{
+    expression();
+    consume(TOKEN_SEMICOLON, "Erreur : point-virgule manquant après la valeur.");
+    emitByte(OP_PRINT);
+}
+
+static void synchronize()
+{
+    parser.panicMode = ZFALSE;
+
+    while (parser.current.type != TOKEN_EOF)
+    {
+        if (parser.previous.type == TOKEN_SEMICOLON)
+        {
+            return;
+        }
+        switch (parser.current.type)
+        {
+        case TOKEN_CLASS:
+        case TOKEN_FUN:
+        case TOKEN_VAR:
+        case TOKEN_FOR:
+        case TOKEN_IF:
+        case TOKEN_WHILE:
+        case TOKEN_PRINT:
+        case TOKEN_RETURN:
+            return;
+        default:
+            ;
+        }
+         
+        advance();
+    }
+    
+}
+
+static void declaration()
+{
+    if (match(TOKEN_VAR))
+    {
+        varDeclaration();
+    }
+    else
+    {
+        statement();
+    }
+
+    if (parser.panicMode)
+    {
+        synchronize();
+    }
+    
+}
+
+static void statement()
+{
+    if (match(TOKEN_PRINT))
+    {
+        printStatement();
+    }
+    else
+    {
+        expressionStatement();
+    }
+}
+
 ZBool compile(const char* source, Chunk* chunk)
 {
     initScanner(source);
@@ -340,8 +494,12 @@ ZBool compile(const char* source, Chunk* chunk)
     parser.hadError = false;
     parser.panicMode = false;
     advance();
-    expression();
-    consume(TOKEN_EOF, "Fin d'expression attendue.");
+
+    while(!match(TOKEN_EOF))
+    {
+        declaration();
+    }
+
     endCompiler();
     return (!parser.hadError);
 }
