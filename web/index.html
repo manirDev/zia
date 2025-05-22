@@ -108,72 +108,7 @@
       </div>
     </main>
 
-    <div class="examples-panel" id="examples-panel">
-      <div class="examples-header">
-        <div class="examples-title">Exemples de code</div>
-        <button class="examples-close" id="examples-close">×</button>
-      </div>
-      <div class="examples-list">
-        <div class="example-item">
-          <div class="example-title">
-            <span>Bonjour le monde</span>
-            <button class="load-example" data-example="hello-world">
-              Charger
-            </button>
-          </div>
-          <div class="example-description">
-            Un simple exemple d'affichage de texte.
-          </div>
-          <pre class="example-code">
-// Affiche "Bonjour le monde!" dans la sortie
-  var message = "Bonjour le monde!";
-  affiche message;</pre
-          >
-        </div>
-        <div class="example-item">
-          <div class="example-title">
-            <span>Calcul de factorielle</span>
-            <button class="load-example" data-example="factorial">
-              Charger
-            </button>
-          </div>
-          <div class="example-description">
-            Calcule la factorielle d'un nombre.
-          </div>
-          <pre class="example-code">
-// Calcul de factorielle en récursif
-  fonction factorielle(n) {
-    si (n <= 1) retourne 1;
-    retourne n * factorielle(n - 1);
-  }
-  
-  var n = 5;
-  affiche "La factorielle de " + n + " est " + factorielle(n);</pre
-          >
-        </div>
-        <div class="example-item">
-          <div class="example-title">
-            <span>Boucle et conditions</span>
-            <button class="load-example" data-example="loop-conditions">
-              Charger
-            </button>
-          </div>
-          <div class="example-description">
-            Exemple de boucles et conditions.
-          </div>
-          <pre class="example-code">
-// Exemple de boucles et conditions
-  pour (var i = 1; i <= 10; i = i + 1) {
-    si (i % 2 == 0) {
-      affiche i + " est pair";
-    } sinon {
-      affiche i + " est impair";
-    }
-  }</pre
-          >
-        </div>
-      </div>
-    </div>
+   
 
     <div class="settings-panel" id="settings-panel">
       <div class="settings-content">
@@ -278,9 +213,11 @@
     </footer>
 
     <script src="./loadEditorConfig.js"></script>
-    <script src="../build_wasm/node_modules/monaco-editor/min/vs/loader.js"></script>
+    <script src="./node_modules/monaco-editor/min/vs/loader.js"></script>
     <script src="./loadEditor.js"></script>
     <script src="./loadEmscripten.js"></script>
     <script src="./script.js"></script>
+
+    {{{ SCRIPT }}}
   </body>
 </html>

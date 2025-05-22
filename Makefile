@@ -61,10 +61,10 @@ start: build
 
 # Build the WebAssembly version
 web:
-	emcc -O3 $(WEBFILES) -o $(WASMJS) --shell-file $(SRCWEBPATH)index.html \
+	emcc -O3 $(WEBFILES) -o $(WASMJS) -o build_wasm/index.html --shell-file $(SRCWEBPATH)index.html $(INCLUDES) \
 	-s WASM=1 \
 	-s EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
-	-s EXPORTED_FUNCTIONS='["_main", "_web_tokenize", "_web_interpret", "_init", "_cleanup"]' \
+	-s EXPORTED_FUNCTIONS='["_main", "_runCompiler"]' \
 	-s ALLOW_MEMORY_GROWTH=1 \
 	-s ASSERTIONS=1 \
 	-s NO_EXIT_RUNTIME=1 \
@@ -76,9 +76,9 @@ deps:
 	cd build_wasm && npm init -y && npm install monaco-editor
 
 # Set up the web version completely
-websetup: deps web
-	cp $(SRCWEBPATH)/*.js build_wasm/
-	cp $(SRCWEBPATH)/*.css build_wasm/
+websetup: web
+	cp $(SRCWEBPATH)*.js build_wasm/
+	cp $(SRCWEBPATH)*.css build_wasm/
 
 # Start a web server for development
 serve:
@@ -87,10 +87,10 @@ serve:
 # Clean all build artifacts
 clean:
 	rm -f $(BINARY) *.o
-	rm -f $(SRCWEBPATH)/*.wasm
-	rm -f $(SRCWEBPATH)/*.js
-	rm -f $(SRCWEBPATH)/*.js.map
-	rm -f $(SRCWEBPATH)/*.wasm.map
+	rm -f build_wasm/*.html
+	rm -f build_wasm/*.js
+	rm -f build_wasm/*.css
+	rm -f build_wasm/*.wasm
 
 # Help target
 help:

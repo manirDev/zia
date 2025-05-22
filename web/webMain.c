@@ -5,98 +5,75 @@
  * the web browser environment through Emscripten.
  */
 
- #include <emscripten.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
+#include <emscripten.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "../src/common/common.h"
+#include "../src/chunk/chunk.h"
+#include "../debug/debug.h"
+#include "../src/vm/vm.h"
+
+#define COMPILE_TIME_EXIT_CODE  65
+#define RUN_TIME_EXIT_CODE      70
+
+#ifdef DEBUG_PRINT_CODE
+ZBool FLAG_PRINT_CODE = ZFALSE;
+#endif
+
+#ifdef DEBUG_TRACE_EXECUTION
+ZBool FLAG_TRACE_EXECUTION = ZFALSE;
+#endif
+
+#ifdef DEBUG_LOG_GC
+ZBool FLAG_LOG_GC = ZFALSE;
+#endif
+
+EMSCRIPTEN_KEEPALIVE
+ZInt32 runCompiler(ZChar* sourceCode)
+{
+#ifdef DEBUG_PRINT_CODE
+    if(ZTRUE == FLAG_PRINT_CODE)
+    {
+        printf("FLAG_PRINT_BYTECODE is ON\n");
+    }
+#endif
+
+#ifdef DEBUG_TRACE_EXECUTION
+    if (ZTRUE == FLAG_TRACE_EXECUTION)
+    {
+       printf("FLAG_TRACE_EXECUTION is ON\n");
+    }
+    
+#endif
+
+#ifdef DEBUG_LOG_GC
+    if (ZTRUE == FLAG_LOG_GC)
+    {
+       printf("FLAG_LOG_GC is ON\n");
+    }
+    
+#endif
+
+    printf("========== Compiling Code ==========\n\n");
+
+    initVM();
+    InterpretResult result = interpret(sourceCode);
+    freeVM();
+
+    printf("\n");
+
+    if (INTERPRET_COMPILE_ERROR == result)
+    {
+        printf("Stopped with: INTERPRET_COMPILE_ERROR!\n");
+        return COMPILE_TIME_EXIT_CODE;
+    }
+    if (INTERPRET_RUNUTIME_ERROR == result)
+    {
+        printf("Stopped with: INTERPRET_RUNUTIME_ERROR!\n");
+        return RUN_TIME_EXIT_CODE;
+    }
+    return 0;
+}
  
- // Define maximum buffer sizes
- #define MAX_SOURCE_SIZE 1024 * 1024  // 1MB max source code
- #define MAX_OUTPUT_SIZE 1024 * 1024  // 1MB max output
- 
- // Buffer to store tokenization/interpretation results
- static char output_buffer[MAX_OUTPUT_SIZE];
- 
- // External functions from the interpreter
- extern void* init_interpreter();
- extern char* tokenize(void* interpreter, const char* source);
- extern char* interpret(void* interpreter, const char* source);
- extern void free_interpreter(void* interpreter);
- 
- // Global interpreter instance
- static void* interpreter = NULL;
- 
- // Initialize the interpreter
- EMSCRIPTEN_KEEPALIVE
- void init() {
-     if (interpreter == NULL) {
-         interpreter = init_interpreter();
-     }
- }
- 
- // Tokenize source code
- EMSCRIPTEN_KEEPALIVE
- const char* web_tokenize(const char* source) {
-     // Initialize if needed
-     if (interpreter == NULL) {
-         init();
-     }
-     
-     // Clear the output buffer
-     memset(output_buffer, 0, MAX_OUTPUT_SIZE);
-     
-     // Tokenize and store the result
-     char* result = tokenize(interpreter, source);
-     if (result) {
-         strncpy(output_buffer, result, MAX_OUTPUT_SIZE - 1);
-         free(result);
-     } else {
-         strcpy(output_buffer, "Error: Tokenization failed");
-     }
-     
-     return output_buffer;
- }
- 
- // Interpret source code
- EMSCRIPTEN_KEEPALIVE
- const char* web_interpret(const char* source) {
-     // Initialize if needed
-     if (interpreter == NULL) {
-         init();
-     }
-     
-     // Clear the output buffer
-     memset(output_buffer, 0, MAX_OUTPUT_SIZE);
-     
-     // Interpret and store the result
-     char* result = interpret(interpreter, source);
-     if (result) {
-         strncpy(output_buffer, result, MAX_OUTPUT_SIZE - 1);
-         free(result);
-     } else {
-         strcpy(output_buffer, "Error: Interpretation failed");
-     }
-     
-     return output_buffer;
- }
- 
- // Clean up resources
- EMSCRIPTEN_KEEPALIVE
- void cleanup() {
-     if (interpreter != NULL) {
-         free_interpreter(interpreter);
-         interpreter = NULL;
-     }
- }
- 
- // Print to console (for debugging)
- EMSCRIPTEN_KEEPALIVE
- void console_log(const char* message) {
-     printf("%s\n", message);
- }
- 
- // Main function (required by Emscripten)
- int main() {
-     init();
-     return 0;
- }
