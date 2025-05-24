@@ -4,7 +4,7 @@
 #include "common/commonTypes.h"
 #include "chunk/chunk.h"
 
-void disassembleChunk(Chunk* chunk, const char* name);
+void disassembleChunk(Chunk* chunk, const ZChar* name);
 ZInt32 disassembleInstruction(Chunk* chunk, ZInt32 offset);
 
 #endif

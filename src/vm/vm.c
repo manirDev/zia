@@ -105,6 +105,18 @@ static InterpretResult run()
             pop();
             break;
         }
+        case OP_GET_LOCAL:
+        {
+            ZUInt8 slot = READ_BYTE();
+            push(vm.stack[slot]);
+            break;
+        }
+        case OP_SET_LOCAL:
+        {
+            ZUInt8 slot = READ_BYTE();
+            vm.stack[slot] = peek(0);
+            break;
+        }
         case OP_SET_GLOBAL:
         {
             ObjString* name = READ_STRING();

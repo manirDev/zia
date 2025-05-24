@@ -3,6 +3,7 @@
 #include "scanner/scanner.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifdef DEBUG_PRINT_CODE
 #include "debug.h"
@@ -37,6 +38,20 @@ typedef struct
 
 typedef struct
 {
+    Token name;
+    ZInt32 depth;
+}Local;
+
+typedef struct
+{
+    Local locals[UINT8_COUNT];
+    ZInt32 localCount;
+    ZInt32 scopeDepth;
+}Compiler;
+
+
+typedef struct
+{
     Token current;
     Token previous;
     ZBool hadError;
@@ -44,6 +59,7 @@ typedef struct
 }Parser;
 
 Parser parser;
+Compiler* current = NULL;
 Chunk* compilingChunk;
 
 static Chunk* currentChunk()
@@ -160,6 +176,13 @@ static void emitConstant(Value value)
     emitBytes(OP_CONSTANT, makeConstant(value));
 }
 
+static void initCompiler(Compiler* compiler)
+{
+    compiler->localCount = 0;
+    compiler->scopeDepth = 0;
+    current = compiler;
+}
+
 static void endCompiler()
 {
     emitReturn();
@@ -171,11 +194,30 @@ static void endCompiler()
 #endif
 }
 
+static void beginScope()
+{
+    current->scopeDepth++;
+}
+
+static void endScope()
+{
+    current->scopeDepth--;
+
+    while (current->localCount > 0 && 
+          (current->locals[current->localCount - 1].depth > current->scopeDepth))
+    {
+        emitByte(OP_POP);
+        current->localCount--;
+    }
+    
+}
+
 static void expression();
 static void statement();
 static void declaration();
 static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
+static int resolveLocal(Compiler* compiler, Token* name);
 
 static void binary(ZBool canAssign)
 {
@@ -258,16 +300,29 @@ static void string(ZBool canAssign)
 
 static void namedVariable(Token name, ZBool canAssign)
 {
-    ZUInt8 arg = identifierConstant(&name);
+    ZUInt8 getOp, setOp;
+    ZInt32 arg = resolveLocal(current, &name);
+    
+    if (arg != -1)
+    {
+        getOp = OP_GET_LOCAL;
+        setOp = OP_SET_LOCAL;
+    }
+    else
+    {
+        arg = identifierConstant(&name);
+        getOp = OP_GET_GLOBAL;
+        setOp = OP_SET_GLOBAL;
+    }
 
     if (canAssign && match(TOKEN_EQUAL))
     {
         expression();
-        emitBytes(OP_SET_GLOBAL, arg);
+        emitBytes(setOp, (ZUInt8)arg);
     }
     else
     {
-        emitBytes(OP_GET_GLOBAL, arg);
+        emitBytes(getOp, (ZUInt8)arg);
     }  
 }
 
@@ -374,14 +429,99 @@ static ZUInt8 identifierConstant(Token* name)
     return makeConstant(OBJ_VAL(copyString(name->start, name->length)));
 }
 
+static ZBool identifiersEqual(Token* a, Token* b)
+{
+    if (a->length != b->length)
+    {
+        return ZFALSE;
+    }
+    return memcmp(a->start, b->start, a->length) == 0;
+}
+static int resolveLocal(Compiler* compiler, Token* name)
+{
+    for (ZInt32 i = compiler->localCount - 1; i >= 0; i++)
+    {
+        Local* local = &compiler->locals[i];
+        if (identifiersEqual(name, &local->name))
+        {
+            if (local->depth == -1)
+            {
+                error("impossible de lire une variable locale dans sa propre initialisation.");
+            }
+            
+            return i;
+        }
+    }
+    
+    return - 1;
+}
+
+static void addLocal(Token name)
+{
+    if (current->localCount == UINT8_COUNT)
+    {
+        //TBD: extend 256 local vairable number in a scope to four byte
+        error("Trop de variables locales dans un seul bloc.");
+        return;
+    }
+    
+    Local* local = &current->locals[current->localCount++];
+    local->name = name;
+    local->depth = -1;
+}
+
+static void declareVariable()
+{
+    if (current->scopeDepth == 0)
+    {
+        return;
+    }
+    
+    Token* name = &parser.previous;
+    for(ZInt32 i = current->localCount - 1; i >= 0; i++)
+    {
+        Local* local = &current->locals[i];
+        if (local->depth != -1 && local->depth < current->scopeDepth)
+        {
+            break;
+        }
+        if (identifiersEqual(name, &local->name))
+        {
+            error("Une variable avec ce nom existe déjà dans cette portée");
+        }
+        
+    }
+    addLocal(*name);
+}
+
 static ZUInt8 parseVariable(const ZChar* errorMessage)
 {
     consume(TOKEN_IDENTIFIER, errorMessage);
+
+    declareVariable();
+    if (current->scopeDepth > 0)
+    {
+        return 0;
+    }
+    
+
     return identifierConstant(&parser.previous);
+}
+
+static void markInitialized()
+{
+    current->locals[current->localCount - 1].depth = current->scopeDepth;
 }
 
 static void defineVariable(ZUInt8 global)
 {
+    if (current->scopeDepth > 0)
+    {
+        markInitialized();
+        return;
+    }
+    
+
     emitBytes(OP_DEFINE_GLOBAL, global);
 }
 
@@ -393,6 +533,17 @@ static ParseRule* getRule(TokenType type)
 static void expression()
 {
     parsePrecedence(PREC_ASSIGNMENT);
+}
+
+static void block()
+{
+    while(!check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF))
+    {
+        declaration();
+    }
+
+
+    consume(TOKEN_RIGHT_BRACE, "Un '}' est attendu après le bloc.");
 }
 
 static void varDeclaration()
@@ -481,6 +632,12 @@ static void statement()
     {
         printStatement();
     }
+    else if(match(TOKEN_LEFT_BRACE))
+    {
+        beginScope();
+        block();
+        endScope();
+    }
     else
     {
         expressionStatement();
@@ -490,6 +647,8 @@ static void statement()
 ZBool compile(const char* source, Chunk* chunk)
 {
     initScanner(source);
+    Compiler compiler;
+    initCompiler(&compiler);
     compilingChunk = chunk;
     parser.hadError = false;
     parser.panicMode = false;

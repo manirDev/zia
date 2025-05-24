@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "value/value.h"
 
-void disassembleChunk(Chunk* chunk, const char* name)
+void disassembleChunk(Chunk* chunk, const ZChar* name)
 {
     printf("== %s ==\n", name);
 
@@ -13,13 +13,20 @@ void disassembleChunk(Chunk* chunk, const char* name)
     
 }
 
-static ZInt32 simpleInstruction(const char* name, int offset)
+static ZInt32 simpleInstruction(const ZChar* name, ZInt32 offset)
 {
     printf("%s\n", name);
     return offset + 1;
 }
 
-static ZInt32 constantInstruction(const char* name, Chunk* chunk, ZInt32 offset)
+static ZInt32 byteInstruction(const ZChar* name, Chunk* chunk, ZInt32 offset)
+{
+    ZUInt8 slot = chunk->code[offset + 1];
+    printf("%-16s %4d\n", name, slot);
+    return offset + 2;
+}
+
+static ZInt32 constantInstruction(const ZChar* name, Chunk* chunk, ZInt32 offset)
 {
     ZUInt8 constant = chunk->code[offset + 1];
     printf("%-16s %4d '", name,  constant);
@@ -53,6 +60,10 @@ ZInt32 disassembleInstruction(Chunk* chunk, ZInt32 offset)
         return simpleInstruction("OP_FALSE", offset);
     case OP_POP:
         return simpleInstruction("OP_POP", offset);
+    case OP_SET_LOCAL:
+        return byteInstruction("OP_SET_LOCAL", chunk, offset);
+    case OP_GET_LOCAL:
+        return byteInstruction("OP_GET_LOCAL", chunk, offset);
     case OP_SET_GLOBAL:
         return constantInstruction("OP_SET_GLOBAL", chunk, offset);
     case OP_GET_GLOBAL:
