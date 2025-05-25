@@ -155,6 +155,14 @@ static void emitBytes(ZUInt8 byte1, ZUInt8 byte2)
     emitByte(byte2);
 }
 
+static ZInt32 emitJump(ZUInt8 instruction)
+{
+    emitByte(instruction);
+    emitByte(0xff);
+    emitByte(0xff);
+    return currentChunk()->count - 2;
+}
+
 static void emitReturn()
 {
     emitByte(OP_RETURN);
@@ -174,6 +182,19 @@ static ZUInt8 makeConstant(Value value)
 static void emitConstant(Value value)
 {
     emitBytes(OP_CONSTANT, makeConstant(value));
+}
+
+static void patchJump(ZInt32 offset)
+{
+    ZInt32 jump = currentChunk()->count - offset - 2;
+
+    if (jump > UINT16_MAX)
+    {
+        error("Trop de code à sauter.");
+    }
+    
+    currentChunk()->code[offset] = (jump >> 8) & 0xff;
+    currentChunk()->code[offset + 1] = jump & 0xff;
 }
 
 static void initCompiler(Compiler* compiler)
@@ -439,7 +460,7 @@ static ZBool identifiersEqual(Token* a, Token* b)
 }
 static int resolveLocal(Compiler* compiler, Token* name)
 {
-    for (ZInt32 i = compiler->localCount - 1; i >= 0; i++)
+    for (ZInt32 i = compiler->localCount - 1; i >= 0; i--)
     {
         Local* local = &compiler->locals[i];
         if (identifiersEqual(name, &local->name))
@@ -478,7 +499,7 @@ static void declareVariable()
     }
     
     Token* name = &parser.previous;
-    for(ZInt32 i = current->localCount - 1; i >= 0; i++)
+    for(ZInt32 i = current->localCount - 1; i >= 0; i--)
     {
         Local* local = &current->locals[i];
         if (local->depth != -1 && local->depth < current->scopeDepth)
@@ -571,6 +592,28 @@ static void expressionStatement()
     emitByte(OP_POP);
 }
 
+static void ifStatement()
+{
+    consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après 'si'.");
+    expression();
+    consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après la condition.");
+
+    ZInt32 thenJump = emitJump(OP_JUMP_IF_FALSE);
+    emitByte(OP_POP);
+    statement();
+
+    ZInt32 elseJump = emitJump(OP_JUMP);
+
+    patchJump(thenJump);
+    emitByte(OP_POP);
+    
+    if (match(TOKEN_ELSE))
+    {
+        statement();
+    }
+    patchJump(elseJump);
+}
+
 static void printStatement()
 {
     expression();
@@ -631,6 +674,10 @@ static void statement()
     if (match(TOKEN_PRINT))
     {
         printStatement();
+    }
+    else if(match(TOKEN_IF))
+    {
+        ifStatement();
     }
     else if(match(TOKEN_LEFT_BRACE))
     {

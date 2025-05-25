@@ -50,6 +50,8 @@ static InterpretResult run()
 {
 #define READ_BYTE() (*vm.ip++)
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()])
+#define READ_SHORT() \
+        (vm.ip += 2, (ZUInt16)((vm.ip[-2] << 8) | vm.ip[-1]))
 #define READ_STRING() AS_STRING(READ_CONSTANT())
 #define BINARY_OP(valueType, op)\
     do { \
@@ -223,6 +225,22 @@ static InterpretResult run()
             printf("\n");
             break;
         }
+        case OP_JUMP:
+        {
+            ZUInt16 offset = READ_SHORT();
+            vm.ip += offset;
+            break;
+        }
+        case OP_JUMP_IF_FALSE:
+        {
+            ZUInt16 offset = READ_SHORT();
+            if (isFalsey(peek(0)))
+            {
+                vm.ip += offset;
+                break;
+            }
+            
+        }
         case OP_RETURN:
         {
             //Exit Interpreter
@@ -235,6 +253,7 @@ static InterpretResult run()
     }
 #undef READ_BYTE
 #undef READ_CONSTANT
+#undef READ_SHORT
 #undef READ_STRING
 #undef BINARY_OP
 }
