@@ -143,7 +143,7 @@ static TokenType identifierType()
         case 'o': return checkKeyword(1, 1, "u", TOKEN_OR);
         case 'a': return checkKeyword(1, 7, "fficher", TOKEN_PRINT);
         case 'r': return checkKeyword(1, 8, "etourner", TOKEN_RETURN);
-        case 't': return checkKeyword(1, 7, "ant_que", TOKEN_WHILE);
+        case 't': return checkKeyword(1, 6, "antque", TOKEN_WHILE);
         case 'c': 
         {
             if (length > 1)

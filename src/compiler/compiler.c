@@ -155,6 +155,20 @@ static void emitBytes(ZUInt8 byte1, ZUInt8 byte2)
     emitByte(byte2);
 }
 
+static void emitLoop(ZInt32 loopStart)
+{
+    emitByte(OP_LOOP);
+
+    ZInt32 offset = currentChunk()->count - loopStart + 2;
+    if (offset > UINT16_MAX)
+    {
+        error("Corps de boucle trop long");
+    }
+    
+    emitByte((offset >> 8) & 0xff);
+    emitByte(offset & 0xff);
+}
+
 static ZInt32 emitJump(ZUInt8 instruction)
 {
     emitByte(instruction);
@@ -313,6 +327,28 @@ static void number(ZBool canAssign)
     emitConstant(NUMBER_VAL(value));
 }
 
+static void and_(ZBool canAssign)
+{
+    ZInt32 endJump = emitJump(OP_JUMP_IF_FALSE);
+
+    emitByte(OP_POP);
+    parsePrecedence(PREC_AND);
+
+    patchJump(endJump);
+}
+
+static void or_(ZBool canAssign)
+{
+    ZInt32 elseJump = emitJump(OP_JUMP_IF_FALSE);
+    ZInt32 endJump = emitJump(OP_JUMP);
+
+    patchJump(elseJump);
+    emitByte(OP_POP);
+
+    parsePrecedence(PREC_OR);
+    patchJump(endJump);
+}
+
 static void string(ZBool canAssign)
 {
     //@TBD:  string escape sequences like \n, we’d translate those here
@@ -373,7 +409,7 @@ static void unary(ZBool canAssign)
 
 ParseRule rules[] = 
 {
-    [TOKEN_LEFT_PAREN]    = {grouping, NULL, PREC_NONE},
+    [TOKEN_LEFT_PAREN]    = {grouping, NULL,   PREC_NONE},
     [TOKEN_RIGHT_PAREN]   = {NULL,     NULL,   PREC_NONE},
     [TOKEN_LEFT_BRACE]    = {NULL,     NULL,   PREC_NONE}, 
     [TOKEN_RIGHT_BRACE]   = {NULL,     NULL,   PREC_NONE},
@@ -395,7 +431,7 @@ ParseRule rules[] =
     [TOKEN_IDENTIFIER]    = {variable, NULL,   PREC_NONE},
     [TOKEN_STRING]        = {string,   NULL,   PREC_NONE},
     [TOKEN_NUMBER]        = {number,   NULL,   PREC_NONE},
-    [TOKEN_AND]           = {NULL,     NULL,   PREC_NONE},
+    [TOKEN_AND]           = {NULL,     and_,   PREC_AND},
     [TOKEN_CLASS]         = {NULL,     NULL,   PREC_NONE},
     [TOKEN_ELSE]          = {NULL,     NULL,   PREC_NONE},
     [TOKEN_FALSE]         = {literal,  NULL,   PREC_NONE},
@@ -403,7 +439,7 @@ ParseRule rules[] =
     [TOKEN_FUN]           = {NULL,     NULL,   PREC_NONE},
     [TOKEN_IF]            = {NULL,     NULL,   PREC_NONE},
     [TOKEN_NULL]          = {literal,  NULL,   PREC_NONE},
-    [TOKEN_OR]            = {NULL,     NULL,   PREC_NONE},
+    [TOKEN_OR]            = {NULL,     or_,    PREC_OR},
     [TOKEN_PRINT]         = {NULL,     NULL,   PREC_NONE},
     [TOKEN_RETURN]        = {NULL,     NULL,   PREC_NONE},
     [TOKEN_SUPER]         = {NULL,     NULL,   PREC_NONE},
@@ -542,7 +578,6 @@ static void defineVariable(ZUInt8 global)
         return;
     }
     
-
     emitBytes(OP_DEFINE_GLOBAL, global);
 }
 
@@ -606,7 +641,7 @@ static void ifStatement()
 
     patchJump(thenJump);
     emitByte(OP_POP);
-    
+
     if (match(TOKEN_ELSE))
     {
         statement();
@@ -619,6 +654,23 @@ static void printStatement()
     expression();
     consume(TOKEN_SEMICOLON, "Erreur : point-virgule manquant après la valeur.");
     emitByte(OP_PRINT);
+}
+
+static void whileStatement()
+{
+    ZInt32 loopStart = currentChunk()->count;
+
+    consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après boucle 'tantque'.");
+    expression();
+    consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après une condition.");
+
+    ZInt32 exitJump = emitJump(OP_JUMP_IF_FALSE);
+    emitByte(OP_POP);
+    statement();
+    emitLoop(loopStart);
+
+    patchJump(exitJump);
+    emitByte(OP_POP);
 }
 
 static void synchronize()
@@ -678,6 +730,10 @@ static void statement()
     else if(match(TOKEN_IF))
     {
         ifStatement();
+    }
+    else if(match(TOKEN_WHILE))
+    {
+        whileStatement();
     }
     else if(match(TOKEN_LEFT_BRACE))
     {

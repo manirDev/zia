@@ -241,6 +241,12 @@ static InterpretResult run()
             }
             
         }
+        case OP_LOOP:
+        {
+            ZUInt16 offset = READ_SHORT();
+            vm.ip -= offset;
+            break;
+        }
         case OP_RETURN:
         {
             //Exit Interpreter
