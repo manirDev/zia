@@ -237,9 +237,8 @@ static InterpretResult run()
             if (isFalsey(peek(0)))
             {
                 vm.ip += offset;
-                break;
             }
-            
+            break;
         }
         case OP_LOOP:
         {
