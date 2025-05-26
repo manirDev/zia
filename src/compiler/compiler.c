@@ -627,6 +627,67 @@ static void expressionStatement()
     emitByte(OP_POP);
 }
 
+static void forStatement()
+{
+    beginScope();
+    consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après boucle 'pour'.");
+
+    if (match(TOKEN_SEMICOLON))
+    {
+        /*
+        No initializer found ex.: for (;i>10;i++)
+        */
+    }
+    else if(match(TOKEN_VAR))
+    {
+        varDeclaration();
+    }
+    else
+    {
+        expressionStatement();
+    }
+    
+    ZInt32 loopStart = currentChunk()->count;
+    ZInt32 exitJump = -1;
+    
+    if (!match(TOKEN_SEMICOLON))
+    {
+        expression();
+        consume(TOKEN_SEMICOLON, "Point-virgule ';' attendu après la condition de la boucle 'pour'.");
+
+        exitJump = emitJump(OP_JUMP_IF_FALSE);
+        emitByte(OP_POP);
+    }
+
+    if (!match(TOKEN_RIGHT_PAREN))
+    {
+        ZInt32 bodyJump = emitJump(OP_JUMP);
+        ZInt32 incrementStart = currentChunk()->count;
+        expression();
+        emitByte(OP_POP);
+        consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après les clauses du boucle 'pour'.");
+
+        emitLoop(loopStart);
+        loopStart = incrementStart;
+        patchJump(bodyJump);
+    }
+    
+    statement();
+    emitLoop(loopStart);
+
+    /*
+    We do this only when there is a condition clause. If there isn’t, 
+    there’s no jump to patch and no condition value on the stack to pop.
+    */
+    if (exitJump != -1)
+    {
+        patchJump(exitJump);
+        emitByte(OP_POP);
+    }
+
+    endScope();
+}
+
 static void ifStatement()
 {
     consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après 'si'.");
@@ -726,6 +787,10 @@ static void statement()
     if (match(TOKEN_PRINT))
     {
         printStatement();
+    }
+    else if(match(TOKEN_FOR))
+    {
+        forStatement();
     }
     else if(match(TOKEN_IF))
     {
