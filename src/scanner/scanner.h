@@ -32,12 +32,12 @@ typedef enum
 typedef struct
 {
    TokenType type;
-   const char* start;
+   const ZChar* start;
    ZInt32 length;
    ZInt32 line;
 }Token;
 
-void initScanner(const char* source);
+void initScanner(const ZChar* source);
 Token scanToken();
 
 #endif

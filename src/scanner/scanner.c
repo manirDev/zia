@@ -255,7 +255,7 @@ static Token string()
     return makeToken(TOKEN_STRING);
 }
 
-void initScanner(const char* source)
+void initScanner(const ZChar* source)
 {
     scanner.start = source;
     scanner.current = source;
@@ -271,7 +271,7 @@ Token scanToken()
         return makeToken(TOKEN_EOF);
     }
 
-    char currChar = advance();
+    ZChar currChar = advance();
     if (isAlpha(currChar))
     {
         return identifier();

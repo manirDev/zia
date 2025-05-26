@@ -5,13 +5,22 @@
 #include "common/commonTypes.h"
 #include "chunk/chunk.h"
 #include "table/table.h"
+#include "object/object.h"
 
-#define STACK_MAX 256
+#define FRAMES_MAX  64
+#define STACK_MAX   (FRAMES_MAX * UINT8_COUNT)
 
 typedef struct
 {
-   Chunk* chunk;
-   ZUInt8* ip;
+    ObjFunction* function;
+    ZUInt8* ip;
+    Value* slots;
+}CallFrame;
+
+typedef struct
+{
+   CallFrame frames[FRAMES_MAX];
+   ZInt32 frameCount;
    Value stack[STACK_MAX];
    Value* stackTop;
    Table strings;
@@ -30,7 +39,7 @@ extern VM vm;
 
 void initVM();
 void freeVM();
-InterpretResult interpret(const char* source);
+InterpretResult interpret(const ZChar* source);
 void push(Value value);
 Value pop();
 

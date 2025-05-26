@@ -6,6 +6,6 @@
 #include "chunk/chunk.h"
 #include "object/object.h"
 
-ZBool compile(const ZChar* source, Chunk* chunk);
+ObjFunction* compile(const ZChar* source);
 
 #endif

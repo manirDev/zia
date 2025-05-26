@@ -20,6 +20,15 @@ static Obj* allocateObject(size_t size, ObjType type)
     return object;
 }
 
+ObjFunction* newFunction()
+{
+    ObjFunction* function = ALLOCATE_OBJ(ObjFunction, OBJ_FUNCTION);
+    function->arity = 0;
+    function->name = NULL;
+    initChunk(&function->chunk);
+    return function;
+}
+
 static ZUInt32 hashString(const ZChar* key, ZInt32 length)
 {
     ZUInt32 hash = 2166136261u;
@@ -68,10 +77,24 @@ ObjString* copyString(const ZChar* chars, ZInt32 length)
     return allocateString(heapChars, length, hash);
 }
 
+static void printFunction(ObjFunction* function)
+{
+    if (NULL == function->name)
+    {
+        printf("<script>");
+        return;
+    }
+    
+    printf("<fn %s>", function->name->chars);
+}
+
 void printObject(Value value)
 {
     switch (OBJ_TYPE(value))
     {
+    case OBJ_FUNCTION:
+        printFunction(AS_FUNCTION(value));
+        break;
     case OBJ_STRING:
         printf("%s", AS_CSTRING(value));
         break;
