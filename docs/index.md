@@ -60,7 +60,7 @@ Mettez en pratique vos connaissances à travers des projets concrets qui illustr
 ### **Partie I : Découverte**
 - **[Introduction](introduction.md)** - L'histoire et la philosophie de Zia
 - **[Installation](installation.md)** - Configuration de votre environnement de développement
-- **[Premiers pas](premiers-pas.md)** - Votre premier programme en Zia
+- **[Premiers pas](first-step.md)** - Votre premier programme en Zia
 
 ### **Partie II : Fondamentaux**
 - **[Syntaxe](syntax.md)** - Les règles grammaticales de Zia
