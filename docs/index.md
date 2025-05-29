@@ -65,7 +65,7 @@ Mettez en pratique vos connaissances à travers des projets concrets qui illustr
 ### **Partie II : Fondamentaux**
 - **[Syntaxe](syntax.md)** - Les règles grammaticales de Zia
 - **[Variables et Types](types.md)** - Gestion des données en français
-- **[Opérateurs et Priorité](operators.md)** - Gestion des données en français
+- **[Opérateurs et Priorité](operators.md)** - L'art du calcul
 - **[Contrôle de Flux](control-flow.md)** - Structures conditionnelles et itératives
 
 ### **Partie III : Développement**
