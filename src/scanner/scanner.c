@@ -356,6 +356,14 @@ Token scanToken()
     {
         return string();
     }
+    case ':':
+    {
+        return makeToken(TOKEN_COLON);
+    }
+    case '?':
+    {
+        return makeToken(TOKEN_QUESTION);
+    }
     default:
         break;
     }

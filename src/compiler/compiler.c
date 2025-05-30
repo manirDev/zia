@@ -18,6 +18,7 @@ typedef enum
 {
     PREC_NONE,
     PREC_ASSIGNMENT,  // =
+    PREC_CONDITIONAL, // ?:
     PREC_OR,          // or
     PREC_AND,         // and
     PREC_EQUALITY,    // == !=
@@ -338,6 +339,26 @@ static void literal(ZBool canAssign)
     }
 }
 
+static void conditional(ZBool canAssign) {
+
+    // Parse true branch
+    ZInt32 thenJump = emitJump(OP_JUMP_IF_FALSE);
+    emitByte(OP_POP); // Pop condition if true
+
+    parsePrecedence(PREC_CONDITIONAL);
+
+    ZInt32 elseJump = emitJump(OP_JUMP);
+
+    patchJump(thenJump);
+    emitByte(OP_POP); // Pop condition if false
+
+    consume(TOKEN_COLON, "Un ':' est attendu après '?' dans l'expression ternaire.");
+
+    parsePrecedence(PREC_CONDITIONAL);
+
+    patchJump(elseJump);
+  }
+
 static void grouping(ZBool canAssign)
 {
     expression();
@@ -471,6 +492,8 @@ ParseRule rules[] =
     [TOKEN_VAR]           = {NULL,     NULL,   PREC_NONE},
     [TOKEN_WHILE]         = {NULL,     NULL,   PREC_NONE},
     [TOKEN_ERROR]         = {NULL,     NULL,   PREC_NONE},
+    [TOKEN_COLON]         = { NULL,    NULL,   PREC_NONE},
+    [TOKEN_QUESTION]      = { NULL,    conditional, PREC_CONDITIONAL },
     [TOKEN_EOF]           = {NULL,     NULL,   PREC_NONE},
 
 };

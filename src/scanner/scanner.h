@@ -26,6 +26,9 @@ typedef enum
     TOKEN_PRINT, TOKEN_RETURN, TOKEN_SUPER, TOKEN_THIS,
     TOKEN_TRUE, TOKEN_VAR, TOKEN_WHILE,
 
+    //Extra added tokens
+    TOKEN_COLON, TOKEN_QUESTION,
+
     TOKEN_ERROR, TOKEN_EOF,
 }TokenType;
 
