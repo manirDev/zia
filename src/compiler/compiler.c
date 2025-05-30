@@ -734,26 +734,40 @@ static void forStatement()
     endScope();
 }
 
-static void ifStatement()
-{
+static void ifStatement() {
     consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après 'si'.");
     expression();
     consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après la condition.");
 
     ZInt32 thenJump = emitJump(OP_JUMP_IF_FALSE);
-    emitByte(OP_POP);
+    emitByte(OP_POP);   // Pop condition if true
     statement();
 
-    ZInt32 elseJump = emitJump(OP_JUMP);
-
+    ZInt32 endJump = emitJump(OP_JUMP);
     patchJump(thenJump);
-    emitByte(OP_POP);
+    emitByte(OP_POP);   // Pop condition if false
 
-    if (match(TOKEN_ELSE))
-    {
+    while (match(TOKEN_ELSE_IF)) {  // Handle multiple "sinon si"
+        consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après 'sinon si'.");
+        expression();
+        consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après la condition.");
+
+        ZInt32 elseifJump = emitJump(OP_JUMP_IF_FALSE);
+        emitByte(OP_POP);   // Pop condition if true
+        statement();
+
+        ZInt32 nextJump = emitJump(OP_JUMP);
+        patchJump(elseifJump);
+        emitByte(OP_POP);   // Pop condition if false
+
+        endJump = nextJump;
+    }
+
+    if (match(TOKEN_ELSE)) {
         statement();
     }
-    patchJump(elseJump);
+
+    patchJump(endJump);
 }
 
 static void printStatement()
