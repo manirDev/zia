@@ -378,6 +378,10 @@ Token scanToken()
     {
         return makeToken(TOKEN_QUESTION);
     }
+    case '%':
+    {
+        return makeToken(TOKEN_PERCENT);
+    }
     default:
         break;
     }

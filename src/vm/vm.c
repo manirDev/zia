@@ -33,6 +33,14 @@ static void runtimeError(const ZChar* format, ...)
     fprintf(stderr, "[ligne %d] dans le script.\n", line);
     resetStack();
 }
+
+static ZReal64 ziaFmod(ZReal64 a, ZReal64 b)
+{
+    ZReal64 quotient = (a / b);
+    ZInt32 truncated  = (ZInt32)quotient;
+    return (a - (b * truncated));
+}
+
 void initVM()
 {
     resetStack();
@@ -62,7 +70,7 @@ static InterpretResult run()
         if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) \
         { \
            runtimeError("Les opérandes doivent être des nombres."); \
-           return INTERPRET_RUNUTIME_ERROR; \
+           return INTERPRET_RUNTIME_ERROR; \
         } \
         ZReal64 b = AS_NUMBER(pop()); \
         ZReal64 a = AS_NUMBER(pop()); \
@@ -130,7 +138,7 @@ static InterpretResult run()
             {
                 tableDelete(&vm.globals, name);
                 runtimeError("Variable '%s' non définie.", name->chars);
-                return INTERPRET_RUNUTIME_ERROR;
+                return INTERPRET_RUNTIME_ERROR;
             }
             break;
         }
@@ -141,7 +149,7 @@ static InterpretResult run()
             if (!tableGet(&vm.globals, name, &value))
             {
                 runtimeError("Variable '%s' non définie.", name->chars);
-                return INTERPRET_RUNUTIME_ERROR;
+                return INTERPRET_RUNTIME_ERROR;
             }
             push(value);
             break;
@@ -188,7 +196,7 @@ static InterpretResult run()
                 runtimeError(
                     "Les opérandes doivent être deux nombres ou deux chaînes."
                 );
-                return INTERPRET_RUNUTIME_ERROR;
+                return INTERPRET_RUNTIME_ERROR;
             }
             break;
         }
@@ -217,7 +225,7 @@ static InterpretResult run()
             if (!IS_NUMBER(peek(0)))
             {
                 runtimeError("L'opérande doit être un nombre.");
-                return INTERPRET_RUNUTIME_ERROR;
+                return INTERPRET_RUNTIME_ERROR;
             }
             
             push(NUMBER_VAL(-AS_NUMBER(pop())));
@@ -250,12 +258,26 @@ static InterpretResult run()
             frame->ip -= offset;
             break;
         }
+        case OP_MODULO:
+        {
+            if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) {
+                runtimeError("Les opérandes doivent être des nombres.");
+                return INTERPRET_RUNTIME_ERROR;
+            }
+            ZReal64 b = AS_NUMBER(pop());
+            ZReal64 a = AS_NUMBER(pop());
+            if (b == 0) {
+                runtimeError("Division par zéro.");
+                return INTERPRET_RUNTIME_ERROR;
+            }
+            push(NUMBER_VAL(ziaFmod(a, b)));
+            break;
+        }
         case OP_RETURN:
         {
             //Exit Interpreter
             return INTERPRET_OK;
         }
-
         default:
             break;
         }

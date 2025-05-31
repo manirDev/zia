@@ -316,6 +316,9 @@ static void binary(ZBool canAssign)
     case TOKEN_SLASH:
         emitByte(OP_DIVIDE);
         break;
+    case TOKEN_PERCENT:
+        emitByte(OP_MODULO);
+        break;
     default:
         return;
     }
@@ -492,8 +495,9 @@ ParseRule rules[] =
     [TOKEN_VAR]           = {NULL,     NULL,   PREC_NONE},
     [TOKEN_WHILE]         = {NULL,     NULL,   PREC_NONE},
     [TOKEN_ERROR]         = {NULL,     NULL,   PREC_NONE},
-    [TOKEN_COLON]         = { NULL,    NULL,   PREC_NONE},
-    [TOKEN_QUESTION]      = { NULL,    conditional, PREC_CONDITIONAL },
+    [TOKEN_COLON]         = {NULL,     NULL,   PREC_NONE},
+    [TOKEN_QUESTION]      = {NULL,     conditional, PREC_CONDITIONAL },
+    [TOKEN_PERCENT]       = {NULL,     binary, PREC_FACTOR},
     [TOKEN_EOF]           = {NULL,     NULL,   PREC_NONE},
 
 };

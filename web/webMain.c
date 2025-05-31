@@ -69,9 +69,9 @@ ZInt32 runCompiler(ZChar* sourceCode)
         printf("Stopped with: INTERPRET_COMPILE_ERROR!\n");
         return COMPILE_TIME_EXIT_CODE;
     }
-    if (INTERPRET_RUNUTIME_ERROR == result)
+    if (INTERPRET_RUNTIME_ERROR == result)
     {
-        printf("Stopped with: INTERPRET_RUNUTIME_ERROR!\n");
+        printf("Stopped with: INTERPRET_RUNTIME_ERROR!\n");
         return RUN_TIME_EXIT_CODE;
     }
     return 0;

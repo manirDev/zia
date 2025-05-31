@@ -68,7 +68,7 @@ static void runFile(const char* path)
     {
         exit(65);
     }
-    if (result == INTERPRET_RUNUTIME_ERROR)
+    if (result == INTERPRET_RUNTIME_ERROR)
     {
         exit(70);
     }  
