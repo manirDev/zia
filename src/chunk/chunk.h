@@ -27,6 +27,8 @@ typedef enum
     OP_MODULO,
     OP_NOT,
     OP_NEGATE,
+    OP_INCREMENT,
+    OP_DECREMENT,
     OP_PRINT,
     OP_JUMP,
     OP_JUMP_IF_FALSE,

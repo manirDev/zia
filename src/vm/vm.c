@@ -273,6 +273,28 @@ static InterpretResult run()
             push(NUMBER_VAL(ziaFmod(a, b)));
             break;
         }
+        case OP_INCREMENT:
+        {
+            if (!IS_NUMBER(peek(0)))
+            {
+                runtimeError("L'opérande doit être un nombre.");
+                return INTERPRET_RUNTIME_ERROR;
+            }
+
+            push(NUMBER_VAL(AS_NUMBER(pop()) + 1));
+            break;
+        }
+        case OP_DECREMENT:
+        {
+            if (!IS_NUMBER(peek(0)))
+            {
+                runtimeError("L'opérande doit être un nombre.");
+                return INTERPRET_RUNTIME_ERROR;
+            }
+
+            push(NUMBER_VAL(AS_NUMBER(pop()) - 1));
+            break;
+        }
         case OP_RETURN:
         {
             //Exit Interpreter
