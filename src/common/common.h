@@ -10,6 +10,7 @@
 #define TAB_SPACE '\t'
 #define CARRIAGE_RETURN '\r'
 #define COMMENT_SLASH '/'
+#define COMMENT_STAR '*'
 #define NULL_CHAR '\0'
 
 #define DEBUG_PRINT_CODE

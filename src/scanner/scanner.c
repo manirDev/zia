@@ -104,17 +104,47 @@ static void skipWhiteSpace()
             scanner.line++;
             advance();
             break;
+
+        // Handle single-line and multi-line comments
         case COMMENT_SLASH:
             if (peekNext() == COMMENT_SLASH)
             {
+                // Skip  this chars : //
                 while (peek() != NEW_LINE && !isAtEnd())
                 {
                     advance();
                 }
             }
+            else if (peekNext() == COMMENT_STAR)
+            {
+                // Skip this: /*
+                advance();
+                advance();
+                while (!isAtEnd())
+                {
+                    //in case having new line in the multi-line comment scanner should increase its line count
+                    if (peek() == NEW_LINE)
+                    {
+                        scanner.line++;
+                    }
+                    if (peek() == COMMENT_STAR && peekNext() == COMMENT_SLASH)
+                    {
+                        advance(); // consume '*'
+                        advance(); // consume '/'
+                        break;
+                    }
+                    advance();
+                }
+
+                if (isAtEnd())
+                {
+                    errorToken("Commentaire multi-ligne non terminé.");
+                    return;
+                }
+            }
             else
             {
-                return;
+                return; // Just a single '/' so it might be division :)
             }
             break;
         default:
