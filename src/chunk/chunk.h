@@ -29,6 +29,7 @@ typedef enum
     OP_NEGATE,
     OP_INCREMENT,
     OP_DECREMENT,
+    OP_DUP,
     OP_PRINT,
     OP_JUMP,
     OP_JUMP_IF_FALSE,

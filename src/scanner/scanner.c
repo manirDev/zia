@@ -362,10 +362,18 @@ Token scanToken()
     }
     case '-':
     {
-        if (match('-')) {
-            return makeToken(TOKEN_MINUS_MINUS);
+        if (match('-')) 
+        {
+            // Check if this is prefix ++ (before an identifier)
+            if (isAlpha(peek())) 
+            {
+                return makeToken(TOKEN_MINUS_MINUS_PREFIX);
+            }
+            // Otherwise it's postfix ++ (after an identifier)
+            return makeToken(TOKEN_MINUS_MINUS_POSTFIX);
         } 
-        else if (match('=')) {
+        else if (match('=')) 
+        {
             return makeToken(TOKEN_MINUS_EQUAL);
         } 
         return makeToken(TOKEN_MINUS);
@@ -374,7 +382,13 @@ Token scanToken()
     {
         if (match('+'))
         {
-            return makeToken(TOKEN_PLUS_PLUS);
+            // Check if this is prefix ++ (before an identifier)
+            if (isAlpha(peek())) 
+            {
+                return makeToken(TOKEN_PLUS_PLUS_PREFIX);
+            }
+            // Otherwise it's postfix ++ (after an identifier)
+            return makeToken(TOKEN_PLUS_PLUS_POSTFIX);
         }
         else if(match('='))
         {

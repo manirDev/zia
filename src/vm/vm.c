@@ -273,6 +273,11 @@ static InterpretResult run()
             push(NUMBER_VAL(ziaFmod(a, b)));
             break;
         }
+        case OP_DUP:
+        {
+            push(peek(0));
+            break;
+        }
         case OP_INCREMENT:
         {
             if (!IS_NUMBER(peek(0)))

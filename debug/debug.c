@@ -104,6 +104,14 @@ ZInt32 disassembleInstruction(Chunk* chunk, ZInt32 offset)
         return jumpInstruction("OP_JUMP_IF_FALSE", 1, chunk, offset);
     case OP_LOOP:
         return jumpInstruction("OP_LOOP", -1, chunk, offset);
+    case OP_MODULO:
+        return simpleInstruction("OP_MODULO", offset);
+    case OP_DUP:
+        return simpleInstruction("OP_DUP", offset);
+    case OP_INCREMENT:
+        return simpleInstruction("OP_INCREMENT", offset);
+    case OP_DECREMENT:
+        return simpleInstruction("OP_DECREMENT", offset);
     case OP_RETURN:
         return simpleInstruction("OP_RETURN", offset);
     default:
