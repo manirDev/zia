@@ -2,11 +2,9 @@ name: Run Zia Tests
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   pull_request:
-    branches:
-      - master
+    branches: [master]
 
 jobs:
   test:
@@ -19,15 +17,16 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'  # your version
+          python-version: '3.10'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          # If you have dependencies, install them here, e.g.,
-          # pip install -r requirements.txt
+      - name: Install Python deps (optional)
+        run: pip install -r requirements.txt || true
 
-      - name: Run tests
-        run: |
-          chmod +x ./tests/run_tests.py
-          ./tests/run_tests.py ./zia.out ./tests
+      - name: Build Zia (native)
+        run: make build
+
+      - name: Make test runner executable
+        run: chmod +x ./tests/run_tests.py
+
+      - name: Run Zia tests
+        run: ./tests/run_tests.py ./zia.out ./tests

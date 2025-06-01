@@ -9,28 +9,28 @@
     {
       "file": "tests/control-flow/for.zia",
       "status": "PASS",
-      "time": 0.31218579201959074,
+      "time": 0.028268916998058558,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/control-flow/if.zia",
       "status": "PASS",
-      "time": 0.0022470830008387566,
+      "time": 0.003372040984686464,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/control-flow/while.zia",
       "status": "PASS",
-      "time": 0.0029975830111652613,
+      "time": 0.001905332988826558,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/error/arithmetic_type_mismatch.zia",
       "status": "PASS",
-      "time": 0.002119624987244606,
+      "time": 0.0029872499871999025,
       "tags": [
         "type-system",
         "edge-case"
@@ -40,91 +40,91 @@
     {
       "file": "tests/error/type_mismatch.zia",
       "status": "PASS",
-      "time": 0.002511540980776772,
+      "time": 0.0023130830086302012,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/error/undefined_var.zia",
       "status": "PASS",
-      "time": 0.0020078330126125365,
+      "time": 0.0019381669990252703,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/expressions/arithmetic.zia",
       "status": "PASS",
-      "time": 0.0023564999864902347,
+      "time": 0.002103000006172806,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/expressions/arithmetic_complex.zia",
       "status": "PASS",
-      "time": 0.00181049999082461,
+      "time": 0.00192304200027138,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/expressions/arithmetic_precedence.zia",
       "status": "PASS",
-      "time": 0.0017225000192411244,
+      "time": 0.0017508339951746166,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/expressions/binary.zia",
       "status": "PASS",
-      "time": 0.0018051670049317181,
+      "time": 0.0019520000205375254,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/expressions/comparison.zia",
       "status": "PASS",
-      "time": 0.0018289580184500664,
+      "time": 0.0017379159980919212,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/expressions/literals.zia",
       "status": "PASS",
-      "time": 0.0020959169778507203,
+      "time": 0.0017387080006301403,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/functions/simple_fn.zia",
       "status": "PASS",
-      "time": 0.0020419160136952996,
+      "time": 0.0018776670040097088,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/operators/decrement.zia",
       "status": "PASS",
-      "time": 0.0017796250176616013,
+      "time": 0.0016379579901695251,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/operators/increment.zia",
       "status": "PASS",
-      "time": 0.0020992909849155694,
+      "time": 0.001976875006221235,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/operators/ternary.zia",
       "status": "PASS",
-      "time": 0.0018293339817319065,
+      "time": 0.001846416009357199,
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/output/print_hello.zia",
       "status": "PASS",
-      "time": 0.0019023340137209743,
+      "time": 0.0017274169949814677,
       "tags": [],
       "description": ""
     }
