@@ -1,0 +1,43 @@
+// @author Manir
+// @tag loop, conditional
+// @description pour loop with si/sinon logic
+
+{
+  afficher "Example 1";
+  pour (var i = 1; i <= 3; i = i + 1) {
+    si (i % 2 == 0) {
+      afficher "pair";
+    } sinon {
+      afficher "impair";
+    }
+  }
+
+  afficher "Example 2";
+  var run = vrai;
+
+  si (run) {
+    pour (var i = 0; i < 2; i = i + 1) {
+      afficher i;
+    }
+  } 
+  sinon {
+    afficher "Skipped";
+  }
+
+  afficher "Example 3";
+  var mode = 4 % 2;
+
+  si (mode == 1) {
+    afficher "Mode 1";
+  } 
+  sinon si (mode == 0) {
+    var i = 0;
+    tantque (i < 2) {
+      afficher i;
+      i = i + 1;
+    }
+  } 
+  sinon {
+    afficher "Unknown mode";
+  }
+}

@@ -1,0 +1,12 @@
+// @author Manir
+// @tag loop, nested
+// @description Nested pour and tantque loops
+
+pour (var i = 0; i < 2; i = i + 1) {
+  var j = 0;
+  tantque (j < 2) {
+    afficher i + j;
+    j = j + 1;
+  }
+}
+
