@@ -23,7 +23,7 @@ jobs:
         run: pip install -r requirements.txt || true
 
       - name: Build Zia (native)
-        run: make build && make websetup
+        run: make build
 
       - name: Make test runner executable
         run: chmod +x ./tests/run_tests.py
