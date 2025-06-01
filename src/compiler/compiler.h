@@ -6,6 +6,8 @@
 #include "chunk/chunk.h"
 #include "object/object.h"
 
+#define JUMP_OFFSET_SIZE 3  // Use 24-bit offsets
+
 ObjFunction* compile(const ZChar* source);
 
 #endif

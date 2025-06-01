@@ -181,9 +181,10 @@ static void emitLoop(ZInt32 loopStart)
 static ZInt32 emitJump(ZUInt8 instruction)
 {
     emitByte(instruction);
-    emitByte(0xff);
-    emitByte(0xff);
-    return currentChunk()->count - 2;
+    emitByte(0xff);  // High byte
+    emitByte(0xff);  // Middle byte
+    emitByte(0xff);  // Low byte
+    return currentChunk()->count - JUMP_OFFSET_SIZE;
 }
 
 static void emitReturn()
@@ -209,15 +210,13 @@ static void emitConstant(Value value)
 
 static void patchJump(ZInt32 offset)
 {
-    ZInt32 jump = currentChunk()->count - offset - 2;
-
-    if (jump > UINT16_MAX)
-    {
-        error("Trop de code à sauter.");
+    ZInt32 jump = currentChunk()->count - offset - JUMP_OFFSET_SIZE;
+    if (jump > 0xFFFFFF) {
+        error("Jump offset too large.");
     }
-
-    currentChunk()->code[offset] = (jump >> 8) & 0xff;
-    currentChunk()->code[offset + 1] = jump & 0xff;
+    currentChunk()->code[offset] = (jump >> 16) & 0xff;
+    currentChunk()->code[offset+1] = (jump >> 8) & 0xff;
+    currentChunk()->code[offset+2] = jump & 0xff;
 }
 
 static void initCompiler(Compiler *compiler, FunctionType type)
@@ -845,43 +844,41 @@ static void forStatement()
     endScope();
 }
 
-static void ifStatement()
-{
+static void ifStatement() {
     consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après 'si'.");
     expression();
     consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après la condition.");
 
     ZInt32 thenJump = emitJump(OP_JUMP_IF_FALSE);
-    emitByte(OP_POP); // Pop condition if true
+    emitByte(OP_POP);  // Pop condition if true
     statement();
 
-    ZInt32 endJump = emitJump(OP_JUMP);
+    ZInt32 elseJump = emitJump(OP_JUMP);
     patchJump(thenJump);
-    emitByte(OP_POP); // Pop condition if false
+    emitByte(OP_POP);  // Pop condition if false
 
-    while (match(TOKEN_ELSE_IF))
-    { // Handle multiple "sinon si"
+    // Handle 'sinon si' and 'sinon'
+    while (match(TOKEN_ELSE_IF)) {
         consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après 'sinon si'.");
         expression();
         consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après la condition.");
 
         ZInt32 elseifJump = emitJump(OP_JUMP_IF_FALSE);
-        emitByte(OP_POP); // Pop condition if true
+        emitByte(OP_POP);  // Pop condition if true
         statement();
 
         ZInt32 nextJump = emitJump(OP_JUMP);
         patchJump(elseifJump);
-        emitByte(OP_POP); // Pop condition if false
+        emitByte(OP_POP);  // Pop condition if false
 
-        endJump = nextJump;
+        elseJump = nextJump;
     }
 
-    if (match(TOKEN_ELSE))
-    {
+    if (match(TOKEN_ELSE)) {
         statement();
     }
 
-    patchJump(endJump);
+    patchJump(elseJump);
 }
 
 static void printStatement()

@@ -64,6 +64,11 @@ static InterpretResult run()
 #define READ_CONSTANT() (frame->function->chunk.constants.values[READ_BYTE()])
 #define READ_SHORT() \
         (frame->ip += 2, (ZUInt16)((frame->ip[-2] << 8) | frame->ip[-1]))
+#define READ_24BIT_OFFSET() \
+    (frame->ip += 3, \
+    (ZUInt32)((frame->ip[-3] << 16) | \
+              (frame->ip[-2] << 8) | \
+               frame->ip[-1]))
 #define READ_STRING() AS_STRING(READ_CONSTANT())
 #define BINARY_OP(valueType, op)\
     do { \
@@ -239,13 +244,13 @@ static InterpretResult run()
         }
         case OP_JUMP:
         {
-            ZUInt16 offset = READ_SHORT();
+            ZUInt16 offset = READ_24BIT_OFFSET();
             frame->ip += offset;
             break;
         }
         case OP_JUMP_IF_FALSE:
         {
-            ZUInt16 offset = READ_SHORT();
+            ZUInt16 offset = READ_24BIT_OFFSET();
             if (isFalsey(peek(0)))
             {
                 frame->ip += offset;
@@ -254,7 +259,7 @@ static InterpretResult run()
         }
         case OP_LOOP:
         {
-            ZUInt16 offset = READ_SHORT();
+            ZUInt16 offset = READ_24BIT_OFFSET();
             frame->ip -= offset;
             break;
         }

@@ -18,16 +18,14 @@ si (age < 13) {
 {
     var age = 27;
     si (age < 3) {
-        afficher "bébé";
-    } 
-    sinon si (age < 9) {
-        afficher "jeune enfant";
-    }   
-    sinon si (age < 30) {
+    afficher "bébé";
+    } sinon si (age < 6) {
+        afficher "petite enfance";
+    } sinon si (age < 30) {
         afficher "adulte jeune";
-    } 
-   
-    sinon {
+    } sinon si (age < 45) {
+        afficher "adulte";
+    } sinon {
         afficher "sénior";
     }
 }
