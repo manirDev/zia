@@ -81,6 +81,7 @@ def parse_args():
     parser.add_argument("--interactive", action="store_true", help="Interactive mode")
     parser.add_argument("--html", help="Generate HTML report to the given file")
     parser.add_argument("--parallel", type=int, help="Run tests in parallel using N workers")
+    parser.add_argument("--only", help="Run only a specific .zia file")
     return parser.parse_args()
 
 def find_test_files(root_dir: str, category_filter: Optional[str] = None) -> List[TestCase]:
@@ -180,7 +181,23 @@ def main():
     binary_path = args.binary
     tests_dir = args.tests
 
-    test_files = find_test_files(tests_dir)
+    # Handle --only single test file
+    if args.only:
+        if not os.path.isfile(args.only) or not args.only.endswith(".zia"):
+            print(f"{Colors.red('✖')} Invalid file path for --only: {args.only}")
+            sys.exit(1)
+        metadata = parse_metadata(args.only)
+        output_path, error_path = get_expected_files(args.only)
+        test_case = TestCase(
+            path=args.only,
+            expected_output_path=output_path,
+            expected_error_path=error_path,
+            metadata=metadata
+        )
+        test_files = [test_case]
+    else:
+        test_files = find_test_files(tests_dir)
+
     all_tests: List[TestCase] = []
 
     for test in test_files:
@@ -200,14 +217,12 @@ def main():
 
     passed, failed, errors = 0, 0, 0
     tag_stats = defaultdict(int)
-
-    test_results = []  # <-- Collect results for JSON
+    test_results = []
 
     for test_case in all_tests:
         result, message, duration = run_test(binary_path, test_case)
         print_result(test_case, result, message, duration)
 
-        # Collect data for summary & JSON output
         if result == TestResult.PASS:
             passed += 1
             for tag in test_case.metadata.tags:
@@ -235,7 +250,6 @@ def main():
         for tag, count in tag_stats.items():
             print(f"  {tag}: {count} passed")
 
-    # Save JSON report if requested
     if args.html:
         summary = {
             "total": len(test_results),
