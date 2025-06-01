@@ -31,8 +31,8 @@ jobs:
       - name: Run Zia tests
         run: ./tests/run_tests.py ./zia.out ./tests --html ./tests/results.json
 
-      - name: Install jinja2
-        run: sudo apt-get update && sudo apt-get install -y jinja2
+      - name: Install Jinja2 (Python library)
+        run: pip install Jinja2
 
       - name: Run Zia report generator
         run: python3 ./tests/generate_html_report.py
