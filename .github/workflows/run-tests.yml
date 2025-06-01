@@ -29,4 +29,17 @@ jobs:
         run: chmod +x ./tests/run_tests.py
 
       - name: Run Zia tests
-        run: ./tests/run_tests.py ./zia.out ./tests
+        run: ./tests/run_tests.py ./zia.out ./tests --html ./tests/results.json
+      - name: Run Zia report generator
+        run: python3 ./tests/generate_html_report.py
+      - name: Install wkhtmltopdf
+        run: sudo apt-get update && sudo apt-get install -y wkhtmltopdf
+
+      - name: Convert HTML report to PDF
+        run: wkhtmltopdf ./tests/test_report.html ./tests/test_report.pdf
+
+      - name: Upload test report PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: zia-test-report
+          path: ./tests/test_report.pdf
