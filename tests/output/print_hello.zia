@@ -1,1 +1,5 @@
+// @author Manir
+// @importance 3
+// @tag edge-case
+// @description Print (afficher) Test
 afficher "Bonjour le monde !";

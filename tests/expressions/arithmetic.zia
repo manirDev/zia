@@ -1,4 +1,7 @@
-// EXPECT: 6
+// @author Manir
+// @importance 3
+// @tag edge-case
+// @description Addition arithmetic calculation
 var a = 4;
 var b = 2;
 var add = a + b;

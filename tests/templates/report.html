@@ -22,6 +22,7 @@
         <th>Test File</th>
         <th>Status</th>
         <th>Time</th>
+        <th>Author</th>
         <th>Tags</th>
         <th>Description</th>
       </tr>
@@ -32,6 +33,7 @@
         <td>{{ test.file }}</td>
         <td class="{{ test.status }}">{{ test.status }}</td>
         <td>{{ "%.2fs"|format(test.time) }}</td>
+        <td>{{ test.author }}</td>
         <td>{{ test.tags | join(', ') }}</td>
         <td>{{ test.description }}</td>
       </tr>

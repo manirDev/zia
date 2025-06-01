@@ -1,4 +1,7 @@
-// EXPECT: 16
+// @author Manir
+// @importance 3
+// @tag edge-case
+// @description Complex arithmetic calculation
 var a = 4;
 var b = 2;
 var c = 3;

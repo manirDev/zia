@@ -1,0 +1,9 @@
+// @author Manir
+// @description Simple `si` condition
+// @tag condition
+// @importance 1
+
+var a = 6;
+si (a > 5) {
+    afficher "ok";
+}

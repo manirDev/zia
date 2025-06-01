@@ -1,9 +1,9 @@
-// @author manir
+// @author Manir
 // @importance 3
 // @tag type-system
 // @tag edge-case
+// @description Verify string concatenation with numbers
 
-// Test description: Verify string concatenation with numbers
 var a = "hello";
 var b = 2;
 var result = a + b;

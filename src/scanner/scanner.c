@@ -236,7 +236,7 @@ static TokenType identifierType()
             {
                 if (length == 2)
                 {
-                    return TOKEN_IF;
+                    return TOKEN_IF; //si
                 }
                 else if (length == 5)
                 {
@@ -244,7 +244,7 @@ static TokenType identifierType()
                 }
                 else if (length == 9)
                 {
-                    return TOKEN_ELSE_IF; // "sinonsi"
+                    return TOKEN_ELSE_IF; // "sinon si"
                 }
             }
             }

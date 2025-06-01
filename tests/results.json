@@ -1,7 +1,7 @@
 {
   "summary": {
-    "total": 17,
-    "passed": 17,
+    "total": 19,
+    "passed": 19,
     "failed": 0,
     "errors": 0
   },
@@ -9,28 +9,56 @@
     {
       "file": "tests/control-flow/for.zia",
       "status": "PASS",
-      "time": 0.00304958299966529,
+      "time": 0.002271167002618313,
+      "author": "",
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/control-flow/if.zia",
       "status": "PASS",
-      "time": 0.0018899170099757612,
-      "tags": [],
-      "description": ""
+      "time": 0.0022969580022618175,
+      "author": "Manir",
+      "tags": [
+        "condition"
+      ],
+      "description": "Simple `si` condition"
+    },
+    {
+      "file": "tests/control-flow/if_else.zia",
+      "status": "PASS",
+      "time": 0.0017686669889371842,
+      "author": "Manir",
+      "tags": [
+        "condition"
+      ],
+      "description": "`si` with `sinon` clause"
+    },
+    {
+      "file": "tests/control-flow/if_elseif_else.zia",
+      "status": "PASS",
+      "time": 0.0017772080027498305,
+      "author": "Manir",
+      "tags": [
+        "condition",
+        "condition",
+        "condition"
+      ],
+      "description": "`si` with `sinon si` and `sinon`"
     },
     {
       "file": "tests/control-flow/while.zia",
       "status": "PASS",
-      "time": 0.002285166992805898,
+      "time": 0.0017154589877463877,
+      "author": "",
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/error/arithmetic_type_mismatch.zia",
       "status": "PASS",
-      "time": 0.002431125001749024,
+      "time": 0.0016268340114038438,
+      "author": "Manir",
       "tags": [
         "type-system",
         "edge-case"
@@ -40,93 +68,114 @@
     {
       "file": "tests/error/type_mismatch.zia",
       "status": "PASS",
-      "time": 0.002054541982943192,
+      "time": 0.0017221659945789725,
+      "author": "",
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/error/undefined_var.zia",
       "status": "PASS",
-      "time": 0.0017035829951055348,
+      "time": 0.0016233749920502305,
+      "author": "",
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/expressions/arithmetic.zia",
       "status": "PASS",
-      "time": 0.0019624160195235163,
-      "tags": [],
-      "description": ""
+      "time": 0.0016641250113025308,
+      "author": "Manir",
+      "tags": [
+        "edge-case"
+      ],
+      "description": "Addition arithmetic calculation"
     },
     {
       "file": "tests/expressions/arithmetic_complex.zia",
       "status": "PASS",
-      "time": 0.0017274999991059303,
-      "tags": [],
-      "description": ""
+      "time": 0.0016432089905720204,
+      "author": "Manir",
+      "tags": [
+        "edge-case"
+      ],
+      "description": "Complex arithmetic calculation"
     },
     {
       "file": "tests/expressions/arithmetic_precedence.zia",
       "status": "PASS",
-      "time": 0.0016884579963516444,
-      "tags": [],
-      "description": ""
+      "time": 0.0017520420078653842,
+      "author": "Manir",
+      "tags": [
+        "edge-case"
+      ],
+      "description": "Simple precedence verification"
     },
     {
       "file": "tests/expressions/binary.zia",
       "status": "PASS",
-      "time": 0.0017935829819180071,
+      "time": 0.0016659169923514128,
+      "author": "",
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/expressions/comparison.zia",
       "status": "PASS",
-      "time": 0.0017772080027498305,
+      "time": 0.0017317080055363476,
+      "author": "",
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/expressions/literals.zia",
       "status": "PASS",
-      "time": 0.0016893749998416752,
+      "time": 0.001776416989741847,
+      "author": "",
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/functions/simple_fn.zia",
       "status": "PASS",
-      "time": 0.0017225420160684735,
+      "time": 0.0016685409937053919,
+      "author": "",
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/operators/decrement.zia",
       "status": "PASS",
-      "time": 0.0017495829961262643,
+      "time": 0.001744957990013063,
+      "author": "",
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/operators/increment.zia",
       "status": "PASS",
-      "time": 0.0017589580093044788,
+      "time": 0.0018811249756254256,
+      "author": "",
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/operators/ternary.zia",
       "status": "PASS",
-      "time": 0.0018602079944685102,
+      "time": 0.001711708988295868,
+      "author": "",
       "tags": [],
       "description": ""
     },
     {
       "file": "tests/output/print_hello.zia",
       "status": "PASS",
-      "time": 0.001797165983589366,
-      "tags": [],
-      "description": ""
+      "time": 0.0017726660007610917,
+      "author": "Manir",
+      "tags": [
+        "edge-case"
+      ],
+      "description": "Print (afficher) Test"
     }
   ]
 }

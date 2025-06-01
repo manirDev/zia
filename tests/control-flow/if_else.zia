@@ -1,0 +1,11 @@
+// @author Manir
+// @description `si` with `sinon` clause
+// @tag condition
+// @importance 1
+
+var a = 2;
+si (a > 5) {
+    afficher "grand";
+} sinon {
+    afficher "petit";
+}

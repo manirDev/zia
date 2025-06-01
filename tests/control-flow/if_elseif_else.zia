@@ -1,0 +1,47 @@
+// @author Manir
+// @description `si` with `sinon si` and `sinon`
+// @tag condition
+// @importance 2
+var age = 17;
+
+si (age < 13) {
+    afficher "enfant";
+} sinon si (age < 18) {
+    afficher "ado";
+} sinon {
+    afficher "adulte";
+}
+
+// @description `si` with `sinon si` and `sinon`
+// @tag condition
+// @importance 2
+{
+    var age = 27;
+    si (age < 3) {
+        afficher "bébé";
+    } 
+    sinon si (age < 9) {
+        afficher "jeune enfant";
+    }   
+    sinon si (age < 30) {
+        afficher "adulte jeune";
+    } 
+   
+    sinon {
+        afficher "sénior";
+    }
+}
+
+{
+// @description `si` with `sinon si` and `sinon`
+// @tag condition
+// @importance 2
+    var age = 11;
+    si (age < 13) {
+        afficher "enfant";
+    } sinon si (age < 18) {
+        afficher "ado";
+    } sinon {
+        afficher "adulte";
+    }
+}

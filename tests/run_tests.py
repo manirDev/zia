@@ -55,7 +55,7 @@ def parse_metadata(file_path: str) -> TestMetadata:
     with open(file_path, 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
-            if not line.startswith("// @") and not line.startswith("// Test description"):
+            if not line.startswith("// @"):
                 continue
             if line.startswith("// @author"):
                 metadata.author = line.partition("@author")[2].strip()
@@ -68,8 +68,8 @@ def parse_metadata(file_path: str) -> TestMetadata:
                 tag = line.partition("@tag")[2].strip()
                 if tag:
                     metadata.tags.append(tag)
-            elif line.startswith("// Test description"):
-                metadata.description = line.partition(":")[2].strip()
+            elif line.startswith("// @description"):
+                metadata.description = line.partition("@description")[2].strip()
     return metadata
 
 def parse_args():
@@ -236,6 +236,7 @@ def main():
             "file": os.path.relpath(test_case.path),
             "status": result.name,
             "time": duration,
+            "author": test_case.metadata.author or "",
             "tags": test_case.metadata.tags,
             "description": test_case.metadata.description or "",
         })
