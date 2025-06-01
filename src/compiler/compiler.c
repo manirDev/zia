@@ -168,12 +168,13 @@ static void emitLoop(ZInt32 loopStart)
 {
     emitByte(OP_LOOP);
 
-    ZInt32 offset = currentChunk()->count - loopStart + 2;
-    if (offset > UINT16_MAX)
+    ZInt32 offset = currentChunk()->count - loopStart + JUMP_OFFSET_SIZE;
+    if (offset >  0xFFFFFF)
     {
         error("Corps de boucle trop long");
     }
 
+    emitByte((offset >> 16) & 0xff);
     emitByte((offset >> 8) & 0xff);
     emitByte(offset & 0xff);
 }
