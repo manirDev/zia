@@ -1,0 +1,5 @@
+// EXPECT: 6
+var a = 4;
+var b = 2;
+var add = a + b;
+afficher add;

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zia Test Report</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { padding: 0.5em; border: 1px solid #ccc; text-align: left; }
+    .PASS { color: green; }
+    .FAIL { color: red; }
+    .ERROR { color: orange; }
+  </style>
+</head>
+<body>
+  <h1>Zia Language Test Report</h1>
+  <p>Generated: {{ generated_at }}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Test File</th>
+        <th>Status</th>
+        <th>Time</th>
+        <th>Tags</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for test in results.tests %}
+      <tr>
+        <td>{{ test.file }}</td>
+        <td class="{{ test.status }}">{{ test.status }}</td>
+        <td>{{ "%.2fs"|format(test.time) }}</td>
+        <td>{{ test.tags | join(', ') }}</td>
+        <td>{{ test.description }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Summary</h2>
+  <ul>
+    <li><strong>Total:</strong> {{ results.summary.total }}</li>
+    <li><strong>Passed:</strong> {{ results.summary.passed }}</li>
+    <li><strong>Failed:</strong> {{ results.summary.failed }}</li>
+    <li><strong>Errors:</strong> {{ results.summary.errors }}</li>
+  </ul>
+</body>
+</html>
