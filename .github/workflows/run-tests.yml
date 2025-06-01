@@ -23,7 +23,7 @@ jobs:
         run: pip install -r requirements.txt || true
 
       - name: Build Zia (native)
-        run: make build
+        run: make build && make websetup
 
       - name: Make test runner executable
         run: chmod +x ./tests/run_tests.py
@@ -48,3 +48,9 @@ jobs:
         with:
           name: zia-test-report
           path: ./tests/test_report.pdf
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build_wasm
