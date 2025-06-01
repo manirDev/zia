@@ -15,7 +15,7 @@ def render_html(results):
 def main():
     results = load_test_results('./tests/results.json')  # From your test runner
     html = render_html(results)
-    with open('test_report.html', 'w') as f:
+    with open('./tests/test_report.html', 'w') as f:
         f.write(html)
     print("✅ HTML report generated as 'test_report.html'")
 
