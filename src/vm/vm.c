@@ -46,33 +46,29 @@ static ZReal64 ziaFmod(ZReal64 a, ZReal64 b)
     return (a - (b * truncated));
 }
 
-static ZReal64 ziaPow(ZReal64 base, ZReal64 exponent)
+static InterpretResult ziaPow(ZReal64 base, ZReal64 exponent, ZReal64 *result)
 {
     ZInt32 exp = (ZInt32)exponent;
-    ZReal64 result = 1;
 
-    if (exp >= 0)
-    {
-        for (ZInt32 i = 0; i < exp; i++)
-        {
-            result *= base;
-        }
+    if (base == 0.0 && exp < 0) {
+        runtimeError("Division par zéro.");
+        return INTERPRET_RUNTIME_ERROR;
     }
-    else
-    {
-        for(ZInt32 i=0; i < -exp; i++)
-        {
-            result *= base;
-        }
 
-        if (result == 0)
-        {
-            runtimeError("Division par zéro.");
-            return INTERPRET_RUNTIME_ERROR;
+    *result = 1.0;
+
+    if (exp >= 0) {
+        for (ZInt32 i = 0; i < exp; i++) {
+            *result *= base;
         }
-        result = (1.0) / result;
+    } else {
+        for (ZInt32 i = 0; i < -exp; i++) {
+            *result *= base;
+        }
+        *result = 1.0 / (*result);
     }
-    return result;
+
+    return INTERPRET_OK;
 }
 
 void initVM()
@@ -326,7 +322,15 @@ static InterpretResult run()
                 runtimeError("L'exposant doit être un entier.");
                 return INTERPRET_RUNTIME_ERROR;
             }
-            push(NUMBER_VAL(ziaPow(base, exponent)));
+
+            ZReal64 result =  1;
+            InterpretResult retCode = ziaPow(base, exponent, &result);
+            if (INTERPRET_RUNTIME_ERROR == retCode)
+            {
+                return retCode;
+            }
+
+            push(NUMBER_VAL(result));
             break;
         }
         case OP_DUP:

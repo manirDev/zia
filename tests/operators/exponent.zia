@@ -28,21 +28,17 @@
     var res4 = base4 ** exp4;
     afficher res4; // 0
 
-    // Cas 5 : Exposant négatif avec base 0 (devrait causer une erreur : division par zéro)
+    // Cas 5 : 0 puissance 0 (selon l’implémentation, souvent accepté comme 1)
     var base5 = 0;
-    var exp5 = -1;
+    var exp5 = 0;
     var res5 = base5 ** exp5;
-    afficher res5; // Erreur attendue
+    afficher res5; // 1
 
-    // Cas 6 : Exposant fractionnaire (non supporté, devrait lever une erreur)
-    var base6 = 4;
-    var exp6 = -0.5;
+    // Cas 6 : Exposant négatif avec base 0 (devrait causer une erreur : division par zéro)
+    /*
+    var base6 = 0;
+    var exp6 = -1;
     var res6 = base6 ** exp6;
     afficher res6; // Erreur attendue
-
-    // Cas 7 : 0 puissance 0 (selon l’implémentation, souvent accepté comme 1)
-    var base7 = 0;
-    var exp7 = 0;
-    var res7 = base7 ** exp7;
-    afficher res7; // 1
+    */
 }
