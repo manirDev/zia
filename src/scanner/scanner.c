@@ -406,7 +406,11 @@ Token scanToken()
     }
     case '*':
     {
-        if (match('='))
+        if(match('*'))
+        {
+            return makeToken(TOKEN_STAR_STAR);
+        }
+        else if (match('='))
         {
             return makeToken(TOKEN_STAR_EQUAL);
         }

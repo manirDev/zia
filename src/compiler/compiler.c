@@ -18,7 +18,7 @@ static void postIncrementDecrement(ZUInt8 getOp, ZUInt8 setOp, ZInt32 arg, ZUInt
 typedef enum
 {
     PREC_NONE,
-    PREC_ASSIGNMENT,  // =
+    PREC_ASSIGNMENT,  // =, +=, -=, /=, *=
     PREC_CONDITIONAL, // ?:
     PREC_OR,          // or
     PREC_AND,         // and
@@ -26,7 +26,8 @@ typedef enum
     PREC_COMPARISON,  // < > <= >=
     PREC_TERM,        // + -
     PREC_FACTOR,      // * /
-    PREC_UNARY,       // ! -
+    PREC_UNARY,       // ! -, ++, --,
+    PREC_POWER,       // **
     PREC_CALL,        // . ()
     PREC_PRIMARY
 } Precedence;
@@ -318,6 +319,9 @@ static void binary(ZBool canAssign)
     case TOKEN_PERCENT:
         emitByte(OP_MODULO);
         break;
+    case TOKEN_STAR_STAR:
+        emitByte(OP_POWER);
+        break;
     default:
         return;
     }
@@ -608,6 +612,7 @@ ParseRule rules[] =
         [TOKEN_MINUS_EQUAL] = {NULL, NULL, PREC_NONE},
         [TOKEN_STAR_EQUAL] = {NULL, NULL, PREC_NONE},
         [TOKEN_SLASH_EQUAL] = {NULL, NULL, PREC_NONE},
+        [TOKEN_STAR_STAR] = {NULL, binary, PREC_POWER},
 
         [TOKEN_EOF] = {NULL, NULL, PREC_NONE},
 

@@ -1,0 +1,48 @@
+// @description Tests pour l'opérateur **
+// @author Manir
+// @importance 1
+// @tag puissance, exposant, opérateurs
+
+{
+    // Cas 1 : Base négative, exposant impair (devrait donner un résultat négatif)
+    var base1 = -2;
+    var exp1 = 3;
+    var res1 = base1 ** exp1;
+    afficher res1; // -8
+
+    // Cas 2 : Base négative, exposant pair (résultat positif)
+    var base2 = -2;
+    var exp2 = 4;
+    var res2 = base2 ** exp2;
+    afficher res2; // 16
+
+    // Cas 3 : Exposant zéro (n'importe quelle base != 0 donne 1)
+    var base3 = 100;
+    var exp3 = 0;
+    var res3 = base3 ** exp3;
+    afficher res3; // 1
+
+    // Cas 4 : Base zéro avec exposant positif (résultat est 0)
+    var base4 = 0;
+    var exp4 = 5;
+    var res4 = base4 ** exp4;
+    afficher res4; // 0
+
+    // Cas 5 : Exposant négatif avec base 0 (devrait causer une erreur : division par zéro)
+    var base5 = 0;
+    var exp5 = -1;
+    var res5 = base5 ** exp5;
+    afficher res5; // Erreur attendue
+
+    // Cas 6 : Exposant fractionnaire (non supporté, devrait lever une erreur)
+    var base6 = 4;
+    var exp6 = -0.5;
+    var res6 = base6 ** exp6;
+    afficher res6; // Erreur attendue
+
+    // Cas 7 : 0 puissance 0 (selon l’implémentation, souvent accepté comme 1)
+    var base7 = 0;
+    var exp7 = 0;
+    var res7 = base7 ** exp7;
+    afficher res7; // 1
+}

@@ -34,11 +34,45 @@ static void runtimeError(const ZChar* format, ...)
     resetStack();
 }
 
+static ZBool isInteger(ZReal64 exponent)
+{
+    return ((ZInt32)exponent == exponent);
+}
+
 static ZReal64 ziaFmod(ZReal64 a, ZReal64 b)
 {
     ZReal64 quotient = (a / b);
     ZInt32 truncated  = (ZInt32)quotient;
     return (a - (b * truncated));
+}
+
+static ZReal64 ziaPow(ZReal64 base, ZReal64 exponent)
+{
+    ZInt32 exp = (ZInt32)exponent;
+    ZReal64 result = 1;
+
+    if (exp >= 0)
+    {
+        for (ZInt32 i = 0; i < exp; i++)
+        {
+            result *= base;
+        }
+    }
+    else
+    {
+        for(ZInt32 i=0; i < -exp; i++)
+        {
+            result *= base;
+        }
+
+        if (result == 0)
+        {
+            runtimeError("Division par zéro.");
+            return INTERPRET_RUNTIME_ERROR;
+        }
+        result = (1.0) / result;
+    }
+    return result;
 }
 
 void initVM()
@@ -276,6 +310,23 @@ static InterpretResult run()
                 return INTERPRET_RUNTIME_ERROR;
             }
             push(NUMBER_VAL(ziaFmod(a, b)));
+            break;
+        }
+        case OP_POWER:
+        {
+            if (!IS_NUMBER(peek(0)) || !IS_NUMBER(peek(1))) {
+                runtimeError("Les opérandes doivent être des nombres.");
+                return INTERPRET_RUNTIME_ERROR;
+            }
+            ZReal64 exponent = AS_NUMBER(pop());
+            ZReal64 base = AS_NUMBER(pop());
+            
+            if (!isInteger(exponent))
+            {
+                runtimeError("L'exposant doit être un entier.");
+                return INTERPRET_RUNTIME_ERROR;
+            }
+            push(NUMBER_VAL(ziaPow(base, exponent)));
             break;
         }
         case OP_DUP:
