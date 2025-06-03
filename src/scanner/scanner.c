@@ -181,6 +181,8 @@ static TokenType identifierType()
         return checkKeyword(1, 8, "etourner", TOKEN_RETURN);
     case 't':
         return checkKeyword(1, 6, "antque", TOKEN_WHILE);
+    case 'q':
+        return checkKeyword(1, 6, "uitter", TOKEN_BREAK);
     case 'c':
     {
         if (length > 1)

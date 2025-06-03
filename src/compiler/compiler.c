@@ -53,12 +53,28 @@ typedef enum
 
 typedef struct
 {
+    ZInt32 *breakJumps;   // for break jump locations
+    ZInt32 breakCount;    // number of active breaks
+    ZInt32 breakCapacity; // capacity of breakJumps array
+    ZInt32 loopStart;
+    ZInt32 loopEnd; // track where the break should jump to
+    ZInt32 scopeDepth;    // track the scope depth when loop started
+} Loop;
+
+typedef struct
+{
+    Loop loops[8]; // support up to 8 nested loop;
+    ZInt32 loopDepth;
+} LoopContext;
+
+typedef struct
+{
     ObjFunction *function;
     FunctionType type;
-
     Local locals[UINT8_COUNT];
     ZInt32 localCount;
     ZInt32 scopeDepth;
+    LoopContext loopContext;
 } Compiler;
 
 typedef struct
@@ -170,7 +186,7 @@ static void emitLoop(ZInt32 loopStart)
     emitByte(OP_LOOP);
 
     ZInt32 offset = currentChunk()->count - loopStart + JUMP_OFFSET_SIZE;
-    if (offset >  0xFFFFFF)
+    if (offset > 0xFFFFFF)
     {
         error("Corps de boucle trop long");
     }
@@ -183,9 +199,9 @@ static void emitLoop(ZInt32 loopStart)
 static ZInt32 emitJump(ZUInt8 instruction)
 {
     emitByte(instruction);
-    emitByte(0xff);  // High byte
-    emitByte(0xff);  // Middle byte
-    emitByte(0xff);  // Low byte
+    emitByte(0xff); // High byte
+    emitByte(0xff); // Middle byte
+    emitByte(0xff); // Low byte
     return currentChunk()->count - JUMP_OFFSET_SIZE;
 }
 
@@ -213,26 +229,37 @@ static void emitConstant(Value value)
 static void patchJump(ZInt32 offset)
 {
     ZInt32 jump = currentChunk()->count - offset - JUMP_OFFSET_SIZE;
-    if (jump > 0xFFFFFF) {
+    if (jump > 0xFFFFFF)
+    {
         error("Jump offset too large.");
     }
     currentChunk()->code[offset] = (jump >> 16) & 0xff;
-    currentChunk()->code[offset+1] = (jump >> 8) & 0xff;
-    currentChunk()->code[offset+2] = jump & 0xff;
+    currentChunk()->code[offset + 1] = (jump >> 8) & 0xff;
+    currentChunk()->code[offset + 2] = jump & 0xff;
 }
 
 static void initCompiler(Compiler *compiler, FunctionType type)
 {
     compiler->function = NULL;
     compiler->type = type;
-
     compiler->localCount = 0;
     compiler->scopeDepth = 0;
 
-    compiler->function = newFunction();
+    // Initialize loop context
+    compiler->loopContext.loopDepth = 0;
+    for (int i = 0; i < 8; i++)
+    { // Initialize all potential loop levels
+        compiler->loopContext.loops[i].breakJumps = NULL;
+        compiler->loopContext.loops[i].breakCount = 0;
+        compiler->loopContext.loops[i].breakCapacity = 0;
+        compiler->loopContext.loops[i].loopStart = 0;
+        compiler->loopContext.loops[i].loopEnd = 0;
+    }
 
+    compiler->function = newFunction();
     current = compiler;
 
+    // Initialize first local slot
     Local *local = &current->locals[current->localCount++];
     local->depth = 0;
     local->name.start = "";
@@ -241,13 +268,27 @@ static void initCompiler(Compiler *compiler, FunctionType type)
 
 static ObjFunction *endCompiler()
 {
+    // Clean up all loop tracking resources
+    for (ZInt32 i = 0; i < current->loopContext.loopDepth; i++)
+    {
+        if (current->loopContext.loops[i].breakJumps != NULL)
+        {
+            free(current->loopContext.loops[i].breakJumps);
+            current->loopContext.loops[i].breakJumps = NULL;
+        }
+        current->loopContext.loops[i].breakCount = 0;
+        current->loopContext.loops[i].breakCapacity = 0;
+    }
+    current->loopContext.loopDepth = 0;
+
     emitReturn();
     ObjFunction *function = current->function;
 
 #ifdef DEBUG_PRINT_CODE
     if (!parser.hadError)
     {
-        disassembleChunk(currentChunk(), NULL != function->name ? function->name->chars : "<script>");
+        disassembleChunk(currentChunk(),
+                         function->name != NULL ? function->name->chars : "<script>");
     }
 #endif
 
@@ -269,6 +310,68 @@ static void endScope()
         emitByte(OP_POP);
         current->localCount--;
     }
+}
+
+static void beginLoop()
+{
+    Compiler *c = current;
+    if (c->loopContext.loopDepth >= 8)
+    {
+        error("Trop de boucles imbriquées");
+        return;
+    }
+
+    Loop *loop = &c->loopContext.loops[c->loopContext.loopDepth++];
+    loop->breakJumps = NULL;
+    loop->breakCount = 0;
+    loop->breakCapacity = 0;
+    loop->loopStart = currentChunk()->count;
+    loop->loopEnd = -1; // will be set when know that the loop ends
+    loop->scopeDepth = c->scopeDepth; // Store current scope depth
+}
+
+static void endLoop()
+{
+    Compiler *c = current;
+    if (c->loopContext.loopDepth == 0)
+    {
+        error("Aucune boucle active à terminer");
+        return;
+    }
+
+    Loop *loop = &c->loopContext.loops[--c->loopContext.loopDepth];
+
+    // Patch all break jumps to loopEnd
+    for (ZInt32 i = 0; i < loop->breakCount; i++)
+    {
+        patchJump(loop->breakJumps[i]);
+    }
+
+    // Free memory if no longer needed
+    if (NULL != loop->breakJumps)
+    {
+        free(loop->breakJumps);
+    }
+}
+
+static void addBreakJump(ZInt32 jump)
+{
+    Compiler *c = current;
+    if (c->loopContext.loopDepth == 0)
+    {
+        error("Les instructions 'quitter' ne peuvent être utilisées que dans une boucle.");
+        return;
+    }
+
+    Loop *loop = &c->loopContext.loops[c->loopContext.loopDepth - 1];
+
+    if (loop->breakCount >= loop->breakCapacity)
+    {
+        ZInt32 newCapacity = loop->breakCapacity < 8 ? 8 : loop->breakCapacity * 2;
+        loop->breakJumps = realloc(loop->breakJumps, sizeof(ZInt32) * newCapacity);
+        loop->breakCapacity = newCapacity;
+    }
+    loop->breakJumps[loop->breakCount++] = jump;
 }
 
 static void expression();
@@ -789,98 +892,124 @@ static void expressionStatement()
     emitByte(OP_POP);
 }
 
-static void forStatement()
-{
+static void forStatement() {
     beginScope();
+    beginLoop();  // This now stores the scope depth
+
     consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après boucle 'pour'.");
 
-    if (match(TOKEN_SEMICOLON))
-    {
-        /*
-        No initializer found ex.: for (;i>10;i++)
-        */
-    }
-    else if (match(TOKEN_VAR))
-    {
+    // Initializer clause
+    if (match(TOKEN_SEMICOLON)) {
+        // No initializer
+    } else if (match(TOKEN_VAR)) {
         varDeclaration();
-    }
-    else
-    {
+    } else {
         expressionStatement();
     }
 
-    ZInt32 loopStart = currentChunk()->count;
+    // Set loop start position
+    current->loopContext.loops[current->loopContext.loopDepth - 1].loopStart = currentChunk()->count;
     ZInt32 exitJump = -1;
 
-    if (!match(TOKEN_SEMICOLON))
-    {
+    // Condition clause
+    if (!match(TOKEN_SEMICOLON)) {
         expression();
-        consume(TOKEN_SEMICOLON, "Point-virgule ';' attendu après la condition de la boucle 'pour'.");
-
+        consume(TOKEN_SEMICOLON, "Point-virgule ';' attendu après la condition.");
+        
         exitJump = emitJump(OP_JUMP_IF_FALSE);
-        emitByte(OP_POP);
+        emitByte(OP_POP); // Pop condition if true
     }
 
-    if (!match(TOKEN_RIGHT_PAREN))
-    {
+    // Increment clause
+    ZInt32 incrementStart = -1;
+    if (!match(TOKEN_RIGHT_PAREN)) {
+        // Jump over increment for first iteration
         ZInt32 bodyJump = emitJump(OP_JUMP);
-        ZInt32 incrementStart = currentChunk()->count;
+        incrementStart = currentChunk()->count;
+        
         expression();
         emitByte(OP_POP);
-        consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après les clauses du boucle 'pour'.");
-
-        emitLoop(loopStart);
-        loopStart = incrementStart;
+        consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après les clauses.");
+        
+        emitLoop(current->loopContext.loops[current->loopContext.loopDepth - 1].loopStart);
+        current->loopContext.loops[current->loopContext.loopDepth - 1].loopStart = incrementStart;
         patchJump(bodyJump);
     }
 
-    statement();
-    emitLoop(loopStart);
+    // Set where breaks should jump to (after the loop)
+    current->loopContext.loops[current->loopContext.loopDepth - 1].loopEnd = currentChunk()->count;
 
-    /*
-    We do this only when there is a condition clause. If there isn’t,
-    there’s no jump to patch and no condition value on the stack to pop.
-    */
-    if (exitJump != -1)
-    {
+    // Loop body
+    statement();
+
+    // Jump back to condition/increment
+    emitLoop(current->loopContext.loops[current->loopContext.loopDepth - 1].loopStart);
+
+    // Patch exit jump if condition exists
+    if (exitJump != -1) {
         patchJump(exitJump);
         emitByte(OP_POP);
     }
 
+    endLoop();
     endScope();
 }
 
-static void ifStatement() {
+static void breakStatement() {
+    if (current->loopContext.loopDepth == 0) {
+        error("Les instructions 'quitter' ne peuvent être utilisées que dans une boucle.");
+        return;
+    }
+
+    consume(TOKEN_SEMICOLON, "Un Virgule est attendu après 'quitter'.");
+
+    // Clean up locals in the loop scope
+    Loop* currentLoop = &current->loopContext.loops[current->loopContext.loopDepth - 1];
+    while (current->localCount > 0 &&
+           current->locals[current->localCount - 1].depth > currentLoop->scopeDepth) {
+        emitByte(OP_POP);
+        current->localCount--;
+    }
+
+    // Emit break jump (will be patched in endLoop)
+    ZInt32 jump = emitJump(OP_JUMP);
+    addBreakJump(jump);
+}
+
+static void ifStatement()
+{
     consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après 'si'.");
     expression();
     consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après la condition.");
 
     ZInt32 thenJump = emitJump(OP_JUMP_IF_FALSE);
-    emitByte(OP_POP);  // Pop condition if true
+    emitByte(OP_POP); // Pop condition if true
     statement();
 
     ZInt32 elseJump = emitJump(OP_JUMP);
     patchJump(thenJump);
-    emitByte(OP_POP);  // Pop condition if false
+    emitByte(OP_POP); // Pop condition if false
 
     // Handle 'sinon si' and 'sinon'
-    while (match(TOKEN_ELSE_IF)) {
+    while (match(TOKEN_ELSE_IF))
+    {
         consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après 'sinon si'.");
         expression();
         consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après la condition.");
 
         ZInt32 elseifJump = emitJump(OP_JUMP_IF_FALSE);
-        emitByte(OP_POP);  // Pop condition if true
+        emitByte(OP_POP); // Pop condition if true
         statement();
 
         ZInt32 nextJump = emitJump(OP_JUMP);
         patchJump(elseifJump);
-        emitByte(OP_POP);  // Pop condition if false
+        emitByte(OP_POP); // Pop condition if false
 
         elseJump = nextJump;
     }
 
-    if (match(TOKEN_ELSE)) {
+    if (match(TOKEN_ELSE))
+    {
         statement();
     }
 
@@ -894,21 +1023,36 @@ static void printStatement()
     emitByte(OP_PRINT);
 }
 
-static void whileStatement()
-{
+static void whileStatement() {
+    beginScope();  // Add scope for while loop
+    beginLoop();   // This now stores the scope depth
+
     ZInt32 loopStart = currentChunk()->count;
+    current->loopContext.loops[current->loopContext.loopDepth - 1].loopStart = loopStart;
 
     consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après boucle 'tantque'.");
     expression();
     consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après une condition.");
 
+    // jump out if condition is false;
     ZInt32 exitJump = emitJump(OP_JUMP_IF_FALSE);
     emitByte(OP_POP);
+
+    // Set where breaks should jump to (after the loop)
+    current->loopContext.loops[current->loopContext.loopDepth - 1].loopEnd = currentChunk()->count;
+
+    // Loop body
     statement();
+    
+    // Jump back to condition check
     emitLoop(loopStart);
 
+    // Patch exit jump (points here when condition is false)
     patchJump(exitJump);
     emitByte(OP_POP);
+
+    endLoop();
+    endScope();  // End the while loop scope
 }
 
 static void synchronize()
@@ -930,6 +1074,7 @@ static void synchronize()
         case TOKEN_IF:
         case TOKEN_WHILE:
         case TOKEN_PRINT:
+        case TOKEN_BREAK:
         case TOKEN_RETURN:
             return;
         default:;
@@ -973,6 +1118,10 @@ static void statement()
     else if (match(TOKEN_WHILE))
     {
         whileStatement();
+    }
+    else if (match(TOKEN_BREAK))
+    {
+        breakStatement();
     }
     else if (match(TOKEN_LEFT_BRACE))
     {

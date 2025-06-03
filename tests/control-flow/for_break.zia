@@ -1,0 +1,65 @@
+// @author Manir
+// @tag for-break
+// @description Using break statement with for(pour) loop
+
+{
+    pour (var i = 0; i < 10; i++) {
+        afficher i;
+        quitter;
+    }
+
+    afficher "Fini 1";
+
+    pour (var a = 0; a < 5; a++) {
+        si (a == 2) {
+            quitter;
+        }
+        afficher a;
+    }
+
+    afficher "Fini 2";
+
+    pour (var b = 0; b < 3; b++) {
+        afficher b;
+    }
+
+    afficher "Fini 3";
+
+    pour (var c = 0; c < 3; c++) {
+        pour (var d = 0; d < 3; d++) {
+            afficher c;
+            quitter;
+        }
+    }
+
+    afficher "Fini 4";
+
+    pour (var e = 0; e < 3; e++) {
+        pour (var f = 0; f < 3; f++) { 
+            si (f == 1) {
+                afficher f;
+                quitter;
+            }
+        }
+        si (e == 1) {
+            afficher e;
+            quitter;
+        }
+    }
+    afficher "Fini 5";
+}
+pour (var a = 1; a <= 5; a++) {
+    pour (var b = 0; b < 1; b++) {
+        pour (var c = 0; c < 1; c++) {
+            pour (var d = 0; d < 1; d++) {
+                pour (var e = 0; e < 1; e++) {
+                    afficher a;
+                    quitter;  // break innermost loop
+                }
+                quitter; // break d loop
+            }
+            quitter; // break c loop
+        }
+        quitter; // break b loop
+    }
+}
