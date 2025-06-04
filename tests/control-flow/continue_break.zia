@@ -1,0 +1,28 @@
+
+// @author Manir
+// @tag break, continue
+// @description Using continue statement and break statement in a loop
+
+
+var i = 0;
+tantque (i < 5) {
+    var j = -1;
+    tantque (j < 10) {
+        j++;
+        si (j % 2 == 0) {
+            continuer;
+        }
+        sinon{
+            afficher j;
+        }
+        si (j == 7) {
+            quitter;
+        }
+    }
+    si(i % 2 == 0)
+    {
+        afficher i;
+    }
+    i++;
+}
+afficher "Terminé";

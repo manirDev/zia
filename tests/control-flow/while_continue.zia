@@ -1,0 +1,47 @@
+
+// @author Manir
+// @tag while-continue
+// @description Using continue statement with while(pour) loop
+
+var i = 0;
+tantque (i < 3) {
+    var j = 0;
+    tantque (j < 3) {
+        si (j == 1) {
+            j = j + 1;
+            continuer;
+        }
+        afficher i;
+        afficher j;
+        j = j + 1;
+    }
+    i = i + 1;
+}
+
+afficher "Case 2";
+var i = 0;
+tantque (i < 3) {
+    var j = 0;
+    tantque (j < 3) {
+        si (j == 1) {
+            j = j + 1;
+            continuer; // Skip when j == 1
+        }
+
+        var k = 0;
+        tantque (k < 3) {
+            si (k == 2) {
+                quitter; // Break innermost loop when k == 2
+            }
+
+            afficher i;
+            afficher j;
+            afficher k;
+            k = k + 1;
+        }
+
+        j = j + 1;
+    }
+    i = i + 1;
+}
+afficher "Fin triple";

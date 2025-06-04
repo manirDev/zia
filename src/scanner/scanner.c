@@ -193,6 +193,8 @@ static TokenType identifierType()
                 return checkKeyword(2, 4, "asse", TOKEN_CLASS);
             case 'e':
                 return checkKeyword(2, 2, "ci", TOKEN_THIS);
+            case 'o':
+                return checkKeyword(2, 7, "ntinuer", TOKEN_CONTINUE);
             }
         }
         break;

@@ -1,0 +1,33 @@
+
+// @author Manir
+// @tag for-continue
+// @description Using continue statement with for(pour) loop
+
+
+pour (var i = 0; i < 3; i++) {
+    pour (var j = 0; j < 3; j++) {
+        si (j == 1) {
+            continuer;
+        }
+        afficher i;
+        afficher j;
+    }
+}
+
+afficher "Case 2";
+pour (var i = 0; i < 3; i++) {
+    pour (var j = 0; j < 3; j++) {
+        si (j == 1) {
+            continuer; // Skip when j == 1
+        }
+        pour (var k = 0; k < 3; k++) {
+            si (k == 2) {
+                quitter; // Break innermost loop when k == 2
+            }
+            afficher i;
+            afficher j;
+            afficher k;
+        }
+    }
+}
+afficher "Fin triple";
