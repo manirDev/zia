@@ -1,12 +1,91 @@
 // @description Using Zia to create patterns
 // @author Manir
-// @tag Pattern-exercice
+// @tag Pattern-exercices
 
+afficher "-----------Left-Aligned Triangle-----------\n";
 pour (var i = 1; i <= 5; i++) {
     var j = 1;
     tantque (j <= i) {
         afficher "*";
         j++;
+    }
+    afficher "\n";
+}
+afficher "-----------Right-Aligned Triangle-----------\n";
+pour (var i = 1; i <= 5; i++) {
+    var space = 5 - i;
+    tantque (space > 0) {
+        afficher " ";
+        space--;
+    }
+    var star = 1;
+    tantque (star <= i) {
+        afficher "*";
+        star++;
+    }
+    afficher "\n";
+}
+afficher "-----------Pyramid-----------\n";
+pour (var i = 1; i <= 5; i++) {
+    var space = 5 - i;
+    tantque (space > 0) {
+        afficher " ";
+        space--;
+    }
+    var star = 1;
+    tantque (star <= (2 * i - 1)) {
+        afficher "*";
+        star++;
+    }
+    afficher "\n";
+}
+afficher "-----------Inverted Triangle-----------\n";
+pour (var i = 5; i >= 1; i--) {
+    var j = 1;
+    tantque (j <= i) {
+        afficher "*";
+        j++;
+    }
+    afficher "\n";
+}
+afficher "-----------Diamond-----------\n";
+var n = 5;
+pour (var i = 1; i <= n; i++) {
+    var space = n - i;
+    tantque (space > 0) {
+        afficher " ";
+        space--;
+    }
+    var star = 1;
+    tantque (star <= 2 * i - 1) {
+        afficher "*";
+        star++;
+    }
+    afficher "\n";
+}
+pour (var i = n - 1; i >= 1; i--) {
+    var space = n - i;
+    tantque (space > 0) {
+        afficher " ";
+        space--;
+    }
+    var star = 1;
+    tantque (star <= 2 * i - 1) {
+        afficher "*";
+        star++;
+    }
+    afficher "\n";
+}
+afficher "-----------Chessboard-----------\n";
+var a = 1;
+var b = 1;
+pour (a = 1; a <= 8; a++) {
+    pour (b = 1; b <= 8; b++) {
+        si ((a + b) % 2 == 0) {
+            afficher "1";
+        } sinon {
+            afficher "0";
+        }
     }
     afficher "\n";
 }

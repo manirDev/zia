@@ -6,7 +6,7 @@
 #include "object/object.h"
 
 
-#define INIT_CAPACITY   0x0008
+#define INIT_CAPACITY   0x0100
 #define CAPACITY_FACTOR 0x0002
 
 #define ALLOCATE(type, count) \

@@ -118,14 +118,15 @@ def read_expected_file(path: str) -> List[str]:
     if not os.path.exists(path):
         return []
     with open(path, 'r', encoding='utf-8') as f:
-        content = f.read().strip()
+        content = f.read()
         if content.startswith('[') and content.endswith(']'):
             import ast
             try:
                 return ast.literal_eval(content)
             except:
                 return [line.strip(' "\'') for line in content[1:-1].split(',')]
-        return [line.strip() for line in content.splitlines() if line.strip()]
+        # Only strip newlines, preserve other whitespace
+        return [line.rstrip('\n') for line in content.splitlines()]
 
 def compare_error_messages(actual: List[str], expected: List[str]) -> bool:
     normalized_actual = [msg.strip(' "\'') for msg in actual]
