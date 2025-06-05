@@ -6,7 +6,7 @@ var a = 5;
 var b = 10;
 
 si (a < b et b < 20) {
-    afficher "vrai";
+    afficher "vrai\n";
 }
 
 var x = 90;

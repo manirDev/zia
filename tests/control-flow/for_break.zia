@@ -5,48 +5,54 @@
 {
     pour (var i = 0; i < 10; i++) {
         afficher i;
+        afficher "\n";
         quitter;
     }
 
-    afficher "Fini 1";
+    afficher "Fini 1\n";
 
     pour (var a = 0; a < 5; a++) {
         si (a == 2) {
             quitter;
         }
         afficher a;
+        afficher "\n";
     }
 
-    afficher "Fini 2";
+    afficher "Fini 2\n";
 
     pour (var b = 0; b < 3; b++) {
         afficher b;
+        afficher "\n";
     }
 
-    afficher "Fini 3";
+    afficher "Fini 3\n";
 
     pour (var c = 0; c < 3; c++) {
         pour (var d = 0; d < 3; d++) {
             afficher c;
+            afficher "\n";
             quitter;
         }
     }
 
-    afficher "Fini 4";
+    afficher "Fini 4\n";
 
     pour (var e = 0; e < 3; e++) {
         pour (var f = 0; f < 3; f++) { 
             si (f == 1) {
                 afficher f;
+                afficher "\n";
                 quitter;
             }
         }
         si (e == 1) {
             afficher e;
+            afficher "\n";
             quitter;
         }
     }
-    afficher "Fini 5";
+    afficher "Fini 5\n";
 }
 pour (var a = 1; a <= 5; a++) {
     pour (var b = 0; b < 1; b++) {
@@ -54,6 +60,7 @@ pour (var a = 1; a <= 5; a++) {
             pour (var d = 0; d < 1; d++) {
                 pour (var e = 0; e < 1; e++) {
                     afficher a;
+                    afficher "\n";
                     quitter;  // break innermost loop
                 }
                 quitter; // break d loop

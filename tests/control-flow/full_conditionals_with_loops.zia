@@ -6,17 +6,17 @@ var flag = 3;
 
 si (flag == 1) {
   pour (var i = 0; i < 1; i = i + 1) {
-    afficher "One";
+    afficher "\nOne";
   }
 } sinon si (flag == 2) {
   var i = 0;
   tantque (i < 1) {
-    afficher "Two";
+    afficher "\nTwo";
     i = i + 1;
   }
 } sinon {
-  afficher "Other";
+  afficher "\nOther";
   pour (var j = 0; j < 2; j++) {
-    afficher j;
+    afficher "\n", j;
   }
 }

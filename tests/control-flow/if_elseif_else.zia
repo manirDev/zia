@@ -5,11 +5,11 @@
 var age = 17;
 
 si (age < 13) {
-    afficher "enfant";
+    afficher "enfant\n";
 } sinon si (age < 18) {
-    afficher "ado";
+    afficher "ado\n";
 } sinon {
-    afficher "adulte";
+    afficher "adulte\n";
 }
 
 // @description `si` with `sinon si` and `sinon`
@@ -18,15 +18,15 @@ si (age < 13) {
 {
     var age = 27;
     si (age < 3) {
-    afficher "bébé";
+        afficher "bébé\n";
     } sinon si (age < 6) {
-        afficher "petite enfance";
+        afficher "petite enfance\n";
     } sinon si (age < 30) {
-        afficher "adulte jeune";
+        afficher "adulte jeune\n";
     } sinon si (age < 45) {
-        afficher "adulte";
+        afficher "adulte\n";
     } sinon {
-        afficher "sénior";
+        afficher "sénior\n";
     }
 }
 
@@ -36,10 +36,10 @@ si (age < 13) {
 // @importance 2
     var age = 11;
     si (age < 13) {
-        afficher "enfant";
+        afficher "enfant\n";
     } sinon si (age < 18) {
-        afficher "ado";
+        afficher "ado\n";
     } sinon {
-        afficher "adulte";
+        afficher "adulte\n";
     }
 }

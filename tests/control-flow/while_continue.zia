@@ -11,14 +11,14 @@ tantque (i < 3) {
             j = j + 1;
             continuer;
         }
-        afficher i;
-        afficher j;
+        afficher i, "\n";
+        afficher j, "\n";
         j = j + 1;
     }
     i = i + 1;
 }
 
-afficher "Case 2";
+afficher "Case 2\n";
 var i = 0;
 tantque (i < 3) {
     var j = 0;
@@ -34,9 +34,9 @@ tantque (i < 3) {
                 quitter; // Break innermost loop when k == 2
             }
 
-            afficher i;
-            afficher j;
-            afficher k;
+            afficher i, "\n";
+            afficher j, "\n";
+            afficher k, "\n";
             k = k + 1;
         }
 

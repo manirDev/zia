@@ -2,12 +2,12 @@
 // @tag loop
 // @description Basic pour loop from 1 to 3
 
-afficher "Example 1";
+afficher "Example 1\n";
 pour (var i = 1; i <= 3; i = i + 1) {
-  afficher i;
+  afficher i, "\n";
 }
 
-afficher "Example 2";
+afficher "Example 2\n";
 pour (var i = 3; i > 0; i = i - 1) {
-  afficher i;
+  afficher i, "\n";
 }

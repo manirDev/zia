@@ -3,6 +3,7 @@
 #include "common/commonTypes.h"
 #include <stdio.h>
 #include <string.h>
+#include "memory/memory.h"
 
 #define END_CHAR '\0'
 
@@ -122,7 +123,7 @@ static void skipWhiteSpace()
                 advance();
                 while (!isAtEnd())
                 {
-                    //in case having new line in the multi-line comment scanner should increase its line count
+                    // in case having new line in the multi-line comment scanner should increase its line count
                     if (peek() == NEW_LINE)
                     {
                         scanner.line++;
@@ -240,7 +241,7 @@ static TokenType identifierType()
             {
                 if (length == 2)
                 {
-                    return TOKEN_IF; //si
+                    return TOKEN_IF; // si
                 }
                 else if (length == 5)
                 {
@@ -291,18 +292,20 @@ static Token number()
 
 static Token string()
 {
+    // keep going till we find '"' to terminate the string:
     while (peek() != '"' && !isAtEnd())
     {
-        if (peek() == NEW_LINE)
+        if (peek() == '\\' && peekNext() == '"')
         {
-            scanner.line++;
+            advance();
         }
+        if (peek() == '\n')
+            scanner.line++;
         advance();
     }
     if (isAtEnd())
-    {
-        return errorToken("Chaîne non terminée.");
-    }
+        return errorToken("Unterminated string.");
+
     advance();
     return makeToken(TOKEN_STRING);
 }
@@ -366,20 +369,20 @@ Token scanToken()
     }
     case '-':
     {
-        if (match('-')) 
+        if (match('-'))
         {
             // Check if this is prefix ++ (before an identifier)
-            if (isAlpha(peek())) 
+            if (isAlpha(peek()))
             {
                 return makeToken(TOKEN_MINUS_MINUS_PREFIX);
             }
             // Otherwise it's postfix ++ (after an identifier)
             return makeToken(TOKEN_MINUS_MINUS_POSTFIX);
-        } 
-        else if (match('=')) 
+        }
+        else if (match('='))
         {
             return makeToken(TOKEN_MINUS_EQUAL);
-        } 
+        }
         return makeToken(TOKEN_MINUS);
     }
     case '+':
@@ -387,14 +390,14 @@ Token scanToken()
         if (match('+'))
         {
             // Check if this is prefix ++ (before an identifier)
-            if (isAlpha(peek())) 
+            if (isAlpha(peek()))
             {
                 return makeToken(TOKEN_PLUS_PLUS_PREFIX);
             }
             // Otherwise it's postfix ++ (after an identifier)
             return makeToken(TOKEN_PLUS_PLUS_POSTFIX);
         }
-        else if(match('='))
+        else if (match('='))
         {
             return makeToken(TOKEN_PLUS_EQUAL);
         }
@@ -410,7 +413,7 @@ Token scanToken()
     }
     case '*':
     {
-        if(match('*'))
+        if (match('*'))
         {
             return makeToken(TOKEN_STAR_STAR);
         }

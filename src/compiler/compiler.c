@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "memory/memory.h"
 
 #ifdef DEBUG_PRINT_CODE
 #include "debug.h"
@@ -339,9 +340,11 @@ static void beginLoop()
     loop->scopeDepth = c->scopeDepth; // Store current scope depth
 }
 
-static void endLoop() {
+static void endLoop()
+{
     Compiler *c = current;
-    if (c->loopContext.loopDepth == 0) {
+    if (c->loopContext.loopDepth == 0)
+    {
         error("No active loop to end");
         return;
     }
@@ -349,12 +352,14 @@ static void endLoop() {
     Loop *loop = &c->loopContext.loops[--c->loopContext.loopDepth];
 
     // Patch break jumps to loopEnd
-    for (ZInt32 i = 0; i < loop->breakCount; i++) {
+    for (ZInt32 i = 0; i < loop->breakCount; i++)
+    {
         patchJump(loop->breakJumps[i]);
     }
 
     // Free memory
-    if (loop->breakJumps != NULL) free(loop->breakJumps);
+    if (loop->breakJumps != NULL)
+        free(loop->breakJumps);
 }
 
 static void addBreakJump(ZInt32 jump)
@@ -376,7 +381,6 @@ static void addBreakJump(ZInt32 jump)
     }
     loop->breakJumps[loop->breakCount++] = jump;
 }
-
 
 static void expression();
 static void statement();
@@ -507,10 +511,47 @@ static void or_(ZBool canAssign)
     patchJump(endJump);
 }
 
-static void string(ZBool canAssign)
+static void string(bool _canAssign)
 {
-    //@TBD:  string escape sequences like \n, we’d translate those here
-    emitConstant(OBJ_VAL(copyString(parser.previous.start + 1, parser.previous.length - 2)));
+    // -2 because we ignore opening and closing quotes:'"'
+    int origLength = parser.previous.length - 2;
+    int escapedLength = 0;
+    char *escapedStr = ALLOCATE(char, origLength);
+    // loop all chars and combine '\'+'n' -> '\n' char, adjust total length:
+    for (int i = 1; i < origLength + 1; ++i)
+    {
+        char c = parser.previous.start[i];
+        if (i < origLength && c == '\\')
+        {
+            char nextChar = parser.previous.start[++i];
+            switch (nextChar)
+            {
+            case '\n':
+                break;
+            case '\\':
+                escapedStr[escapedLength++] = '\\';
+                break;
+            case '\'':
+                escapedStr[escapedLength++] = '\'';
+                break;
+            case '\"':
+                escapedStr[escapedLength++] = '\"';
+                break;
+            case 'n':
+                escapedStr[escapedLength++] = '\n';
+                break;
+            case 't':
+                escapedStr[escapedLength++] = '\t';
+                break;
+            default:
+                break;
+            }
+            continue;
+        }
+        escapedStr[escapedLength++] = c;
+    }
+    emitConstant(OBJ_VAL(copyString(escapedStr, escapedLength)));
+    FREE(char, escapedStr);
 }
 
 static void namedVariable(Token name, ZBool canAssign)
@@ -959,9 +1000,12 @@ static void forStatement()
     statement();
 
     // Jump back to condition/increment
-     if (incrementStart != -1) {
+    if (incrementStart != -1)
+    {
         emitLoop(incrementStart);
-    } else {
+    }
+    else
+    {
         emitLoop(current->loopContext.loops[current->loopContext.loopDepth - 1].loopStart);
     }
 
@@ -1023,7 +1067,7 @@ static void continueStatement()
     if (currentLoop->incrementStart != -1)
     {
         emitLoop(currentLoop->incrementStart);
-    } 
+    }
     else
     {
         emitLoop(currentLoop->loopStart);
@@ -1074,9 +1118,13 @@ static void ifStatement()
 
 static void printStatement()
 {
-    expression();
+    do
+    {
+        expression();
+        emitByte(OP_PRINT);
+    } while (match(TOKEN_COMMA));
+    
     consume(TOKEN_SEMICOLON, "Erreur : point-virgule manquant après la valeur.");
-    emitByte(OP_PRINT);
 }
 
 static void whileStatement()

@@ -3,11 +3,11 @@
 // @description Nested pour loop with conditionals
 
 pour (var i = 1; i <= 3; i = i + 1) {
-  afficher i;
+  afficher i, "\n";
   si (i == 2) {
     var j = 0;
     tantque (j < 2) {
-      afficher j;
+      afficher j, "\n";
       j = j + 1;
     }
   }

@@ -9,12 +9,12 @@ pour (var i = 0; i < 3; i++) {
         si (j == 1) {
             continuer;
         }
-        afficher i;
-        afficher j;
+        afficher i, "\n";
+        afficher j, "\n";
     }
 }
 
-afficher "Case 2";
+afficher "Case 2\n";
 pour (var i = 0; i < 3; i++) {
     pour (var j = 0; j < 3; j++) {
         si (j == 1) {
@@ -24,9 +24,9 @@ pour (var i = 0; i < 3; i++) {
             si (k == 2) {
                 quitter; // Break innermost loop when k == 2
             }
-            afficher i;
-            afficher j;
-            afficher k;
+            afficher i, "\n";
+            afficher j, "\n";
+            afficher k, "\n";
         }
     }
 }

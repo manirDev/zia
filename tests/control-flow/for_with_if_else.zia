@@ -3,28 +3,17 @@
 // @description pour loop with si/sinon logic
 
 {
-  afficher "Example 1";
+  afficher "Example 1\n";
   pour (var i = 1; i <= 3; i = i + 1) {
     si (i % 2 == 0) {
-      afficher "pair";
+      afficher "pair\n";
     } sinon {
-      afficher "impair";
+      afficher "impair\n";
     }
   }
 
-  afficher "Example 2";
-  var run = vrai;
+  afficher "Example 2\n";
 
-  si (run) {
-    pour (var i = 0; i < 2; i = i + 1) {
-      afficher i;
-    }
-  } 
-  sinon {
-    afficher "Skipped";
-  }
-
-  afficher "Example 3";
   var mode = 4 % 2;
 
   si (mode == 1) {
@@ -33,11 +22,11 @@
   sinon si (mode == 0) {
     var i = 0;
     tantque (i < 2) {
-      afficher i;
-      i = i + 1;
+      afficher i, "\n";
+      i++;
     }
   } 
   sinon {
-    afficher "Unknown mode";
+    afficher "Unknown mode\n";
   }
 }

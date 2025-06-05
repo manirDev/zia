@@ -8,37 +8,37 @@
     var base1 = -2;
     var exp1 = 3;
     var res1 = base1 ** exp1;
-    afficher res1; // -8
+    afficher res1, "\n"; // -8
 
     // Cas 2 : Base négative, exposant pair (résultat positif)
     var base2 = -2;
     var exp2 = 4;
     var res2 = base2 ** exp2;
-    afficher res2; // 16
+    afficher res2, "\n"; // 16
 
     // Cas 3 : Exposant zéro (n'importe quelle base != 0 donne 1)
     var base3 = 100;
     var exp3 = 0;
     var res3 = base3 ** exp3;
-    afficher res3; // 1
+    afficher res3, "\n"; // 1
 
     // Cas 4 : Base zéro avec exposant positif (résultat est 0)
     var base4 = 0;
     var exp4 = 5;
     var res4 = base4 ** exp4;
-    afficher res4; // 0
+    afficher res4, "\n"; // 0
 
     // Cas 5 : 0 puissance 0 (selon l’implémentation, souvent accepté comme 1)
     var base5 = 0;
     var exp5 = 0;
     var res5 = base5 ** exp5;
-    afficher res5; // 1
+    afficher res5, "\n"; // 1
 
     // Cas 6 : Exposant négatif avec base 0 (devrait causer une erreur : division par zéro)
     /*
     var base6 = 0;
     var exp6 = -1;
     var res6 = base6 ** exp6;
-    afficher res6; // Erreur attendue
+    afficher res6, "\n"; // Erreur attendue
     */
 }

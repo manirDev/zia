@@ -4,6 +4,6 @@
 
 var i = 0;
 tantque (i < 3) {
-  afficher i;
+  afficher i, "\n";
   i = i + 1;
 }

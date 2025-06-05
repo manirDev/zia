@@ -14,6 +14,7 @@ tantque (i < 5) {
         }
         sinon{
             afficher j;
+            afficher "\n";
         }
         si (j == 7) {
             quitter;
@@ -22,7 +23,8 @@ tantque (i < 5) {
     si(i % 2 == 0)
     {
         afficher i;
+        afficher "\n";
     }
     i++;
 }
-afficher "Terminé";
+afficher "Terminé\n";

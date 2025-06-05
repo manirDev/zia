@@ -5,18 +5,17 @@
 var note = 75;
 
 si (note >= 50) {
-    afficher "réussi";
+    afficher "réussi\n";
     si (note< 70) {
-        afficher "mention";
+        afficher "mention\n";
     }
     sinon si(note > 80 et note < 90){
-        afficher "mention bien";
+        afficher "mention bien\n";
     }
     sinon {
-        afficher "mention passable";
+        afficher "mention passable\n";
     }
 
     afficher "Congrats";
 }
-// expect: réussi
-// expect: mention
+

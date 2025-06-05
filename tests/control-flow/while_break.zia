@@ -5,63 +5,63 @@
 {
     var i = 0;
     tantque (i < 10) {
-        afficher i;
+        afficher i, "\n";
         quitter;
         i = i + 1;
     }
 
-    afficher "Fini 1";
+    afficher "Fini 1\n";
 
     var a = 0;
     tantque (a < 5) {
         si (a == 2) {
             quitter;
         }
-        afficher a;
+        afficher a, "\n";
         a = a + 1;
     }
 
-    afficher "Fini 2";
+    afficher "Fini 2\n";
 
     var b = 0;
     tantque (b < 3) {
-        afficher b;
+        afficher b, "\n";
         b = b + 1;
     }
 
-    afficher "Fini 3";
+    afficher "Fini 3\n";
 
     var c = 0;
     tantque (c < 3) {
         var d = 0;
         tantque (d < 3) {
-            afficher c;
+            afficher c, "\n";
             quitter;
             d = d + 1;
         }
         c = c + 1;
     }
 
-    afficher "Fini 4";
+    afficher "Fini 4\n";
 
     var e = 0;
     tantque (e < 3) {
         var f = 0;
         tantque (f < 3) {
             si (f == 1) {
-                afficher f;
+                afficher f, "\n";
                 quitter;
             }
             f = f + 1;
         }
         si (e == 1) {
-            afficher e;
+            afficher e, "\n";
             quitter;
         }
         e = e + 1;
     }
 
-    afficher "Fini 5";
+    afficher "Fini 5\n";
 }
 
 
@@ -75,7 +75,7 @@ tantque (a <= 5) {
             tantque (d < 1) {
                 var e = 0;
                 tantque (e < 1) {
-                    afficher a;
+                    afficher a, "\n";
                     quitter;  // break e loop
                 }
                 quitter; // break d loop

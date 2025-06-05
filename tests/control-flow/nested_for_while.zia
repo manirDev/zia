@@ -5,7 +5,7 @@
 pour (var i = 0; i < 2; i = i + 1) {
   var j = 0;
   tantque (j < 2) {
-    afficher i + j;
+    afficher i + j, "\n";
     j = j + 1;
   }
 }

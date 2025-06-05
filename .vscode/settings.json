@@ -22,6 +22,19 @@
         "optional": "c",
         "ratio": "c",
         "vector": "c",
-        "table.h": "c"
+        "table.h": "c",
+        "__config": "c",
+        "__locale": "c",
+        "__verbose_abort": "c",
+        "cstdlib": "c",
+        "format": "c",
+        "ios": "c",
+        "print": "c",
+        "stdexcept": "c",
+        "string": "c",
+        "string_view": "c",
+        "system_error": "c",
+        "typeinfo": "c",
+        "version": "c"
     }
 }
