@@ -10,12 +10,14 @@
 #include "debug.h"
 #endif
 
-#define MAX_NESTED_LOOPS 8
+#define MAX_NESTED_LOOPS 10
+#define MAX_CASES 10
 
 typedef void (*ParseFn)(ZBool canAssign);
 
 static ZUInt8 identifierConstant(Token *name);
 static void postIncrementDecrement(ZUInt8 getOp, ZUInt8 setOp, ZInt32 arg, ZUInt8 operation);
+static void synchronize();
 
 // ZIA's precedence order from lowest to the highest
 typedef enum
@@ -68,6 +70,13 @@ typedef struct
 
 typedef struct
 {
+    ZInt32 *switchBreakJumps;
+    ZInt32 switchBreakCount;
+    ZInt32 switchDepth;
+} SwitchContext;
+
+typedef struct
+{
     // support up to MAX_NESTED_LOOPS nested loop;
     Loop loops[MAX_NESTED_LOOPS];
     ZInt32 loopDepth;
@@ -81,6 +90,7 @@ typedef struct
     ZInt32 localCount;
     ZInt32 scopeDepth;
     LoopContext loopContext;
+    SwitchContext switchContext;
 } Compiler;
 
 typedef struct
@@ -263,6 +273,10 @@ static void initCompiler(Compiler *compiler, FunctionType type)
         compiler->loopContext.loops[i].incrementStart = 0;
     }
 
+    compiler->switchContext.switchDepth = 0;
+    compiler->switchContext.switchBreakJumps = NULL;
+    compiler->switchContext.switchBreakCount = 0;
+
     compiler->function = newFunction();
     current = compiler;
 
@@ -288,6 +302,8 @@ static ObjFunction *endCompiler()
         current->loopContext.loops[i].incrementStart = 0;
     }
     current->loopContext.loopDepth = 0;
+
+    // FREE_ARRAY(ZInt32, current->switchContext.switchBreakJumps, current->switchContext.switchBreakCount);
 
     emitReturn();
     ObjFunction *function = current->function;
@@ -365,9 +381,31 @@ static void endLoop()
 static void addBreakJump(ZInt32 jump)
 {
     Compiler *c = current;
+
+    // ✅ Check if we are in a switch
+    if (c->switchContext.switchDepth > 0)
+    {
+        if (c->switchContext.switchBreakJumps == NULL)
+        {
+            c->switchContext.switchBreakJumps = malloc(sizeof(ZInt32) * MAX_CASES);
+            c->switchContext.switchBreakCount = 0;
+        }
+
+        if (c->switchContext.switchBreakCount < MAX_CASES)
+        {
+            c->switchContext.switchBreakJumps[c->switchContext.switchBreakCount++] = jump;
+        }
+        else
+        {
+            error("Trop de 'quitter' dans 'selon'.");
+        }
+        return;
+    }
+
+    // ✅ Otherwise fallback to loop support
     if (c->loopContext.loopDepth == 0)
     {
-        error("Les instructions 'quitter' ne peuvent être utilisées que dans une boucle.");
+        error("Les instructions 'quitter' ne peuvent être utilisées que dans une boucle ou un 'selon'.");
         return;
     }
 
@@ -761,6 +799,9 @@ ParseRule rules[] =
         [TOKEN_STAR_EQUAL] = {NULL, NULL, PREC_NONE},
         [TOKEN_SLASH_EQUAL] = {NULL, NULL, PREC_NONE},
         [TOKEN_STAR_STAR] = {NULL, binary, PREC_POWER},
+        [TOKEN_SWITCH] = {NULL, NULL, PREC_NONE},
+        [TOKEN_CASE] = {NULL, NULL, PREC_NONE},
+        [TOKEN_DEFAULT] = {NULL, NULL, PREC_NONE},
 
         [TOKEN_EOF] = {NULL, NULL, PREC_NONE},
 
@@ -1022,26 +1063,30 @@ static void forStatement()
 
 static void breakStatement()
 {
-    if (current->loopContext.loopDepth == 0)
-    {
-        error("Les instructions 'quitter' ne peuvent être utilisées que dans une boucle.");
-        return;
-    }
+    consume(TOKEN_SEMICOLON, "Virgule ';' attendu après 'quitter'.");
 
-    consume(TOKEN_SEMICOLON, "Un Virgule est attendu après 'quitter'.");
-
-    // Clean up locals in the loop scope
-    Loop *currentLoop = &current->loopContext.loops[current->loopContext.loopDepth - 1];
+    // Clear locals from scope
     while (current->localCount > 0 &&
-           current->locals[current->localCount - 1].depth > currentLoop->scopeDepth)
+           current->locals[current->localCount - 1].depth > current->scopeDepth)
     {
         emitByte(OP_POP);
         current->localCount--;
     }
 
-    // Emit break jump (will be patched in endLoop)
-    ZInt32 jump = emitJump(OP_JUMP);
-    addBreakJump(jump);
+    int jump = emitJump(OP_JUMP);
+
+    if (current->switchContext.switchDepth > 0)
+    {
+        addBreakJump(jump);
+    }
+    else if (current->loopContext.loopDepth > 0)
+    {
+        addBreakJump(jump);
+    }
+    else
+    {
+        error("Les instructions 'quitter' ne peuvent être utilisées que dans une boucle ou un 'selon'.");
+    }
 }
 
 static void continueStatement()
@@ -1072,6 +1117,108 @@ static void continueStatement()
     {
         emitLoop(currentLoop->loopStart);
     }
+}
+
+static void switchStatement()
+{
+    current->switchContext.switchDepth++;
+
+    consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après 'selon'.");
+    expression(); // leaves discriminant on stack
+    consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après 'selon'.");
+    consume(TOKEN_LEFT_BRACE, "Parenthèse '{' attendue après 'selon'.");
+
+    // store into temp local
+    ZInt32 slot = current->localCount++;
+    emitBytes(OP_SET_LOCAL, (ZUInt8)slot);
+
+    // collect end‐of‐switch jumps
+    ZInt32 endJumps[MAX_CASES];
+    ZInt32 endCount = 0;
+
+    // --- first case ---
+    if (!match(TOKEN_CASE))
+    {
+        error("'selon' doit avoir au moins un 'cas'.");
+        return;
+    }
+    advance();
+    ZInt32 cv = atoi(parser.previous.start);
+    consume(TOKEN_COLON, "':' attendu après 'cas N:'.");
+
+    // if (slot != cv) skip this body
+    emitBytes(OP_GET_LOCAL, (ZUInt8)slot);
+    emitBytes(OP_CONSTANT, makeConstant(NUMBER_VAL(cv)));
+    emitByte(OP_EQUAL);
+    ZInt32 skip = emitJump(OP_JUMP_IF_FALSE);
+    // pop the boolean
+    emitByte(OP_POP);
+
+    // body
+    while (!check(TOKEN_CASE) && !check(TOKEN_DEFAULT) && !check(TOKEN_RIGHT_BRACE))
+    {
+        statement();
+    }
+
+    // jump to end
+    endJumps[endCount++] = emitJump(OP_JUMP);
+    patchJump(skip);
+    // pop the boolean
+    emitByte(OP_POP);
+
+    // --- subsequent cases ---
+    while (match(TOKEN_CASE))
+    {
+        advance();
+        cv = atoi(parser.previous.start);
+        consume(TOKEN_COLON, "':' attendu après 'cas N:'.");
+
+        emitBytes(OP_GET_LOCAL, (ZUInt8)slot);
+        emitBytes(OP_CONSTANT, makeConstant(NUMBER_VAL(cv)));
+        emitByte(OP_EQUAL);
+        skip = emitJump(OP_JUMP_IF_FALSE);
+        emitByte(OP_POP);
+
+        while (!check(TOKEN_CASE) && !check(TOKEN_DEFAULT) && !check(TOKEN_RIGHT_BRACE))
+        {
+            statement();
+        }
+
+        endJumps[endCount++] = emitJump(OP_JUMP);
+        patchJump(skip);
+        emitByte(OP_POP);
+    }
+
+    // --- default ---
+    if (match(TOKEN_DEFAULT))
+    {
+        consume(TOKEN_COLON, "':' attendu après 'défaut:'.");
+        while (!check(TOKEN_RIGHT_BRACE))
+        {
+            statement();
+        }
+    }
+
+    consume(TOKEN_RIGHT_BRACE, "Parenthèse '}' attendue a la fin du 'selon'.");
+
+    // patch all end‐of‐switch jumps
+    for (int i = 0; i < endCount; i++)
+    {
+        patchJump(endJumps[i]);
+    }
+
+    // patch all ‘quitter’ inside switch
+    for (int i = 0; i < current->switchContext.switchBreakCount; i++)
+    {
+        patchJump(current->switchContext.switchBreakJumps[i]);
+    }
+    free(current->switchContext.switchBreakJumps);
+    current->switchContext.switchBreakJumps = NULL;
+    current->switchContext.switchBreakCount = 0;
+    current->switchContext.switchDepth--;
+
+    // pop temp local
+    current->localCount--;
 }
 
 static void ifStatement()
@@ -1123,7 +1270,7 @@ static void printStatement()
         expression();
         emitByte(OP_PRINT);
     } while (match(TOKEN_COMMA));
-    
+
     consume(TOKEN_SEMICOLON, "Erreur : point-virgule manquant après la valeur.");
 }
 
@@ -1180,6 +1327,7 @@ static void synchronize()
         case TOKEN_PRINT:
         case TOKEN_BREAK:
         case TOKEN_CONTINUE:
+        case TOKEN_SWITCH:
         case TOKEN_RETURN:
             return;
         default:;
@@ -1231,6 +1379,10 @@ static void statement()
     else if (match(TOKEN_CONTINUE))
     {
         continueStatement();
+    }
+    else if (match(TOKEN_SWITCH))
+    {
+        switchStatement();
     }
     else if (match(TOKEN_LEFT_BRACE))
     {

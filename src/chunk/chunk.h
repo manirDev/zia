@@ -34,7 +34,12 @@ typedef enum
     OP_PRINT,
     OP_JUMP,
     OP_JUMP_IF_FALSE,
+    OP_JUMP_IF_TRUE,
     OP_LOOP,
+    OP_SWITCH,
+    OP_CASE,
+    OP_DEFAULT,
+    OP_SWAP,
     OP_RETURN,
 }OpCode;
 

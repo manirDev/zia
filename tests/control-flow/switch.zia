@@ -1,0 +1,99 @@
+// @author Manir
+// @tag switch-case
+// @description Using Switch statement with different cases
+
+afficher "--------Example 1--------\n";
+
+var x = 8;
+selon (x) {
+  cas 1:{
+    afficher "un\n";
+    quitter;
+  }
+   
+  cas 2:{
+    afficher "deux\n";
+    quitter;
+  } 
+  cas 3:{
+    afficher "trois\n";
+    quitter;
+  }
+  cas 4:{
+    afficher "4\n";
+    quitter;
+  }
+  cas 5:{
+    afficher "5\n";
+    quitter;
+  }
+  cas 6:{
+    afficher "6\n";
+    quitter;
+  }
+  cas 7:{
+    afficher "7\n";
+    quitter;
+  }
+  cas 8:{
+    afficher "8\n";
+    quitter;
+  } 
+  cas 9:{
+    afficher "9\n";
+    quitter;
+  }
+  defaut:{
+    afficher "autre\n";
+  }
+}
+
+afficher "\n--------Example 2--------\n";
+
+var num = 2;
+
+selon (num) {
+    cas 1:{
+        afficher "Jaune";
+        quitter;
+    }
+       
+    cas 2:{
+        afficher "Rouge\n";
+        var i = 0;
+        pour (i = 0; i<5; i++){
+            si(i % 2 == 0){
+                afficher i, "\n";
+            }
+        }
+        afficher "\n", i;
+        quitter;
+    }
+        
+    cas 3:{
+        afficher "Violet";
+        quitter;
+    }
+    defaut:{
+        afficher "Inconnu";
+    }
+        
+}
+
+var num1 = 3;
+selon (num1) {
+  cas 3:{
+    var i =0;
+    pour (i = 0; i < 4; i++) {
+      afficher i, "\n";
+      si (i == 2) {
+        quitter;
+      }
+      
+    }
+  }
+  defaut:{
+    afficher "done\n";
+  }
+}
+

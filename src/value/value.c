@@ -56,14 +56,14 @@ ZBool valuesEqual(Value a, Value b)
 {
     if (a.type != b.type)
     {
-        return false;
+        return ZFALSE;
     }
     switch (a.type)
     {
     case VAL_BOOL:
         return AS_BOOL(a) == AS_BOOL(b);
     case VAL_NUL:
-        return true;
+        return ZTRUE;
     case VAL_NUMBER:
         return AS_NUMBER(a) == AS_NUMBER(b);
     case VAL_OBJ:
@@ -71,6 +71,6 @@ ZBool valuesEqual(Value a, Value b)
         return AS_OBJ(a) == AS_OBJ(b);
     }
     default:
-        return false;
+        return ZFALSE;
     }
 }

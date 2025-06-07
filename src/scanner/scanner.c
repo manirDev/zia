@@ -184,6 +184,8 @@ static TokenType identifierType()
         return checkKeyword(1, 6, "antque", TOKEN_WHILE);
     case 'q':
         return checkKeyword(1, 6, "uitter", TOKEN_BREAK);
+    case 'd':
+        return checkKeyword(1, 5, "efaut", TOKEN_DEFAULT);
     case 'c':
     {
         if (length > 1)
@@ -196,6 +198,8 @@ static TokenType identifierType()
                 return checkKeyword(2, 2, "ci", TOKEN_THIS);
             case 'o':
                 return checkKeyword(2, 7, "ntinuer", TOKEN_CONTINUE);
+            case 'a':
+                return checkKeyword(2, 1, "s", TOKEN_CASE);
             }
         }
         break;
@@ -231,27 +235,29 @@ static TokenType identifierType()
     }
     case 's':
     {
-        if (scanner.current - scanner.start > 1)
+        if (length > 1)
         {
             switch (scanner.start[1])
             {
-            case 'u':
-                return checkKeyword(2, 3, "per", TOKEN_SUPER);
-            case 'i':
-            {
-                if (length == 2)
+                case 'u':
+                    return checkKeyword(2, 3, "per", TOKEN_SUPER);
+                case 'i':
                 {
-                    return TOKEN_IF; // si
+                    if (length == 2)
+                    {
+                        return TOKEN_IF; // si
+                    }
+                    else if (length == 5)
+                    {
+                        return TOKEN_ELSE; // "sinon"
+                    }
+                    else if (length == 9)
+                    {
+                        return TOKEN_ELSE_IF; // "sinon si"
+                    }
                 }
-                else if (length == 5)
-                {
-                    return TOKEN_ELSE; // "sinon"
-                }
-                else if (length == 9)
-                {
-                    return TOKEN_ELSE_IF; // "sinon si"
-                }
-            }
+                case 'e':
+                    return checkKeyword(2, 3, "lon", TOKEN_SWITCH);
             }
         }
         break;
