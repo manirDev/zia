@@ -40,6 +40,7 @@ typedef enum
     OP_CASE,
     OP_DEFAULT,
     OP_SWAP,
+    OP_CALL,
     OP_RETURN,
 }OpCode;
 

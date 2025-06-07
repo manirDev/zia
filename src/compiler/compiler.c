@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include "memory/memory.h"
 
 #ifdef DEBUG_PRINT_CODE
@@ -12,12 +13,14 @@
 
 #define MAX_NESTED_LOOPS 10
 #define MAX_CASES 10
+#define MAX_ARGS 255
 
 typedef void (*ParseFn)(ZBool canAssign);
 
 static ZUInt8 identifierConstant(Token *name);
 static void postIncrementDecrement(ZUInt8 getOp, ZUInt8 setOp, ZInt32 arg, ZUInt8 operation);
 static void synchronize();
+static ZUInt8 argumentList();
 
 // ZIA's precedence order from lowest to the highest
 typedef enum
@@ -84,6 +87,7 @@ typedef struct
 
 typedef struct
 {
+    struct Compiler *enclosing;
     ObjFunction *function;
     FunctionType type;
     Local locals[UINT8_COUNT];
@@ -139,8 +143,14 @@ static void error(const ZChar *message)
     errorAt(&parser.previous, message);
 }
 
-static void errorAtCurrent(const ZChar *message)
+static void errorAtCurrent(const ZChar *format, ...)
 {
+    ZChar message[256];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(message, sizeof message, format, args);
+    va_end(args);
+
     errorAt(&parser.current, message);
 }
 
@@ -223,6 +233,7 @@ static ZInt32 emitJump(ZUInt8 instruction)
 
 static void emitReturn()
 {
+    emitByte(OP_NULL);
     emitByte(OP_RETURN);
 }
 
@@ -256,6 +267,7 @@ static void patchJump(ZInt32 offset)
 
 static void initCompiler(Compiler *compiler, FunctionType type)
 {
+    compiler->enclosing = current;
     compiler->function = NULL;
     compiler->type = type;
     compiler->localCount = 0;
@@ -279,6 +291,10 @@ static void initCompiler(Compiler *compiler, FunctionType type)
 
     compiler->function = newFunction();
     current = compiler;
+    if (TYPE_SCRIPT != type)
+    {
+        current->function->name = copyString(parser.previous.start, parser.previous.length);
+    }
 
     // Initialize first local slot
     Local *local = &current->locals[current->localCount++];
@@ -316,6 +332,9 @@ static ObjFunction *endCompiler()
     }
 #endif
 
+    /*when a Compiler finishes, it pops itself off the stack by restoring
+    the previous compiler to be the new current one.*/
+    current = current->enclosing;
     return function;
 }
 
@@ -474,6 +493,12 @@ static void binary(ZBool canAssign)
     default:
         return;
     }
+}
+
+static void call(ZBool canAssign)
+{
+    ZUInt8 argCount = argumentList();
+    emitBytes(OP_CALL, argCount);
 }
 
 static void literal(ZBool canAssign)
@@ -747,7 +772,7 @@ static void postDecrement(bool canAssign)
 
 ParseRule rules[] =
     {
-        [TOKEN_LEFT_PAREN] = {grouping, NULL, PREC_NONE},
+        [TOKEN_LEFT_PAREN] = {grouping, call, PREC_CALL},
         [TOKEN_RIGHT_PAREN] = {NULL, NULL, PREC_NONE},
         [TOKEN_LEFT_BRACE] = {NULL, NULL, PREC_NONE},
         [TOKEN_RIGHT_BRACE] = {NULL, NULL, PREC_NONE},
@@ -919,6 +944,11 @@ static ZUInt8 parseVariable(const ZChar *errorMessage)
 
 static void markInitialized()
 {
+    if (current->scopeDepth == 0)
+    {
+        return;
+    }
+
     current->locals[current->localCount - 1].depth = current->scopeDepth;
 }
 
@@ -931,6 +961,31 @@ static void defineVariable(ZUInt8 global)
     }
 
     emitBytes(OP_DEFINE_GLOBAL, global);
+}
+
+static ZUInt8 argumentList()
+{
+    ZUInt8 argCount = 0;
+    if (!check(TOKEN_RIGHT_PAREN))
+    {
+        do
+        {
+            expression();
+            if (argCount == MAX_ARGS)
+            {
+                char message[64];
+                snprintf(message, sizeof message,
+                         "Impossible d'avoir plus de %d arguments.", MAX_ARGS);
+                error(message);
+            }
+
+            argCount++;
+        } while (match(TOKEN_COMMA));
+    }
+
+    consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après les arguments.");
+
+    return argCount;
 }
 
 static ParseRule *getRule(TokenType type)
@@ -951,6 +1006,44 @@ static void block()
     }
 
     consume(TOKEN_RIGHT_BRACE, "Un '}' est attendu après le bloc.");
+}
+
+static void function(FunctionType type)
+{
+    Compiler compiler;
+    initCompiler(&compiler, type);
+    beginScope();
+
+    consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après le nom de la fonction.");
+
+    if (!check(TOKEN_RIGHT_PAREN))
+    {
+        do
+        {
+            current->function->arity++;
+            if (current->function->arity > 255)
+            {
+                errorAtCurrent("Impossible d'avoir plus de %d paramètres. ", MAX_ARGS);
+            }
+            ZUInt8 constant = parseVariable(" Nom de paramètre attendu.");
+            defineVariable(constant);
+        } while (match(TOKEN_COMMA));
+    }
+
+    consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après les paramètres.");
+    consume(TOKEN_LEFT_BRACE, "Accolade '{' attendue avant le corps de la fonction.");
+    block();
+
+    ObjFunction *function = endCompiler();
+    emitBytes(OP_CONSTANT, makeConstant(OBJ_VAL(function)));
+}
+
+static void funcDeclaration()
+{
+    ZUInt8 global = parseVariable("Expect function name.");
+    markInitialized();
+    function(TYPE_FUNCTION);
+    defineVariable(global);
 }
 
 static void varDeclaration()
@@ -1126,7 +1219,7 @@ static void switchStatement()
     consume(TOKEN_LEFT_PAREN, "Parenthèse '(' attendue après 'selon'.");
     expression(); // leaves discriminant on stack
     consume(TOKEN_RIGHT_PAREN, "Parenthèse ')' attendue après 'selon'.");
-    consume(TOKEN_LEFT_BRACE, "Parenthèse '{' attendue après 'selon'.");
+    consume(TOKEN_LEFT_BRACE, "Accolade '{' attendue avant le corps du 'selon'.");
 
     // store into temp local
     ZInt32 slot = current->localCount++;
@@ -1199,7 +1292,7 @@ static void switchStatement()
         }
     }
 
-    consume(TOKEN_RIGHT_BRACE, "Parenthèse '}' attendue a la fin du 'selon'.");
+    consume(TOKEN_RIGHT_BRACE, "Accolade '}' attendue a la fin du 'selon'.");
 
     // patch all end‐of‐switch jumps
     for (int i = 0; i < endCount; i++)
@@ -1274,6 +1367,25 @@ static void printStatement()
     consume(TOKEN_SEMICOLON, "Erreur : point-virgule manquant après la valeur.");
 }
 
+static void returnStatement()
+{
+    if (TYPE_SCRIPT == current->type)
+    {
+        error("Impossible de faire un 'returner' au niveau supérieur.");
+    }
+
+    if (match(TOKEN_SEMICOLON))
+    {
+        emitReturn();
+    }
+    else
+    {
+        expression();
+        consume(TOKEN_SEMICOLON, "Point-virgule ';' attendu après la valeur de retour.");
+        emitByte(OP_RETURN);
+    }
+}
+
 static void whileStatement()
 {
     beginScope();
@@ -1339,7 +1451,11 @@ static void synchronize()
 
 static void declaration()
 {
-    if (match(TOKEN_VAR))
+    if (match(TOKEN_FUN))
+    {
+        funcDeclaration();
+    }
+    else if (match(TOKEN_VAR))
     {
         varDeclaration();
     }
@@ -1389,6 +1505,10 @@ static void statement()
         beginScope();
         block();
         endScope();
+    }
+    else if(match(TOKEN_RETURN))
+    {
+        returnStatement();
     }
     else
     {

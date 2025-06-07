@@ -112,6 +112,8 @@ ZInt32 disassembleInstruction(Chunk* chunk, ZInt32 offset)
         return simpleInstruction("OP_INCREMENT", offset);
     case OP_DECREMENT:
         return simpleInstruction("OP_DECREMENT", offset);
+    case OP_CALL:
+        return byteInstruction("OP_CALL", chunk, offset);
     case OP_RETURN:
         return simpleInstruction("OP_RETURN", offset);
     default:

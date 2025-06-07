@@ -1,0 +1,12 @@
+/*
+fon fib(n) {
+  si (n < 2) retourner n;
+  retourner fib(n - 2) + fib(n - 1);
+}
+
+var start = temps();
+afficher fib(35);
+afficher "\n";
+afficher temps() - start, "\n";
+
+*/

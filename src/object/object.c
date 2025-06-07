@@ -29,6 +29,13 @@ ObjFunction* newFunction()
     return function;
 }
 
+ObjNativeFn* newNative(NativeFn function)
+{
+    ObjNativeFn* nativefn = ALLOCATE_OBJ(ObjNativeFn, OBJ_NATIVE);
+    nativefn->function = function;
+    return nativefn;
+}
+
 static ZUInt32 hashString(const ZChar* key, ZInt32 length)
 {
     ZUInt32 hash = 2166136261u;
@@ -97,6 +104,9 @@ void printObject(Value value)
         break;
     case OBJ_STRING:
         printf("%s", AS_CSTRING(value));
+        break;
+    case OBJ_NATIVE:
+        printf("<native fn>");
         break;
     }
 }

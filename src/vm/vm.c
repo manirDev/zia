@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include <time.h>
 #include "debug.h"
 #include "object/object.h"
 #include "memory/memory.h"
@@ -12,6 +13,13 @@ VM vm;
 static Value peek(ZInt32 distance);
 static ZBool isFalsey(Value value);
 static void concatenate();
+static ZBool call(ObjFunction* function, ZInt32 argCount);
+static ZBool callValue(Value callee, ZInt32 argCount);
+
+static Value clockNative(ZInt32 argCount, Value* args)
+{
+    return NUMBER_VAL((ZReal64)clock() / CLOCKS_PER_SEC);
+}
 
 static void resetStack()
 {
@@ -27,11 +35,32 @@ static void runtimeError(const ZChar *format, ...)
     va_end(args);
     fputs("\n", stderr);
 
-    CallFrame *frame = &vm.frames[vm.frameCount - 1];
-    size_t instruction = frame->ip - frame->function->chunk.code - 1;
-    ZInt32 line = frame->function->chunk.lines[instruction];
-    fprintf(stderr, "[ligne %d] dans le script.\n", line);
+    for (ZInt32 i = vm.frameCount - 1; i >= 0; i--)
+    {
+        CallFrame* frame = &vm.frames[i];
+        ObjFunction* function = frame->function;
+        size_t instruction = frame->ip - function->chunk.code - 1;
+        fprintf(stderr, "[ligne %d] dans ", function->chunk.lines[instruction]);
+        if (NULL == function->name)
+        {
+           fprintf(stderr, "script\n");
+        }
+        else
+        {
+            fprintf(stderr, "%s()\n", function->name);
+        }
+    }
+    
     resetStack();
+}
+
+static void defineNative(const ZChar* name, NativeFn function)
+{
+    push(OBJ_VAL(copyString(name, (ZInt32)strlen(name))));
+    push(OBJ_VAL(newNative(function)));
+    tableSet(&vm.globals, AS_STRING(vm.stack[0]), vm.stack[1]);
+    pop();
+    pop();
 }
 
 static ZBool isInteger(ZReal64 exponent)
@@ -83,6 +112,8 @@ void initVM()
     vm.objects = NULL;
     initTable(&vm.globals);
     initTable(&vm.strings);
+
+    defineNative("temps", clockNative);
 }
 
 void freeVM()
@@ -392,10 +423,30 @@ static InterpretResult run()
             push(b);
             break;
         }
+        case OP_CALL:
+        {
+            ZInt32 argCount = READ_BYTE();
+            if (!callValue(peek(argCount), argCount))
+            {
+                return INTERPRET_RUNTIME_ERROR;
+            }
+            frame = &vm.frames[vm.frameCount - 1];
+            break;
+        }
         case OP_RETURN:
         {
-            // Exit Interpreter
-            return INTERPRET_OK;
+            Value result = pop();
+            vm.frameCount--;
+            if (vm.frameCount == 0)
+            {
+                pop();
+                return INTERPRET_OK;
+            }
+            
+            vm.stackTop = frame->slots;
+            push(result);
+            frame = &vm.frames[vm.frameCount - 1];
+            break;
         }
         default:
             break;
@@ -419,10 +470,7 @@ InterpretResult interpret(const ZChar *source)
     }
 
     push(OBJ_VAL(function));
-    CallFrame *frame = &vm.frames[vm.frameCount++];
-    frame->function = function;
-    frame->ip = function->chunk.code;
-    frame->slots = vm.stack;
+    call(function, 0);
 
     return run();
 }
@@ -442,6 +490,54 @@ Value pop()
 static Value peek(ZInt32 distance)
 {
     return vm.stackTop[-1 - distance];
+}
+
+static ZBool call(ObjFunction* function, ZInt32 argCount)
+{
+    if (argCount != function->arity)
+    {
+        runtimeError("Attendu %d arguments mais %d ont été fournis.", function->arity, argCount);
+        return ZFALSE;  
+    }
+    
+    if (vm.frameCount == FRAMES_MAX)
+    {
+        runtimeError("Stack Overflow");
+        return ZFALSE;
+    }
+    
+
+    CallFrame* frame = &vm.frames[vm.frameCount++];
+    frame->function = function;
+    frame->ip = function->chunk.code;
+    frame->slots = vm.stackTop - argCount - 1;
+    return ZTRUE;
+}
+
+static ZBool callValue(Value callee, ZInt32 argCount)
+{
+    if (IS_OBJ(callee))
+    {
+        switch (OBJ_TYPE(callee))
+        {
+        case OBJ_FUNCTION:
+           return call(AS_FUNCTION(callee), argCount);
+        case OBJ_NATIVE:
+        {
+            NativeFn native = AS_NATIVE(callee);
+            Value result = native(argCount, vm.stackTop - argCount);
+            vm.stackTop -= argCount + 1;
+            push(result);
+            return ZTRUE;
+        }
+        default:
+            break;
+        }
+    }
+     
+    runtimeError("Seules les fonctions et les classes peuvent être appelées.");
+
+    return ZFALSE;
 }
 
 static ZBool isFalsey(Value value)
