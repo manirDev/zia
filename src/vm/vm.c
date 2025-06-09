@@ -3,6 +3,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 #include "debug.h"
 #include "object/object.h"
 #include "memory/memory.h"
@@ -13,14 +14,48 @@ VM vm;
 static Value peek(ZInt32 distance);
 static ZBool isFalsey(Value value);
 static void concatenate();
-static ZBool call(ObjClosure* closure, ZInt32 argCount);
+static ZBool call(ObjClosure *closure, ZInt32 argCount);
 static ZBool callValue(Value callee, ZInt32 argCount);
-static ObjUpvalue* captureUpvalue(Value* local);
-static void closeUpvalues(Value* last);
+static ObjUpvalue *captureUpvalue(Value *local);
+static void closeUpvalues(Value *last);
 
-static Value clockNative(ZInt32 argCount, Value* args)
+static Value clockNative(ZInt32 argCount, Value *args)
 {
     return NUMBER_VAL((ZReal64)clock() / CLOCKS_PER_SEC);
+}
+
+static Value floorNative(ZInt32 argCount, Value *args)
+{
+    if (argCount != 1)
+    {
+        // Handle error (e.g., return NaN or throw runtime error)
+        return NUMBER_VAL(NAN);
+    }
+
+    if (!IS_NUMBER(args[0]))
+    {
+        return NUMBER_VAL(NAN);
+    }
+
+    ZReal64 num = AS_NUMBER(args[0]);
+    return NUMBER_VAL(floor(num));
+}
+
+static Value ceilNative(ZInt32 argCount, Value *args)
+{
+    if (argCount != 1)
+    {
+        // Handle error (e.g., return NaN or throw runtime error)
+        return NUMBER_VAL(NAN);
+    }
+
+    if (!IS_NUMBER(args[0]))
+    {
+        return NUMBER_VAL(NAN);
+    }
+
+    ZReal64 num = AS_NUMBER(args[0]);
+    return NUMBER_VAL(ceil(num));
 }
 
 static void resetStack()
@@ -40,24 +75,24 @@ static void runtimeError(const ZChar *format, ...)
 
     for (ZInt32 i = vm.frameCount - 1; i >= 0; i--)
     {
-        CallFrame* frame = &vm.frames[i];
-        ObjFunction* function = frame->closure->function;
+        CallFrame *frame = &vm.frames[i];
+        ObjFunction *function = frame->closure->function;
         size_t instruction = frame->ip - function->chunk.code - 1;
         fprintf(stderr, "[ligne %d] dans ", function->chunk.lines[instruction]);
         if (NULL == function->name)
         {
-           fprintf(stderr, "script\n");
+            fprintf(stderr, "script\n");
         }
         else
         {
             fprintf(stderr, "%s()\n", function->name->chars);
         }
     }
-    
+
     resetStack();
 }
 
-static void defineNative(const ZChar* name, NativeFn function)
+static void defineNative(const ZChar *name, NativeFn function)
 {
     push(OBJ_VAL(copyString(name, (ZInt32)strlen(name))));
     push(OBJ_VAL(newNative(function)));
@@ -117,6 +152,9 @@ void initVM()
     initTable(&vm.strings);
 
     defineNative("temps", clockNative);
+    // arrondi_inférieur
+    defineNative("plancher", floorNative);
+    defineNative("plafond", ceilNative);
 }
 
 void freeVM()
@@ -438,8 +476,8 @@ static InterpretResult run()
         }
         case OP_CLOSURE:
         {
-            ObjFunction* function = AS_FUNCTION(READ_CONSTANT());
-            ObjClosure* closure = newClosure(function);
+            ObjFunction *function = AS_FUNCTION(READ_CONSTANT());
+            ObjClosure *closure = newClosure(function);
             push(OBJ_VAL(closure));
             for (ZInt32 i = 0; i < closure->upvalueCount; i++)
             {
@@ -454,7 +492,7 @@ static InterpretResult run()
                     closure->upvalues[i] = frame->closure->upvalues[index];
                 }
             }
-            
+
             break;
         }
         case OP_GET_UPVALUE:
@@ -485,7 +523,7 @@ static InterpretResult run()
                 pop();
                 return INTERPRET_OK;
             }
-            
+
             vm.stackTop = frame->slots;
             push(result);
             frame = &vm.frames[vm.frameCount - 1];
@@ -513,7 +551,7 @@ InterpretResult interpret(const ZChar *source)
     }
 
     push(OBJ_VAL(function));
-    ObjClosure* closure = newClosure(function);
+    ObjClosure *closure = newClosure(function);
     pop();
     push(OBJ_VAL(closure));
     call(closure, 0);
@@ -538,22 +576,21 @@ static Value peek(ZInt32 distance)
     return vm.stackTop[-1 - distance];
 }
 
-static ZBool call(ObjClosure* closure, ZInt32 argCount)
+static ZBool call(ObjClosure *closure, ZInt32 argCount)
 {
     if (argCount != closure->function->arity)
     {
         runtimeError("Attendu %d arguments mais %d ont été fournis.", closure->function->arity, argCount);
-        return ZFALSE;  
+        return ZFALSE;
     }
-    
+
     if (vm.frameCount == FRAMES_MAX)
     {
         runtimeError("Stack Overflow");
         return ZFALSE;
     }
-    
 
-    CallFrame* frame = &vm.frames[vm.frameCount++];
+    CallFrame *frame = &vm.frames[vm.frameCount++];
     frame->closure = closure;
     frame->ip = closure->function->chunk.code;
     frame->slots = vm.stackTop - argCount - 1;
@@ -580,29 +617,29 @@ static ZBool callValue(Value callee, ZInt32 argCount)
             break;
         }
     }
-     
+
     runtimeError("Seules les fonctions et les classes peuvent être appelées.");
 
     return ZFALSE;
 }
 
-static ObjUpvalue* captureUpvalue(Value* local)
+static ObjUpvalue *captureUpvalue(Value *local)
 {
-    ObjUpvalue* prevUpvalue = NULL;
-    ObjUpvalue* upvalue = vm.openUpvalues;
+    ObjUpvalue *prevUpvalue = NULL;
+    ObjUpvalue *upvalue = vm.openUpvalues;
 
     while (NULL != upvalue && upvalue->location > local)
     {
         prevUpvalue = upvalue;
         upvalue = upvalue->next;
     }
-    
+
     if (NULL != upvalue && upvalue->location == local)
     {
         return upvalue;
     }
-    
-    ObjUpvalue* createdUpvalue = newUpvalue(local);
+
+    ObjUpvalue *createdUpvalue = newUpvalue(local);
     createdUpvalue->next = upvalue;
 
     if (NULL == prevUpvalue)
@@ -617,11 +654,11 @@ static ObjUpvalue* captureUpvalue(Value* local)
     return createdUpvalue;
 }
 
-static void closeUpvalues(Value* last)
+static void closeUpvalues(Value *last)
 {
-    while(NULL != vm.openUpvalues && vm.openUpvalues->location >= last)
+    while (NULL != vm.openUpvalues && vm.openUpvalues->location >= last)
     {
-        ObjUpvalue* upvalue = vm.openUpvalues;
+        ObjUpvalue *upvalue = vm.openUpvalues;
         upvalue->closed = *upvalue->location;
         upvalue->location = &upvalue->closed;
         vm.openUpvalues = upvalue->next;

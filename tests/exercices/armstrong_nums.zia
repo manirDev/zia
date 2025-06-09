@@ -1,0 +1,39 @@
+// @description Zia advanced algorithm tests
+// @author Manir
+// @tag Armstrong
+
+afficher "\n-----Test: Armstrong-----\n";
+
+fon isArmstrong(n) {
+  var temp = n;
+  var sum = 0;
+  var digits = 0;
+  var t = temp;
+
+  // Count digits (fixed integer division)
+  tantque (t > 0) {
+    digits = digits + 1;
+    t = plancher(t / 10);
+  }
+
+  t = temp;
+
+  // Calculate sum of digits^digits
+  tantque (t > 0) {
+    var d = t % 10;
+    sum = sum + (d ** digits);
+    t = plancher(t / 10);
+  }
+
+  si (sum == n) {
+    retourner 1;
+  }
+  retourner 0;
+}
+
+pour (var i = 0; i < 1000; i++) {
+    var si_armstrong = isArmstrong(i);
+    si (si_armstrong == 1) {
+        afficher i, "\n";
+    }
+}
