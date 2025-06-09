@@ -1,0 +1,31 @@
+// @description Zia advanced algorithm tests
+// @author Manir
+// @tag Primary
+
+afficher "\n-----Test : Premiers-----\n";
+
+fon isPrime(n) {
+  si (n < 2) {
+    retourner 0;
+  }
+  si (n == 2) {
+    retourner 1;
+  }
+  si (n % 2 == 0) {
+    retourner 0;
+  }
+  var i = 3;
+  tantque (i * i <= n) {
+    si (n % i == 0) {
+      retourner 0;
+    }
+    i = i + 2;
+  }
+  retourner 1;
+}
+
+pour (var i = 2; i <= 50; i = i + 1) {
+  si (isPrime(i) == 1) {
+    afficher i, " ";
+  }
+}

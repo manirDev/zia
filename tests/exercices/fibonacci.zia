@@ -1,0 +1,33 @@
+// @description Zia advanced algorithm tests
+// @author Manir
+// @tag Fibonacci
+
+afficher "\n-----Test: Fibonacci-----\n";
+
+fon fib(n) {
+  si (n < 2) {
+    retourner n;
+  }
+  var a = 0;
+  var b = 1;
+  pour (var i = 2; i <= n; i = i + 1) {
+    var tmp = a + b;
+    a = b;
+    b = tmp;
+  }
+  retourner b;
+}
+
+pour (var i = 0; i <= 10; i = i + 1) {
+  afficher fib(i), " ";
+}
+
+afficher "\nFibo recursion\n";
+fon fib(n) {
+  si (n < 2) retourner n;
+  var num = fib(n - 2) + fib(n - 1);
+  retourner num;
+}
+
+var fibo = fib(10);
+afficher fibo;

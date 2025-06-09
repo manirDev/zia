@@ -49,7 +49,7 @@ WASMJS=$(SRCWEBPATH)zia.js
 
 # Build the native binary
 build:
-	gcc -g -o $(BINARY) $(SRCFILES) $(INCLUDES) -Wall
+	gcc -g -o $(BINARY) $(SRCFILES) $(INCLUDES) -Wall -lm
 
 # Run in interactive mode (if implemented)
 run: build

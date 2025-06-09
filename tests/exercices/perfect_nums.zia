@@ -1,0 +1,33 @@
+// @description Zia advanced algorithm tests
+// @author Manir
+// @tag Perfect
+
+afficher "\n-----Test : Parfaits-----\n";
+
+// Check if n is a perfect number
+fon isPerfect(n) {
+  si (n <= 1) {
+    retourner 0;
+  }
+  var sum = 1;
+  var i = 2;
+  tantque (i * i <= n) {
+    si (n % i == 0) {
+      sum = sum + i;
+      si (i != n / i) {
+        sum = sum + (n / i);
+      }
+    }
+    i = i + 1;
+  }
+  si (sum == n) {
+    retourner 1;
+  }
+  retourner 0;
+}
+
+pour (var i = 2; i <= 100; i = i + 1) {
+  si (isPerfect(i) == 1) {
+    afficher i, "\n";
+  }
+}
