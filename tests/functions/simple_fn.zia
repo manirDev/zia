@@ -1,0 +1,98 @@
+// @description Zia simple functions
+// @author Manir
+// @tag function
+
+// ----- Test 1 : Portée et closure simple -----
+afficher "-----Test 1------\n";
+var x = "global\n";
+
+fon outer() {
+  var x = "outer";
+  afficher x;
+}
+
+outer();
+
+// ----- Test 2 : Closure retournée -----
+afficher "\n-----Test 2------\n";
+
+fon makeCompteur() {
+  var count = 0;
+  fon inner(){
+    count = count + 1;
+    afficher count, "\n";
+  }
+
+  retourner inner;
+}
+
+var c1 = makeCompteur();
+c1();
+c1();
+
+var c2 = makeCompteur();
+c2();
+c1();
+
+// ----- Test 3 : Conditionnelle et closure -----
+afficher "\n-----Test 3------\n";
+
+fon testCond(i) {
+  var result = 0;
+  si (i < 0) {
+    result = -1;
+  } 
+  sinon si (i == 0) {
+    result = 0;
+  } 
+  sinon {
+    result = 1;
+  }
+  fon printResult() {
+    afficher result, "\n";
+  }
+  retourner printResult;
+}
+
+var cNeg = testCond(-5);
+var cZero = testCond(0);
+var cPos = testCond(5);
+
+cNeg();
+cZero();
+cPos();
+
+// ----- Test 4 : Boucle POUR avec continuer et quitter -----
+afficher "\n-----Test 4------\n";
+
+fon loopTest() {
+  var sum = 0;
+  pour (var i = 1; i <= 5; i++) {
+    si (i == 3) {
+      continuer;
+    }
+    si (i == 5) {
+      quitter;
+    }
+    sum = sum + i;
+  }
+  retourner sum;
+}
+
+var sum = loopTest();
+afficher sum;
+
+// ----- Test 5 : Boucle TANTQUE et closure -----
+afficher "\n-----Test 5------\n";
+
+fon whileTest() {
+  var total = 0;
+  var i = 0;
+  tantque (i < 5) {
+    total = total + i;
+    i++;
+  }
+  afficher total;
+}
+
+ whileTest();

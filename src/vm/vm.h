@@ -12,7 +12,7 @@
 
 typedef struct
 {
-    ObjFunction* function;
+    ObjClosure* closure;
     ZUInt8* ip;
     Value* slots;
 }CallFrame;
@@ -25,6 +25,7 @@ typedef struct
    Value* stackTop;
    Table strings;
    Table globals;
+   ObjUpvalue* openUpvalues;
    Obj* objects;
 }VM;
 

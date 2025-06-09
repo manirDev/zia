@@ -1,0 +1,8 @@
+-----Example1------
+outside
+-----Example2------
+outside
+-----Example3------
+return from outer
+create inner closure
+value

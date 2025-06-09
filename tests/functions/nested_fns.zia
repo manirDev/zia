@@ -1,0 +1,48 @@
+// @description Zia nested function
+// @author Manir
+// @tag function
+
+afficher "-----Example1------\n";
+fon outer() {
+  var x = "outside\n";
+  fon inner() {
+    afficher x;
+  }
+  inner();
+}
+outer();
+
+afficher "-----Example2------\n";
+fon outer() {
+  var x = "outside\n";
+
+  fon inner() {
+    afficher x;
+  }
+
+  retourner inner;
+}
+
+var closure = outer();
+closure();
+
+afficher "-----Example3------\n";
+
+fon outer() {
+  var x = "value\n";
+  fon middle() {
+    fon inner() {
+      afficher x;
+    }
+
+    afficher "create inner closure\n";
+    retourner inner;
+  }
+
+  afficher "return from outer\n";
+  retourner middle;
+}
+
+var mid = outer();
+var in = mid();
+in();

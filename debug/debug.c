@@ -1,6 +1,7 @@
 #include "debug.h"
 #include <stdio.h>
 #include "value/value.h"
+#include "object/object.h"
 
 void disassembleChunk(Chunk* chunk, const ZChar* name)
 {
@@ -114,6 +115,30 @@ ZInt32 disassembleInstruction(Chunk* chunk, ZInt32 offset)
         return simpleInstruction("OP_DECREMENT", offset);
     case OP_CALL:
         return byteInstruction("OP_CALL", chunk, offset);
+    case OP_CLOSURE:
+    {
+        offset++;
+        ZUInt8 constant = chunk->code[offset++];
+        printf("%-16s %4d ", "OP_CLOSURE", constant);
+        printValue(chunk->constants.values[constant]);
+        printf("\n");
+
+        ObjFunction* function = AS_FUNCTION(chunk->constants.values[constant]);
+        for (ZInt32 j = 0; j < function->upvalueCount; j++)
+        {
+            ZInt32 isLocal = chunk->code[offset++];
+            ZInt32 index = chunk->code[offset++];
+            printf("%04d    |           %s %d\n", offset - 2, (isLocal ? "local" : "upvalue"), index);
+        }
+        
+        return offset;
+    }
+    case OP_GET_UPVALUE:
+        return byteInstruction("OP_GET_UPVALUE", chunk, offset);
+    case OP_SET_UPVALUE:
+        return byteInstruction("OP_SET_UPVALUE", chunk, offset);
+    case OP_CLOSE_UPVALUE:
+        return simpleInstruction("OP_CLOSE_UPVALUE", offset);
     case OP_RETURN:
         return simpleInstruction("OP_RETURN", offset);
     default:
