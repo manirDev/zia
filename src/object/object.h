@@ -32,6 +32,7 @@ typedef enum
 struct Obj
 {
     ObjType type;
+    ZBool isMarked;
     struct Obj* next;
 };
 

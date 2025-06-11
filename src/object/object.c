@@ -14,9 +14,15 @@ static Obj *allocateObject(size_t size, ObjType type)
 {
     Obj *object = (Obj *)reallocate(NULL, 0, size);
     object->type = type;
+    object->isMarked = ZFALSE;
 
     object->next = vm.objects;
     vm.objects = object;
+
+#ifdef DEBUG_LOG_GC
+    printf("%p allocate %zu for %d\n", (void*)object, size, type);
+#endif
+
     return object;
 }
 
@@ -69,7 +75,11 @@ static ObjString *allocateString(ZChar *chars, ZInt32 length, ZUInt32 hash)
     string->length = length;
     string->chars = chars;
     string->hash = hash;
+
+    push(OBJ_VAL(string));
     tableSet(&vm.strings, string, NUL_VAL);
+    pop();
+    
     return string;
 }
 

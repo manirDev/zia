@@ -147,7 +147,17 @@ static InterpretResult ziaPow(ZReal64 base, ZReal64 exponent, ZReal64 *result)
 void initVM()
 {
     resetStack();
+
     vm.objects = NULL;
+
+    // TBD: they will be tuned
+    vm.bytesAllocated = 0;
+    vm.nextGC = 1024 * 1024;
+
+    vm.grayCount = 0;
+    vm.grayCapacity = 0;
+    vm.grayStack = NULL;
+
     initTable(&vm.globals);
     initTable(&vm.strings);
 
@@ -195,15 +205,19 @@ static InterpretResult run()
     for (;;)
     {
 #ifdef DEBUG_TRACE_EXECUTION
-        printf("      ");
-        for (Value *slot = vm.stack; slot < vm.stackTop; slot++)
+        if (ZTRUE == FLAG_TRACE_EXECUTION)
         {
-            printf("[ ");
-            printValue(*slot);
-            printf(" ]");
+            // loop over stack and show its contents:
+            printf("      ");
+            for (Value *slot = vm.stack; slot < vm.stackTop; slot++)
+            {
+                printf("[ ");
+                printValue(*slot);
+                printf(" ]");
+            }
+            printf("\n");
+            disassembleInstruction(&frame->closure->function->chunk, (ZInt32)(frame->ip - frame->closure->function->chunk.code));
         }
-        printf("\n");
-        disassembleInstruction(&frame->closure->function->chunk, (ZInt32)(frame->ip - frame->closure->function->chunk.code));
 #endif
         ZUInt8 instruction;
         switch (instruction = READ_BYTE())
@@ -672,8 +686,8 @@ static ZBool isFalsey(Value value)
 
 static void concatenate()
 {
-    ObjString *b = AS_STRING(pop());
-    ObjString *a = AS_STRING(pop());
+    ObjString *b = AS_STRING(peek(0));
+    ObjString *a = AS_STRING(peek(1));
 
     ZInt32 length = a->length + b->length;
     ZChar *chars = ALLOCATE(char, length + 1);
@@ -682,5 +696,8 @@ static void concatenate()
     chars[length] = NULL_CHAR;
 
     ObjString *result = takeString(chars, length);
+    pop();
+    pop();
+
     push(OBJ_VAL(result));
 }

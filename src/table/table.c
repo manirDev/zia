@@ -178,3 +178,26 @@ ObjString* tableFindString(Table* table, const ZChar* chars, ZInt32 length, ZUIn
         index = (index + 1) % table->capacity;
     }
 }
+
+void tableRemoveWhite(Table* table)
+{
+    for (ZInt32 i = 0; i < table->capacity; i++)
+    {
+        Entry* entry = &table->entries[i];
+        if (NULL != entry->key && ZFALSE == entry->key->obj.isMarked)
+        {
+            tableDelete(table, entry->key);
+        }
+    }
+    
+}
+
+void markTable(Table* table)
+{
+    for (ZInt32 i = 0; i < table->capacity; i++)
+    {
+        Entry* entry = &table->entries[i];
+        markObject((Obj*)entry->key);
+        markValue(entry->value);
+    }  
+}

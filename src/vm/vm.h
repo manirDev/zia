@@ -26,7 +26,12 @@ typedef struct
    Table strings;
    Table globals;
    ObjUpvalue* openUpvalues;
+   size_t bytesAllocated;
+   size_t nextGC;
    Obj* objects;
+   ZInt32 grayCount;
+   ZInt32 grayCapacity;
+   Obj** grayStack;
 }VM;
 
 typedef enum

@@ -18,17 +18,19 @@
 #define COMPILE_TIME_EXIT_CODE  65
 #define RUN_TIME_EXIT_CODE      70
 
+// we define needed Flags:
 #ifdef DEBUG_PRINT_CODE
-ZBool FLAG_PRINT_CODE = ZFALSE;
+ZBool FLAG_PRINT_CODE = false;
 #endif
 
 #ifdef DEBUG_TRACE_EXECUTION
-ZBool FLAG_TRACE_EXECUTION = ZFALSE;
+ZBool FLAG_TRACE_EXECUTION = false;
 #endif
 
 #ifdef DEBUG_LOG_GC
-ZBool FLAG_LOG_GC = ZFALSE;
+ZBool FLAG_LOG_GC = false;
 #endif
+
 
 EMSCRIPTEN_KEEPALIVE
 ZInt32 runCompiler(ZChar* sourceCode)

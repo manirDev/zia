@@ -6,6 +6,20 @@
 #include <stdlib.h>
 #include <string.h>
 
+// we define needed Flags: ( we could create flags from main(argv[]) from those) 
+#ifdef DEBUG_PRINT_CODE
+ZBool FLAG_PRINT_CODE = false;
+#endif
+
+#ifdef DEBUG_TRACE_EXECUTION
+ZBool FLAG_TRACE_EXECUTION = false;
+#endif
+
+#ifdef DEBUG_LOG_GC
+ZBool FLAG_LOG_GC = false;
+#endif
+
+
 static void repl()
 {
     char line[1024];

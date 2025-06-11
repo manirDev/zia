@@ -1,6 +1,7 @@
 #include "chunk.h"
 #include <stdlib.h>
 #include "memory/memory.h"
+#include "vm/vm.h"
 
 void initChunk(Chunk* chunk)
 {
@@ -43,6 +44,8 @@ void writeChunk(Chunk* chunk, ZUInt8 byte, ZInt32 line)
 
 ZInt32 addConstant(Chunk* chunk,  Value value)
 {
+    push(value);
     writeValueArray(&chunk->constants, value);
+    pop();
     return chunk->constants.count - 1;
 }

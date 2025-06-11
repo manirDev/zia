@@ -25,5 +25,7 @@ ZBool tableSet(Table* table, ObjString* key, Value value);
 ZBool tableDelete(Table* table, ObjString* key);
 void tableAddAll(Table* from, Table* to);
 ObjString* tableFindString(Table* table, const ZChar* chars, ZInt32 length, ZUInt32 hash);
+void tableRemoveWhite(Table* table);
+void markTable(Table* table);
 
 #endif

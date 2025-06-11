@@ -9,5 +9,6 @@
 #define JUMP_OFFSET_SIZE 3  // Use 24-bit offsets
 
 ObjFunction* compile(const ZChar* source);
+void markCompilerRoots();
 
 #endif

@@ -58,7 +58,7 @@ typedef struct
 {
     ZUInt8 index;
     ZBool isLocal;
-}Upvalue;
+} Upvalue;
 
 typedef enum
 {
@@ -103,7 +103,7 @@ typedef struct Compiler
     ZInt32 scopeDepth;
     LoopContext loopContext;
     SwitchContext switchContext;
-}Compiler;
+} Compiler;
 
 typedef struct
 {
@@ -334,10 +334,13 @@ static ObjFunction *endCompiler()
     ObjFunction *function = current->function;
 
 #ifdef DEBUG_PRINT_CODE
-    if (!parser.hadError)
+    if (ZTRUE == FLAG_PRINT_CODE)
     {
-        disassembleChunk(currentChunk(),
-                         function->name != NULL ? function->name->chars : "<script>");
+        if (!parser.hadError)
+        {
+            disassembleChunk(currentChunk(),
+                             function->name != NULL ? function->name->chars : "<script>");
+        }
     }
 #endif
 
@@ -461,7 +464,7 @@ static void declaration();
 static ParseRule *getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 static int resolveLocal(Compiler *compiler, Token *name);
-static ZInt32 resolveUpvalue(Compiler* compiler, Token* name);
+static ZInt32 resolveUpvalue(Compiler *compiler, Token *name);
 
 static void binary(ZBool canAssign)
 {
@@ -644,7 +647,7 @@ static void namedVariable(Token name, ZBool canAssign)
         getOp = OP_GET_LOCAL;
         setOp = OP_SET_LOCAL;
     }
-    else if((arg = resolveUpvalue(current, &name)) != -1)
+    else if ((arg = resolveUpvalue(current, &name)) != -1)
     {
         getOp = OP_GET_UPVALUE;
         setOp = OP_SET_UPVALUE;
@@ -914,20 +917,19 @@ static ZInt32 resolveLocal(Compiler *compiler, Token *name)
     return -1;
 }
 
-static ZInt32 addUpvalue(Compiler* compiler, ZUInt8 index, ZBool isLocal)
+static ZInt32 addUpvalue(Compiler *compiler, ZUInt8 index, ZBool isLocal)
 {
     ZInt32 upvalueCount = compiler->function->upvalueCount;
 
     for (ZInt32 i = 0; i < upvalueCount; i++)
     {
-        Upvalue* upvalue = &compiler->upvalues[i];
+        Upvalue *upvalue = &compiler->upvalues[i];
         if (upvalue->index == index && upvalue->isLocal == isLocal)
         {
             return i;
         }
-        
     }
-    
+
     if (UINT8_COUNT == upvalueCount)
     {
         error("Trop de variables capturées dans la fonction.");
@@ -939,7 +941,7 @@ static ZInt32 addUpvalue(Compiler* compiler, ZUInt8 index, ZBool isLocal)
     return compiler->function->upvalueCount++;
 }
 
-static ZInt32 resolveUpvalue(Compiler* compiler, Token* name)
+static ZInt32 resolveUpvalue(Compiler *compiler, Token *name)
 {
     if (NULL == compiler->enclosing)
     {
@@ -958,7 +960,7 @@ static ZInt32 resolveUpvalue(Compiler* compiler, Token* name)
     {
         return addUpvalue(compiler, (ZUInt8)upvalue, ZFALSE);
     }
-    
+
     return -1;
 }
 
@@ -1113,7 +1115,6 @@ static void function(FunctionType type)
         emitByte(compiler.upvalues[i].isLocal ? 1 : 0);
         emitByte(compiler.upvalues[i].index);
     }
-    
 }
 
 static void funcDeclaration()
@@ -1584,7 +1585,7 @@ static void statement()
         block();
         endScope();
     }
-    else if(match(TOKEN_RETURN))
+    else if (match(TOKEN_RETURN))
     {
         returnStatement();
     }
@@ -1615,4 +1616,14 @@ ObjFunction *compile(const ZChar *source)
     @NOTE: This way, the VM doesn’t try to execute a function that may contain invalid bytecode.
     */
     return parser.hadError ? NULL : function;
+}
+
+void markCompilerRoots()
+{
+    Compiler *compiler = current;
+    while (NULL != compiler)
+    {
+        markObject((Obj *)compiler->function);
+        compiler = compiler->enclosing;
+    }
 }
