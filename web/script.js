@@ -62,6 +62,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up event listeners
     document.getElementById('run-button').addEventListener('click', function() {
         let sourceCode = '';
+        let isBytecode = document.getElementById('bytecode-toggle').checked ==true;
+        let isTrace = document.getElementById('execution-toggle').checked ==true;
+        let isGC = document.getElementById('gc-toggle').checked ==true;
+
         if (window.MonacoEditorLoader && window.MonacoEditorLoader.getContent) {
             sourceCode = window.MonacoEditorLoader.getContent();
         } else if (window.editor) {
@@ -88,6 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const outputElement = document.getElementById('output');
             if (outputElement) {
                 outputElement.textContent = '';
+                outputElement.value = ''
             }
             
             if (window.MonacoEditorLoader && window.MonacoEditorLoader.setOutput) {
@@ -97,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Run the code
             let result = 'No interpreter available';
             if (window.ziaInterpreter.interpret) {
-                result = window.ziaInterpreter.interpret(sourceCode);
+                result = window.ziaInterpreter.interpret(sourceCode, isBytecode, isTrace, isGC);
                 
             }
             
@@ -160,6 +165,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const outputElement = document.getElementById('output');
         if (outputElement) {
             outputElement.textContent = '';
+            outputElement.value = ''
         }
         
         if (window.MonacoEditorLoader && window.MonacoEditorLoader.setOutput) {

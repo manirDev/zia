@@ -268,6 +268,7 @@ main {
     display: flex;
     flex-direction: column;
     border-left: 1px solid var(--border-color);
+    min-height: 0; 
     background-color: var(--bg-dark);
 }
 
@@ -345,7 +346,8 @@ main {
 }
 
 .output {
-    flex: 1;
+    flex: 1 1 0;      /* shorthand for flex-grow:1; flex-shrink:1; flex-basis:0 */
+    min-height: 0;    /* ensure it won’t push itself taller than the container */
     padding: 1rem;
     overflow-y: auto;
     font-family: 'JetBrains Mono', monospace;
@@ -371,6 +373,19 @@ footer {
 .footer-links {
     display: flex;
     gap: 1rem;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;             /* stay on top of content */
+}
+
+/* 5) Avoid your main content hiding behind the footer */
+body {
+  padding-bottom: 3rem;    /* ≈ your footer’s height */
 }
 
 .github-link, .footer-link {

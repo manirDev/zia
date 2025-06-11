@@ -20,7 +20,10 @@ static Obj *allocateObject(size_t size, ObjType type)
     vm.objects = object;
 
 #ifdef DEBUG_LOG_GC
-    printf("%p allocate %zu for %d\n", (void*)object, size, type);
+    if(ZTRUE == FLAG_LOG_GC)
+    {
+        printf("%p allocate %zu for %d\n", (void*)object, size, type);
+    }
 #endif
 
     return object;
@@ -79,7 +82,7 @@ static ObjString *allocateString(ZChar *chars, ZInt32 length, ZUInt32 hash)
     push(OBJ_VAL(string));
     tableSet(&vm.strings, string, NUL_VAL);
     pop();
-    
+
     return string;
 }
 

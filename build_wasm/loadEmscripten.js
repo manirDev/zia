@@ -115,17 +115,17 @@ async function loadziaWasm() {
  * @param {string} sourceCode - Source code to interpret
  * @returns {string} - Output of interpretation
  */
-function interpret(sourceCode) {
+function interpret(sourceCode, activateBC, activateTE, activateGC) {
   
-    const myTimeout = setTimeout(()=>compileCall({currentText:sourceCode}), 34);
+    const myTimeout = setTimeout(()=>compileCall({currentText:sourceCode, activateBC:activateBC, activateTE:activateTE, activateGC:activateGC}), 34);
 };
 
-function compileCall({currentText:currentText}) {
+function compileCall({currentText:currentText, activateBC:activateBC, activateTE:activateTE, activateGC:activateGC}) {
     const result = Module.ccall(
         "runCompiler", // name of C function
         "int", // return type
-        ["string"], // argument types
-        [currentText] // arguments
+        ["string", "bool", "bool", "bool"], // argument types
+        [currentText, activateBC, activateTE, activateGC] // arguments
     )
 }
 

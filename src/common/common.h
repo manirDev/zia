@@ -21,11 +21,11 @@
 
 #define UINT8_COUNT (UINT8_MAX + 1) // Hard limit on how many locals can exist at the same time (IN THE SAME SCOPE)
 
-#undef DEBUG_PRINT_CODE             // comment this out: to enable debug printing
-#undef DEBUG_TRACE_EXECUTION        // comment this out: to enable trace-execution
+//#undef DEBUG_PRINT_CODE             // comment this out: to enable debug printing
+//#undef DEBUG_TRACE_EXECUTION        // comment this out: to enable trace-execution
 
 #undef DEBUG_STRESS_GC              // comment this out: to enable GC every step
-#undef DEBUG_LOG_GC                 // comment this out: to enable loging of GC steps
+///#undef DEBUG_LOG_GC                 // comment this out: to enable loging of GC steps
 
 // flag-variables, set in main-implementations, to toggle on/off GC. (ex. in Wasm-Web-Frontend)
 #ifdef DEBUG_PRINT_CODE
