@@ -26,9 +26,14 @@ Chaque mot-clé de Zia a été soigneusement sélectionné pour respecter l'usag
 | `fonction` | *Créer un bloc d'actions réutilisable* | function |
 | `retourner` | *Renvoyer un résultat vers l'appelant* | return |
 | `si` | *Introduire une condition* | if |
-| `sinon` | *Alternative à une condition* | else |
+| `sinon si` | *Condition alternative* | else if |
+| `sinon` | *Action alternative* | else |
 | `pour` | *Itération déterminée* | for |
 | `tantque` | *Répétition conditionnelle* | while |
+| `selon` | *Sélection parmi plusieurs cas* | switch |
+| `cas` | *Option spécifique dans une sélection* | case |
+| `quitter` | *Sortir d'une boucle ou d'un bloc* | break |
+| `continuer` | *Passer à l'itération suivante* | continue |
 | `et` | *Conjonction logique inclusive* | and/&& |
 | `ou` | *Disjonction logique* | or/\|\| |
 | `vrai` | *Valeur de vérité positive* | true |

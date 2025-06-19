@@ -1,15 +1,47 @@
 # Le Langage Zia
 ## Programmez en français avec élégance et simplicité
 
-Bienvenue dans l'univers du langage de programmation **Zia**, une révolution dans l'apprentissage du code pour les francophones. Ce livre officiel vous accompagnera dans votre découverte d'un langage qui réconcilie la puissance de la programmation avec la beauté de la langue française.
+Bienvenue dans l'univers du langage de programmation Zia, une révolution dans l'apprentissage du code pour les francophones. Cette documentation officielle vous accompagnera dans votre découverte d'un langage qui réconcilie la puissance de la programmation avec la beauté de la langue française.
 
 Zia représente bien plus qu'un simple langage de script : c'est une passerelle culturelle qui permet aux développeurs francophones de penser, créer et innover dans leur langue maternelle. Inspiré par la robustesse syntaxique du langage C, Zia transforme l'expérience de programmation en remplaçant les mots-clés anglais par leurs équivalents français naturels et intuitifs.
+
+⚡ Essayez Zia en 30 secondes
+
+🌐 Ouvriez l'éditeur en ligne [ici](https://manirdev.github.io/zia/build_wasm/)
+✍️ Copiez ce code :
+```zia
+var nom = "Monde";
+afficher "Bonjour ", nom, "!";
+```
+
+▶️ Cliquez sur Exécuter
+🎉 Félicitations ! Vous venez de programmer en français !
+
+
+🔥 Voyez la différence immédiatement
+Langage traditionnel :
+```c
+if (age >= 18) {
+    printf("You can vote");
+} else {
+    printf("Too young to vote");
+}
+```
+Avec Zia :
+```zia
+si (age >= 18) {
+    afficher "Vous pouvez voter";
+} sinon {
+    afficher "Trop jeune pour voter";
+}
+```
+Lequel vous semble plus naturel ?
 
 ---
 
 ## 🚀 Pourquoi Zia révolutionne l'apprentissage
 
-**Une approche pédagogique innovante** : Zia élimine la barrière linguistique qui décourage souvent les débutants francophones. En utilisant des mots-clés familiers comme `si`, `alors`, `sinon`, `pour`, et `tant_que`, les apprenants peuvent se concentrer sur la logique plutôt que sur la traduction mentale constante.
+**Une approche pédagogique innovante** : Zia élimine la barrière linguistique qui décourage souvent les débutants francophones. En utilisant des mots-clés familiers comme `si`, `sinon si`, `sinon`, `pour`, `tantque` etc..., les apprenants peuvent se concentrer sur la logique plutôt que sur la traduction mentale constante.
 
 **Une syntaxe familière** : Basé sur la structure éprouvée du C, Zia conserve la rigueur et la clarté de ce langage fondamental tout en l'adaptant à l'esprit français. Cette approche permet une transition naturelle vers d'autres langages tout en offrant une expérience d'apprentissage authentiquement francophone.
 
@@ -22,7 +54,7 @@ Zia représente bien plus qu'un simple langage de script : c'est une passerelle 
 ### 🎯 **Syntaxe intuitive**
 - Architecture basée sur le langage C, reconnue pour sa clarté structurelle
 - Mots-clés entièrement traduits en français pour une compréhension immédiate
-- Respect des conventions de nommage françaises avec support des accents
+- Respect des conventions de nommage françaises en caractères ASCII
 
 ### 🌐 **Écosystème ouvert**
 - Interpréteur open-source disponible sur [GitHub](https://github.com/manirDev/zia)
@@ -33,7 +65,7 @@ Zia représente bien plus qu'un simple langage de script : c'est une passerelle 
 ### 📚 **Approche pédagogique**
 - Courbe d'apprentissage optimisée pour les francophones
 - Documentation complète en français
-- Exemples pratiques adaptés au contexte culturel français
+- Exemples pratiques adaptés au contexte de la programmation
 
 ---
 
@@ -98,14 +130,14 @@ Zia est un projet communautaire qui grandit grâce à l'engagement de ses utilis
 
 ## 🚀 Commencer votre voyage
 
-Ce livre n'est pas seulement un manuel technique : c'est une invitation à redécouvrir la programmation sous un angle francophone authentique. Chaque chapitre a été conçu pour construire progressivement votre expertise tout en préservant le plaisir d'apprendre.
+Cette documentation n'est pas seulement un manuel technique : c'est une invitation à redécouvrir la programmation sous un angle francophone authentique. Chaque chapitre a été conçu pour construire progressivement votre expertise tout en préservant le plaisir d'apprendre.
 
-Que vous soyez étudiant, enseignant, développeur en reconversion ou simple passionné de technologie, Zia vous offre une expérience de programmation unique qui respecte votre identité linguistique et culturelle.
+Que vous soyez étudiant, enseignant, développeur en reconversion ou simple passionné de technologie, Zia vous offre une expérience de programmation unique préserve le flow naturel de la programmation.
 
 **Prêt à coder en français ?** Tournez la page et découvrez comment Zia transformera votre approche de la programmation.
 
 ---
 
-*💡 **Astuce** : Ce livre évolue constamment grâce aux retours de la communauté. N'hésitez pas à consulter régulièrement le [dépôt GitHub](https://github.com/manirDev/zia) pour les dernières mises à jour et nouveautés.*
+*💡 **Astuce** :  Cette documentation évolue constamment grâce aux retours de la communauté. N'hésitez pas à consulter régulièrement le [dépôt GitHub](https://github.com/manirDev/zia) pour les dernières mises à jour et nouveautés.*
 
 *🛠️ **Statut du projet** : En développement actif avec des mises à jour régulières. Votre feedback est précieux pour façonner l'avenir de Zia.*

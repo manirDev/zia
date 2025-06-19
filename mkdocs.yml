@@ -349,11 +349,8 @@ nav:
     - "Feuille de route": "roadmap.md"
   
   - "📚 Partie I • Découverte":
-    - "découverte/index.md"
     - "Chapitre 1 • Introduction": 
       - "introduction.md"
-      - "Philosophie de Zia": "introduction/philosophie.md"
-      - "Comparaison avec d'autres langages": "introduction/comparaison.md"
     - "Chapitre 2 • Installation": 
       - "installation.md"
       - "Installation Windows": "installation/windows.md"
@@ -362,11 +359,8 @@ nav:
       - "Configuration IDE": "installation/ide.md"
     - "Chapitre 3 • Premiers pas": 
       - "first-step.md"
-      - "Premier programme": "first-step/hello-world.md"
-      - "Environnement de développement": "first-step/environnement.md"
-  
+
   - "🔧 Partie II • Fondamentaux":
-    - "fondamentaux/index.md"
     - "Chapitre 4 • Syntaxe": 
       - "syntax.md"
       - "Règles de base": "syntax/regles.md"

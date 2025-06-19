@@ -9,7 +9,7 @@
 
 Dans l'univers cosmopolite de la programmation, où l'anglais règne en maître depuis des décennies, une question fondamentale a longtemps taraudé les développeurs francophones : pourquoi la beauté et la précision de notre langue ne pourraient-elles pas s'exprimer naturellement dans le code que nous écrivons ?
 
-Cette interrogation n'est pas née du hasard, mais d'une observation simple et profonde. Lorsqu'un étudiant français découvre la programmation, il doit simultanément apprivoiser deux défis : maîtriser la logique algorithmique et naviguer dans un océan de termes anglais. Cette double barrière cognitive ralentit l'apprentissage et peut décourager des talents prometteurs qui peinent à franchir cet obstacle linguistique initial.
+Cette interrogation n'est pas née du hasard, mais d'une observation simple et profonde. Lorsqu'un étudiant en informatique découvre la programmation, il doit simultanément apprivoiser deux défis : maîtriser la logique algorithmique et naviguer dans un océan de termes anglais. Cette double barrière cognitive ralentit l'apprentissage et peut décourager des talents prometteurs qui peinent à franchir cet obstacle linguistique initial.
 
 C'est dans ce contexte qu'est né **Zia**, un projet ambitieux qui transcende la simple traduction pour proposer une véritable révolution culturelle dans l'approche francophone de la programmation.
 
@@ -29,9 +29,9 @@ Ainsi, Zia incarne à la fois **l'illumination technique** et **la bienveillance
 
 ### **L'identité linguistique comme force créatrice**
 
-Zia repose sur une conviction profonde : notre langue maternelle n'est pas seulement un moyen de communication, c'est le creuset de notre pensée créatrice. Lorsqu'un développeur peut exprimer ses idées dans sa langue naturelle, il libère un potentiel cognitif souvent bridé par la traduction mentale constante.
+Zia repose sur une conviction profonde : notre langue de base n'est pas seulement un moyen de communication, c'est le creuset de notre pensée créatrice. Lorsqu'un développeur peut exprimer ses idées dans sa langue naturelle, il libère un potentiel cognitif souvent bridé par la traduction mentale constante.
 
-En remplaçant `if` par `si`, `while` par `tant_que`, et `function` par `fonction`, Zia ne fait pas qu'une simple substitution lexicale. Il restaure l'harmonie entre la pensée et l'expression, permettant au programmeur de se concentrer pleinement sur la résolution créative des problèmes plutôt que sur la jonglerie linguistique.
+En remplaçant `if` par `si`, `while` par `tantque`, et `function` par `fonction`, Zia ne fait pas qu'une simple substitution lexicale. Il restaure l'harmonie entre la pensée et l'expression, permettant au programmeur de se concentrer pleinement sur la résolution créative des problèmes plutôt que sur la jonglerie linguistique.
 
 ### **L'héritage du C, sublimé par le français**
 
@@ -81,7 +81,7 @@ Zia fonctionne également comme un laboratoire vivant d'expérimentation linguis
 
 ### **Former une nouvelle génération**
 
-L'ambition ultime de Zia est de former une génération de développeurs francophones qui maîtrisent parfaitement les concepts fondamentaux de la programmation dans leur langue maternelle. Ces développeurs pourront ensuite évoluer vers d'autres langages avec une base conceptuelle solide, sans jamais avoir sacrifié leur identité linguistique lors de l'apprentissage initial.
+L'ambition ultime de Zia est de former une génération de développeurs francophones qui maîtrisent parfaitement les concepts fondamentaux de la programmation dans leur langue de base. Ces développeurs pourront ensuite évoluer vers d'autres langages avec une base conceptuelle solide, sans jamais avoir sacrifié leur identité linguistique lors de l'apprentissage initial.
 
 ### **Inspirer un mouvement global**
 

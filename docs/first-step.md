@@ -17,7 +17,7 @@ Votre premier programme en Zia sera donc un chaleureux "Bonjour, le monde !" - u
 
 ### **Votre premier code Zia**
 
-Ouvrez votre éditeur favori (ou l'interface web de Zia) et saisissez ces quelques lignes magiques :
+Ouvrez l'interface web de [Zia](https://manirdev.github.io/zia/build_wasm/) et saisissez ces quelques lignes magiques :
 
 ```zia
 afficher "Bonjour, le monde !";
@@ -44,7 +44,7 @@ Le point-virgule marque la fin de votre instruction, comme un point final termin
 
 Lorsque vous exécutez ce programme, votre écran s'illumine de ces mots simples mais puissants :
 
-```
+```zia
 Bonjour, le monde !
 ```
 
@@ -71,9 +71,9 @@ Derrière cette simplicité se cache un processus fascinant :
 Maintenant que vous maîtrisez le principe, amusons-nous à créer des variations :
 
 ```zia
-afficher "Salut la Terre !";
-afficher "Coucou l'univers !";
-afficher "Hola mundo desde Francia !";
+afficher "Salut la Terre ! ";
+afficher "Coucou l'univers ! ";
+afficher "Hola mundo desde Zia ! ";
 ```
 
 ### **Affichage multi-lignes**
@@ -81,9 +81,9 @@ afficher "Hola mundo desde Francia !";
 Vous pouvez aussi créer des programmes plus bavards :
 
 ```zia
-afficher "Bonjour, le monde !";
-afficher "Je suis votre premier programme Zia.";
-afficher "Enchanté de faire votre connaissance !";
+afficher "Bonjour, le monde !\n";
+afficher "Je suis votre premier programme Zia.\n";
+afficher "Enchanté de faire votre connaissance !\n";
 ```
 
 ### **Jouer avec les caractères spéciaux**
@@ -159,9 +159,18 @@ Votre "Bonjour, le monde !" n'est que le début d'une aventure extraordinaire. �
 ### **Exemple de haïku numérique**
 
 ```zia
-afficher "Premier programme,";
-afficher "Mots français sur l'écran noir,";
+// Le Poète Numérique - Haïku en Zia
+// Un programme qui affiche un haïku de ma composition
+
+afficher "=== Le Poète Numérique ===";
+afficher "\n";
+// Mon haïku sur la programmation
+afficher "Code qui s'éveille\n";
+afficher "Lignes de français dansent\n";
 afficher "L'art du code naît.";
+    
+afficher "\n";
+afficher "~ Écrit en Zia ~";
 ```
 
 ---
