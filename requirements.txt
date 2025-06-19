@@ -1,0 +1,23 @@
+mkdocs
+mkdocs-material
+mkdocstrings
+pymdown-extensions
+
+# Git plugins
+mkdocs-git-revision-date-localized-plugin
+mkdocs-git-committers-plugin-2
+
+# Navigation and structure
+mkdocs-awesome-pages-plugin
+
+# Content enhancements
+mkdocs-redirects
+mkdocs-macros-plugin
+mkdocs-glightbox
+mkdocs-jupyter
+
+# PDF export (optional - requires additional setup)
+mkdocs-with-pdf
+
+# Minification
+mkdocs-minify-plugin

@@ -1,0 +1,476 @@
+# Configuration MkDocs Avancée pour la documentation du langage Zia
+site_name: "Le Langage Zia"
+site_description: "Programmez en français avec élégance et simplicité - Guide complet du langage de programmation francophone"
+site_author: "Communauté Zia"
+site_url: "https://manirdev.github.io/zia-docs/"
+
+# Repository
+repo_name: "manirDev/zia"
+repo_url: "https://github.com/manirDev/zia"
+edit_uri: "edit/main/docs/"
+
+# Copyright avec informations détaillées
+copyright: |
+  Copyright &copy; 2024 Communauté Zia - Langage de programmation français<br>
+  Distribué sous licence <a href="https://github.com/manirDev/zia/blob/main/LICENSE">MIT</a>
+
+# Configuration thème avancée
+theme:
+  name: "material"
+  language: "fr"
+  
+  # Logo et favicon personnalisés
+  logo: "assets/images/zia-logo.svg"
+  favicon: "assets/images/favicon.ico"
+  
+  # Couleurs et apparence avancées
+  palette:
+    # Mode clair - Thème élégant
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: "deep purple"
+      accent: "purple"
+      toggle:
+        icon: material/weather-night
+        name: "Passer au mode sombre"
+    
+    # Mode sombre - Thème professionnel
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: "deep purple"
+      accent: "purple"
+      toggle:
+        icon: material/weather-sunny
+        name: "Passer au mode clair"
+  
+  # Icônes personnalisées
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/code-braces-box
+    edit: material/pencil
+    view: material/eye
+    admonition:
+      note: fontawesome/solid/note-sticky
+      abstract: fontawesome/solid/book
+      info: fontawesome/solid/circle-info
+      tip: fontawesome/solid/lightbulb
+      success: fontawesome/solid/check
+      question: fontawesome/solid/circle-question
+      warning: fontawesome/solid/triangle-exclamation
+      failure: fontawesome/solid/bomb
+      danger: fontawesome/solid/skull
+      bug: fontawesome/solid/robot
+      example: fontawesome/solid/flask
+      quote: fontawesome/solid/quote-left
+  
+  # Fonctionnalités avancées pour une expérience livre premium
+  features:
+    # Navigation avancée
+    - navigation.instant        # Navigation SPA
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.tracking       # Suivi URL
+    - navigation.sections      # Sections collapsibles
+    - navigation.expand        # Auto-expansion
+    - navigation.path          # Breadcrumbs
+    - navigation.indexes       # Pages d'index
+    - navigation.top           # Back to top
+    - navigation.footer        # Navigation séquentielle
+    - navigation.prune         # Optimisation navigation
+    
+    # Recherche avancée
+    - search.highlight         # Surlignage résultats
+    - search.share            # Partage recherche
+    - search.suggest          # Auto-suggestions
+    
+    # Table des matières avancée
+    - toc.follow              # TOC qui suit le scroll
+    - toc.integrate           # TOC dans sidebar
+    
+    # Contenu interactif
+    - content.code.copy       # Copie de code
+    - content.code.select     # Sélection de code
+    - content.code.annotate   # Annotations de code
+    - content.tabs.link       # Onglets synchronisés
+    - content.tooltips        # Info-bulles
+    - content.footnote.tooltips # Notes en info-bulles
+    
+    # Actions avancées
+    - content.action.edit     # Bouton édition
+    - content.action.view     # Bouton vue source
+    
+    # Header optimisé
+    - header.autohide         # Header qui se cache au scroll
+
+# Extensions Markdown avancées
+markdown_extensions:
+  # Extensions Python-Markdown de base
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: "🔗"
+      permalink_title: "Lien permanent vers cette section"
+      title: "Table des matières"
+      toc_depth: 4
+  
+  # Extensions PyMdown avancées
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic:
+      mode: view
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      options:
+        custom_icons:
+          - "assets/emojis"
+  - pymdownx.escapeall:
+      hardbreak: true
+      nbsp: true
+  - pymdownx.highlight:
+      auto_title: true
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+      linenums: true
+      linenums_style: pymdownx-inline
+      use_pygments: true
+  - pymdownx.inlinehilite:
+      style_plain_text: true
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: "manirDev"
+      repo: "zia"
+      normalize_issue_symbols: true
+  - pymdownx.mark
+  - pymdownx.progressbar
+  - pymdownx.saneheaders
+  - pymdownx.smartsymbols:
+      fractions: false
+  - pymdownx.snippets:
+      base_path: "docs/snippets"
+      check_paths: true
+      dedent_subsections: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+        - name: zia
+          class: language-zia
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true 
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+      clickable_checkbox: true
+  - pymdownx.tilde
+
+# Plugins avancés
+plugins:
+  # Recherche multilingue avancée
+  - search:
+      lang: 
+        - fr
+        - en
+      separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+      pipeline:
+        - stemmer
+        - stopWordFilter
+        - trimmer
+  
+  # Informations Git (optionnel - nécessite l'installation)
+  # - git-revision-date-localized:
+  #     enable_creation_date: true
+  #     type: timeago
+  #     locale: fr
+  #     fallback_to_build_date: true
+  
+  # Optimisation et performance
+  - minify:
+      minify_html: true
+      minify_js: true
+      minify_css: true
+      htmlmin_opts:
+        remove_comments: true
+        remove_empty_space: true
+        remove_redundant_attributes: true
+        remove_script_type_attributes: true
+        remove_style_link_type_attributes: true
+        minify_css: true
+        minify_js: true
+      cache_safe: true
+  
+
+  # Plugin pour les PDF
+  - with-pdf:
+      enabled_if_env: ENABLE_PDF_EXPORT
+      cover_title: "Guide Complet du Langage Zia"
+      cover_subtitle: "Programmation en français"
+      author: "Communauté Zia"
+      copyright: "Copyright © 2024 Communauté Zia"
+      cover_logo: "assets/images/zia-logo.svg"
+      toc_title: "Table des matières"
+      heading_shift: false
+      toc_level: 3
+      ordered_chapter_level: 2
+      excludes_children:
+        - 'release-notes/:upgrading'
+        - 'release-notes/:changelog'
+      exclude_pages:
+        - 'bugs/'
+        - 'appendix/contribute/'
+      convert_iframe:
+        - src: IFRAME_SRC
+          img: POSTER_IMAGE
+          text: ALTERNATE_TEXT
+      two_columns_level: 3
+      render_js: true
+      headless_chrome_path: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      output_path: pdf/zia-guide.pdf
+      debug_html: true
+      show_anchors: true
+      verbose: true
+  # Navigation automatique (optionnel)
+  # - awesome-pages
+  
+  # Tags et métadonnées (optionnel)
+  # - tags:
+  #     tags_file: tags.md
+
+# CSS et JavaScript personnalisés avancés
+extra_css:
+  - assets/stylesheets/zia-theme.css
+  - assets/stylesheets/sidebar-advanced.css
+  - assets/stylesheets/code-highlighting.css
+  - assets/stylesheets/print-styles.css
+
+extra_javascript:
+  # MathJax pour les formules
+  - assets/javascripts/mathjax-config.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  
+  # Prism.js pour Zia syntax highlighting
+  - https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js
+  - assets/javascripts/prism-zia.js
+  
+  # Scripts personnalisés
+  - assets/javascripts/zia-interactive.js
+  - assets/javascripts/code-runner.js
+
+# Variables extra avancées
+extra:
+  # Informations sur le projet
+  version:
+    provider: mike
+    default: stable
+  
+  # Liens sociaux étendus
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/manirDev/zia
+      name: "Code source sur GitHub"
+    - icon: fontawesome/solid/globe
+      link: https://manirdev.github.io/zia/build_wasm/
+      name: "Essayer Zia en ligne"
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/zia-community
+      name: "Rejoindre la communauté Discord"
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/ZiaLang
+      name: "Suivre sur Twitter"
+    - icon: fontawesome/solid/envelope
+      link: mailto:contact@zialang.fr
+      name: "Contact par email"
+  
+  # Générateur personnalisé
+  generator: false
+  
+  # Analytics avancé
+  analytics:
+    provider: google
+    property: G-XXXXXXXXXX
+    feedback:
+      title: "Cette page vous a-t-elle été utile ?"
+      ratings:
+        - icon: material/emoticon-happy-outline
+          name: "Cette page m'a aidé"
+          data: 1
+          note: >-
+            Merci pour votre retour ! Aidez-nous à améliorer cette page en
+            <a href="https://github.com/manirDev/zia/issues/new" target="_blank" rel="noopener">
+            signalant un problème</a>.
+        - icon: material/emoticon-sad-outline
+          name: "Cette page pourrait être améliorée"
+          data: 0
+          note: >-
+            Merci pour votre retour ! Aidez-nous à améliorer cette page en
+            <a href="https://github.com/manirDev/zia/issues/new" target="_blank" rel="noopener">
+            signalant un problème</a>.
+  
+  # Consentement RGPD avancé
+  consent:
+    title: "Consentement aux cookies"
+    description: >-
+      Nous utilisons des cookies pour reconnaître vos visites répétées et vos préférences,
+      ainsi que pour mesurer l'efficacité de notre documentation et déterminer si les utilisateurs
+      trouvent ce qu'ils recherchent. Avec votre consentement, vous nous aidez à améliorer
+      notre documentation et l'expérience utilisateur.
+    actions:
+      - accept
+      - reject
+      - manage
+    cookies:
+      analytics:
+        name: "Google Analytics"
+        checked: false
+      github: "GitHub"
+
+# Structure de navigation avancée - Style Livre Interactif
+nav:
+  - "🏠 Accueil": 
+    - "index.md"
+    - "Nouveautés": "changelog.md"
+    - "Feuille de route": "roadmap.md"
+  
+  - "📚 Partie I • Découverte":
+    - "découverte/index.md"
+    - "Chapitre 1 • Introduction": 
+      - "introduction.md"
+      - "Philosophie de Zia": "introduction/philosophie.md"
+      - "Comparaison avec d'autres langages": "introduction/comparaison.md"
+    - "Chapitre 2 • Installation": 
+      - "installation.md"
+      - "Installation Windows": "installation/windows.md"
+      - "Installation macOS": "installation/macos.md"
+      - "Installation Linux": "installation/linux.md"
+      - "Configuration IDE": "installation/ide.md"
+    - "Chapitre 3 • Premiers pas": 
+      - "first-step.md"
+      - "Premier programme": "first-step/hello-world.md"
+      - "Environnement de développement": "first-step/environnement.md"
+  
+  - "🔧 Partie II • Fondamentaux":
+    - "fondamentaux/index.md"
+    - "Chapitre 4 • Syntaxe": 
+      - "syntax.md"
+      - "Règles de base": "syntax/regles.md"
+      - "Commentaires": "syntax/commentaires.md"
+      - "Conventions": "syntax/conventions.md"
+    - "Chapitre 5 • Variables et Types": 
+      - "types.md"
+      - "Types primitifs": "types/primitifs.md"
+      - "Types composés": "types/composes.md"
+      - "Conversion de types": "types/conversion.md"
+    - "Chapitre 6 • Opérateurs et Priorité": 
+      - "operators.md"
+      - "Opérateurs arithmétiques": "operators/arithmetiques.md"
+      - "Opérateurs logiques": "operators/logiques.md"
+      - "Priorité des opérateurs": "operators/priorite.md"
+    - "Chapitre 7 • Contrôle de Flux": 
+      - "control-flow.md"
+      - "Structures conditionnelles": "control-flow/conditionnelles.md"
+      - "Boucles": "control-flow/boucles.md"
+      - "Gestion des erreurs": "control-flow/erreurs.md"
+  
+  - "💻 Partie III • Développement":
+    - "développement/index.md"
+    - "Chapitre 8 • Fonctions": 
+      - "functions.md"
+      - "Définition de fonctions": "functions/definition.md"
+      - "Paramètres et arguments": "functions/parametres.md"
+      - "Fonctions anonymes": "functions/anonymes.md"
+      - "Récursivité": "functions/recursivite.md"
+    - "Chapitre 9 • Programmation orientée objet": 
+      - "oop.md"
+      - "Classes et objets": "oop/classes.md"
+      - "Héritage": "oop/heritage.md"
+      - "Polymorphisme": "oop/polymorphisme.md"
+      - "Encapsulation": "oop/encapsulation.md"
+    - "Chapitre 10 • Modules et bibliothèques":
+      - "modules.md"
+      - "Création de modules": "modules/creation.md"
+      - "Importation": "modules/importation.md"
+      - "Gestionnaire de paquets": "modules/paquets.md"
+  
+  - "🚀 Partie IV • Projets":
+    - "projets/index.md"
+    - "Chapitre 11 • Projets débutants": 
+      - "projects.md"
+      - "Calculatrice": "projects/calculatrice.md"
+      - "Jeu de devinettes": "projects/devinettes.md"
+      - "Gestionnaire de tâches": "projects/taches.md"
+    - "Chapitre 12 • Projets intermédiaires":
+      - "projects/intermediaires.md"
+      - "API REST": "projects/api-rest.md"
+      - "Interface graphique": "projects/gui.md"
+      - "Base de données": "projects/database.md"
+    - "Chapitre 13 • Projets avancés":
+      - "projects/avances.md"
+      - "Compilateur Zia": "projects/compilateur.md"
+      - "Framework web": "projects/framework.md"
+      - "Intelligence artificielle": "projects/ia.md"
+  
+  - "📖 Annexes":
+    - "annexes/index.md"
+    - "Référence du langage": 
+      - "reference.md"
+      - "Mots-clés": "reference/mots-cles.md"
+      - "Fonctions intégrées": "reference/fonctions.md"
+      - "Bibliothèque standard": "reference/bibliotheque.md"
+    - "Glossaire": "glossaire.md"
+    - "FAQ": "faq.md"
+    - "Ressources":
+      - "Tutoriels externes": "ressources/tutoriels.md"
+      - "Articles de blog": "ressources/articles.md"
+      - "Vidéos": "ressources/videos.md"
+    - "Contribuer": 
+      - "contribuer.md"
+      - "Guide de contribution": "contribuer/guide.md"
+      - "Standards de code": "contribuer/standards.md"
+      - "Tests": "contribuer/tests.md"
+
+# Configuration avancée
+use_directory_urls: false
+strict: false  # À activer quand tous les fichiers seront créés
+
+# Hooks personnalisés pour des fonctionnalités avancées
+# hooks:
+#   - hooks/zia_syntax_highlighter.py
+#   - hooks/interactive_examples.py
+#   - hooks/auto_navigation.py
+
+# Configuration de build
+site_dir: "site"
+docs_dir: "docs"
+
+# Exclusions
+exclude_docs: |
+  drafts/
+  templates/
+  *.tmp
+  *.bak
+
+# Watch pour le développement
+watch:
+  - "docs"
+  - "mkdocs.yml"
+  #- "assets"
+
+# Configuration de développement
+dev_addr: "127.0.0.1:8000"
