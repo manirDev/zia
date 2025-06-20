@@ -21,9 +21,9 @@ En Zia, tous les chemins mènent à `var` - ce mot-clé unique qui ouvre les por
 
 ```zia
 var nom = "Sophie";          // Zia comprend : "C'est du texte"
-var âge = 28;                // Zia comprend : "C'est un nombre entier"
+var age = 28;                // Zia comprend : "C'est un nombre entier"
 var taille = 1.68;           // Zia comprend : "C'est un nombre décimal"
-var estMariée = vrai;        // Zia comprend : "C'est une valeur logique"
+var estMariee = vrai;        // Zia comprend : "C'est une valeur logique"
 var enfants = nul;           // Zia comprend : "C'est une absence de valeur"
 ```
 
@@ -39,8 +39,8 @@ Les nombres entiers en Zia représentent les quantités exactes, sans approximat
 
 ```zia
 var populationParis = 2175000;        // Population parisienne
-var annéeNaissance = 1995;            // Une année précise
-var températureHiver = -12;           // Températures négatives supportées
+var anneeNaissance = 1995;            // Une année précise
+var temperatureHiver = -12;           // Températures négatives supportées
 var compteurVisites = 0;              // Point de départ neutre
 ```
 
@@ -61,10 +61,10 @@ Zia gère intelligemment les conversions automatiques :
 
 ```zia
 var base = 10;              // Entier
-var coefficient = 1.5;      // Décimal
-var résultat = base * coefficient;  // Résultat : 15.0 (décimal)
+var coefficient = 1.51;      // Décimal
+var resultat = base * coefficient;  // Résultat : 15.1 (décimal)
 
-afficher "Calcul intelligent : " + résultat;
+afficher "Calcul intelligent : ", resultat;
 ```
 
 ---
@@ -74,7 +74,7 @@ afficher "Calcul intelligent : " + résultat;
 ### **Déclaration : donner vie aux mots**
 
 ```zia
-var prénom = "Marie-Claire";          // Prénoms composés français
+var prenom = "Marie-Claire";          // Prénoms composés français
 var ville = "Aix-en-Provence";        // Villes avec tirets
 var message = "Bonjour à tous !";     // Phrases complètes
 var email = "contact@exemple.fr";     // Adresses électroniques
@@ -85,7 +85,7 @@ var email = "contact@exemple.fr";     // Adresses électroniques
 Zia embrasse pleinement l'identité française :
 
 ```zia
-var poème = "Être ou ne pas être, telle est la question";
+var poeme = "Être ou ne pas être, telle est la question";
 var adresse = "123 rue de la Paix, 75001 Paris";
 var exclamation = "Quelle magnifique journée !";
 var question = "Comment allez-vous aujourd'hui ?";
@@ -95,11 +95,11 @@ var question = "Comment allez-vous aujourd'hui ?";
 
 ```zia
 var nom = "Dubois";
-var prénom = "Jean";
-var nomComplet = prénom + " " + nom;    // Concaténation élégante
+var prenom = "Jean";
+var nomComplet = prenom + " " + nom;    // Concaténation élégante
 
-var présentation = "Je m'appelle " + nomComplet + " et j'ai " + 35 + " ans.";
-afficher présentation;
+var presentation = "Je m'appelle " + nomComplet + " et j'ai " + " 35ans.";
+afficher presentation;
 ```
 
 ### **Textes multi-lignes et échappement**
@@ -107,7 +107,7 @@ afficher présentation;
 ```zia
 var citation = "Victor Hugo a dit : \"L'avenir appartient aux enfants.\"";
 var chemin = "C:\\Documents\\Projets\\MonFichier.txt";
-var poèmeCourt = "Roses sont rouges,\nViolettes sont bleues,\nZia est français,\nEt c'est merveilleux !";
+var poemeCourt = "Roses sont rouges,\nViolettes sont bleues,\nZia est la lumiere,\nEt c'est merveilleux !\n";
 ```
 
 ---
@@ -119,7 +119,7 @@ var poèmeCourt = "Roses sont rouges,\nViolettes sont bleues,\nZia est français
 ```zia
 var estMajeur = vrai;                 // Majorité légale
 var aUnPermis = faux;                 // Situation administrative
-var estConnecté = vrai;               // État de connexion
+var estConnecte = vrai;               // État de connexion
 var estValide = faux;                 // Validation de données
 ```
 
@@ -128,11 +128,11 @@ var estValide = faux;                 // Validation de données
 Zia comprend naturellement les contextes logiques français :
 
 ```zia
-var âge = 17;
-var estMajeur = (âge >= 18);          // Évaluation automatique à 'faux'
+var age = 17;
+var estMajeur = (age >= 18);          // Évaluation automatique à 'faux'
 
 var note = 16;
-var estReçu = (note >= 10);           // Évaluation automatique à 'vrai'
+var estRecu = (note >= 10);           // Évaluation automatique à 'vrai'
 
 var temps = "ensoleillé";
 var peutSortir = (temps == "ensoleillé");  // Évaluation contextuelle
@@ -145,7 +145,7 @@ var peutSortir = (temps == "ensoleillé");  // Évaluation contextuelle
 ### **`nul` : quand rien vaut quelque chose**
 
 ```zia
-var résultat = nul;                   // En attente de calcul
+var resultat = nul;                   // En attente de calcul
 var utilisateur = nul;                // Aucun utilisateur connecté
 var erreur = nul;                     // Pas d'erreur détectée
 ```
@@ -153,17 +153,17 @@ var erreur = nul;                     // Pas d'erreur détectée
 ### **Gestion intelligente de la nullité**
 
 ```zia
-var données = nul;
+var donnees = nul;
 
-si (données != nul) {
-    afficher "Données disponibles : " + données;
+si (donnees != nul) {
+    afficher "Données disponibles : ", donnees;
 } sinon {
     afficher "Aucune donnée n'a été trouvée.";
 }
 ```
 
 ---
-
+<!--
 ## 🔄 Conversion et transformation : la fluidité des types
 
 ### **Conversions automatiques intelligentes**
@@ -192,10 +192,11 @@ var chaîne = String(789);              // Conversion vers texte
 ```
 
 ---
+-->
 
 ## 🎯 Exemples pratiques avancés
 
-### **Gestion d'un profil utilisateur**
+<!--### **Gestion d'un profil utilisateur**
 
 ```zia
 fonction créerProfil(nom, prénom, âge, email) {
@@ -214,6 +215,7 @@ fonction créerProfil(nom, prénom, âge, email) {
 var utilisateur = créerProfil("Martin", "Sophie", 25, "sophie.martin@email.fr");
 afficher "Bienvenue " + utilisateur.nomComplet + " !";
 ```
+-->
 
 ### **Calculatrice financière française**
 
@@ -221,69 +223,68 @@ afficher "Bienvenue " + utilisateur.nomComplet + " !";
 fonction calculerTTC(prixHT, tauxTVA) {
     var montantTVA = prixHT * (tauxTVA / 100);
     var prixTTC = prixHT + montantTVA;
-    
-    afficher "Prix HT : " + prixHT + "€";
-    afficher "TVA (" + tauxTVA + "%) : " + montantTVA + "€";
-    afficher "Prix TTC : " + prixTTC + "€";
-    
+
+    afficher "\nPrix HT : ",prixHT, "€";
+    afficher "\nTVA (", tauxTVA, "%) : ", montantTVA, "€";
+    afficher "\nPrix TTC : ", prixTTC, "€";
+
     retourner prixTTC;
 }
 
-var produit = {
-    nom: "Ordinateur portable",
-    prixHT: 1000.0,
-    taux: 20.0
-};
+var nom = "Ordinateur portable";
+var prixHT = 1000.0;
+var taux = 20.0;
 
-var total = calculerTTC(produit.prixHT, produit.taux);
+var total = calculerTTC(prixHT, taux);
+afficher "\ntotal: ", total, "\n";
 ```
 
 ### **Système de notation française**
 
 ```zia
-fonction évaluerNote(note) {
-    var appréciation = "";
-    var estReçu = faux;
-    
+fonction evaluerNote(note) {
+    var appreciation = "";
+    var estRecu = faux;
+
     si (note >= 16) {
-        appréciation = "Très bien";
-        estReçu = vrai;
+        appreciation = "Très bien";
+        estRecu = vrai;
     } sinon si (note >= 14) {
-        appréciation = "Bien";
-        estReçu = vrai;
+        appreciation = "Bien";
+        estRecu = vrai;
     } sinon si (note >= 12) {
-        appréciation = "Assez bien";
-        estReçu = vrai;
+        appreciation = "Assez bien";
+        estRecu = vrai;
     } sinon si (note >= 10) {
-        appréciation = "Passable";
-        estReçu = vrai;
+        appreciation = "Passable";
+        estRecu = vrai;
     } sinon {
-        appréciation = "Insuffisant";
-        estReçu = faux;
+        appreciation = "Insuffisant";
+        estRecu = faux;
     }
-    
-    var résultat = {
+
+    var resultat = {
         note: note,
-        appréciation: appréciation,
-        estReçu: estReçu,
+        appreciation: appreciation,
+        estRecu: estRecu,
         mention: (note >= 14) ? "Avec mention" : "Sans mention"
     };
-    
-    retourner résultat;
+
+    retourner resultat;
 }
 
-var étudiant = "Pierre Durand";
+var etudiant = "Pierre Durand";
 var noteMaths = 15.5;
-var évaluation = évaluerNote(noteMaths);
+var evaluation = evaluerNote(noteMaths);
 
-afficher étudiant + " - Note : " + évaluation.note + "/20";
-afficher "Appréciation : " + évaluation.appréciation;
-afficher "Résultat : " + (évaluation.estReçu ? "ADMIS" : "AJOURNE");
+afficher etudiant + " - Note : ", evaluation.note + "/20";
+afficher "Appreciation : " + evaluation.appreciation;
+afficher "Resultat : " + (evaluation.estRecu ? "ADMIS" : "AJOURNE");
 ```
 
 ---
 
-## 🔍 Vérification et validation de types
+<!--## 🔍 Vérification et validation de types
 
 ### **Fonctions d'introspection**
 
@@ -313,6 +314,7 @@ pour (var i = 0; i < exemples.length; i++) {
 ```
 
 ---
+-->
 
 ## 🎨 Bonnes pratiques françaises
 
@@ -321,42 +323,38 @@ pour (var i = 0; i < exemples.length; i++) {
 ```zia
 // ✅ Nommage français expressif
 var compteurVisiteurs = 0;
-var listePrénoms = ["Marie", "Pierre", "Sophie"];
+var estAuthentifie = faux;
+var moyenneGenerale = 14.5;
+
+// ❌ Éviter les accents
+var listePrénoms = nul;
 var estAuthentifié = faux;
 var moyenneGénérale = 14.5;
-
-// ✅ Contexte culturel français
-var départements = ["Paris", "Lyon", "Marseille"];
-var joursOuvrés = 5;
-var congésPayés = 25;
-var salaireMinimum = 1709.28;
-
-// ❌ Éviter les anglicismes inutiles
-var userCount = 0;           // Préférer : compteurUtilisateurs
-var isValid = faux;          // Préférer : estValide
-var firstName = "Marie";     // Préférer : prénom
 ```
 
 ### **Documentation et commentaires**
 
 ```zia
 /**
- * Calcule l'âge d'une personne à partir de son année de naissance
- * @param {number} annéeNaissance - L'année de naissance
- * @return {number} L'âge calculé
+ * Calcule l'age d'une personne à partir de son annee de naissance
+ * @param {number} anneeNaissance - L'annee de naissance
+ * @return {number} L'age calcule
  */
-fonction calculerÂge(annéeNaissance) {
-    var annéeActuelle = 2024;  // À adapter selon les besoins
-    var âge = annéeActuelle - annéeNaissance;
-    
-    // Vérification de cohérence
-    si (âge < 0 ou âge > 150) {
-        afficher "Attention : âge incohérent calculé";
+fonction calculerAge(anneeNaissance) {
+    var anneeActuelle = 2024;  // À adapter selon les besoins
+    var age = anneeActuelle - anneeNaissance;
+
+    // Verification de coherence
+    si (age < 0 ou age > 150) {
+        afficher "Attention : age incoherent calcule\n";
         retourner nul;
     }
-    
-    retourner âge;
+
+    retourner age;
 }
+
+var age = calculerAge(2300);
+afficher age;
 ```
 
 ---
@@ -372,16 +370,17 @@ Le typage dynamique de Zia reflète l'esprit français : il vous fait confiance 
 Cette approche permet d'écrire du code élégant et naturel :
 
 ```zia
-var données = nul;
+var donnees = nul;
 
 // Plus tard dans le programme...
-données = "Informations textuelles";
+donnees = "Informations textuelles";
+afficher "\nDonnees actuelles : ", donnees;
 
 // Encore plus tard...
-données = 42;
+donnees = 42;
 
 // Zia s'adapte gracieusement à chaque changement
-afficher "Données actuelles : " + données;
+afficher "\nDonnees actuelles : ", donnees;
 ```
 
 ---
@@ -390,7 +389,7 @@ afficher "Données actuelles : " + données;
 
 La gestion des variables et types en Zia transcende la simple manipulation technique pour devenir un art de l'expression française structurée. Chaque `var` que vous écrivez est une déclaration d'intention, chaque valeur assignée raconte une partie de votre histoire algorithmique.
 
-En maîtrisant ces concepts, vous acquérez la capacité de modéliser n'importe quelle réalité dans l'univers numérique, tout en conservant la clarté et l'élégance qui caractérisent la pensée française.
+En maîtrisant ces concepts, vous acquérez la capacité de modéliser n'importe quelle réalité dans l'univers numérique, tout en conservant la clarté et l'élégance qui caractérisent la pensée algorithmique.
 
 Dans le prochain chapitre, nous découvrirons comment ces données prennent vie à travers les structures de contrôle, ces mécanismes qui permettent à vos programmes de prendre des décisions et de s'adapter aux situations.
 

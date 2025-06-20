@@ -1,31 +1,20 @@
-# Configuration MkDocs Avancée pour la documentation du langage Zia
 site_name: "Le Langage Zia"
-site_description: "Programmez en français avec élégance et simplicité - Guide complet du langage de programmation francophone"
-site_author: "Communauté Zia"
-site_url: "https://manirdev.github.io/zia-docs/"
+site_description: "Programmez en français avec élégance et simplicité - Guide complet du langage de programmation Zia"
+site_author: "Manir MHT"
+site_url: "https://manirdev.github.io/zia/site/"
 
-# Repository
-repo_name: "manirDev/zia"
-repo_url: "https://github.com/manirDev/zia"
-edit_uri: "edit/main/docs/"
-
-# Copyright avec informations détaillées
+# Copyright with informations
 copyright: |
   Copyright &copy; 2024 Communauté Zia - Langage de programmation français<br>
   Distribué sous licence <a href="https://github.com/manirDev/zia/blob/main/LICENSE">MIT</a>
 
-# Configuration thème avancée
+# Theme Configuration
 theme:
   name: "material"
   language: "fr"
   
-  # Logo et favicon personnalisés
-  logo: "assets/images/zia-logo.svg"
-  favicon: "assets/images/favicon.ico"
-  
-  # Couleurs et apparence avancées
+  # Color and apperance
   palette:
-    # Mode clair - Thème élégant
     - media: "(prefers-color-scheme: light)"
       scheme: default
       primary: "deep purple"
@@ -34,7 +23,7 @@ theme:
         icon: material/weather-night
         name: "Passer au mode sombre"
     
-    # Mode sombre - Thème professionnel
+    # Dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: "deep purple"
@@ -43,12 +32,10 @@ theme:
         icon: material/weather-sunny
         name: "Passer au mode clair"
   
-  # Icônes personnalisées
+  # Custom icons
   icon:
     repo: fontawesome/brands/github
     logo: material/code-braces-box
-    edit: material/pencil
-    view: material/eye
     admonition:
       note: fontawesome/solid/note-sticky
       abstract: fontawesome/solid/book
@@ -63,7 +50,7 @@ theme:
       example: fontawesome/solid/flask
       quote: fontawesome/solid/quote-left
   
-  # Fonctionnalités avancées pour une expérience livre premium
+  # Advanced functionalities
   features:
     # Navigation avancée
     - navigation.instant        # Navigation SPA
@@ -180,7 +167,7 @@ markdown_extensions:
       clickable_checkbox: true
   - pymdownx.tilde
 
-# Plugins avancés
+# Plugins
 plugins:
   # Recherche multilingue avancée
   - search:
@@ -217,34 +204,35 @@ plugins:
   
 
   # Plugin pour les PDF
-  - with-pdf:
-      enabled_if_env: ENABLE_PDF_EXPORT
-      cover_title: "Guide Complet du Langage Zia"
-      cover_subtitle: "Programmation en français"
-      author: "Communauté Zia"
-      copyright: "Copyright © 2024 Communauté Zia"
-      cover_logo: "assets/images/zia-logo.svg"
-      toc_title: "Table des matières"
-      heading_shift: false
-      toc_level: 3
-      ordered_chapter_level: 2
-      excludes_children:
-        - 'release-notes/:upgrading'
-        - 'release-notes/:changelog'
-      exclude_pages:
-        - 'bugs/'
-        - 'appendix/contribute/'
-      convert_iframe:
-        - src: IFRAME_SRC
-          img: POSTER_IMAGE
-          text: ALTERNATE_TEXT
-      two_columns_level: 3
-      render_js: true
-      headless_chrome_path: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-      output_path: pdf/zia-guide.pdf
-      debug_html: true
-      show_anchors: true
-      verbose: true
+ #- with-pdf:
+ #    enabled_if_env: ENABLE_PDF_EXPORT
+ #    cover_title: "Guide Complet du Langage Zia"
+ #    cover_subtitle: "Programmation en français"
+ #    author: "Communauté Zia"
+ #    copyright: "Copyright © 2024 Communauté Zia"
+ #    cover_logo: "assets/images/zia-logo.svg"
+ #    toc_title: "Table des matières"
+ #    heading_shift: false
+ #    toc_level: 3
+ #    ordered_chapter_level: 2
+ #    excludes_children:
+ #      - 'release-notes/:upgrading'
+ #      - 'release-notes/:changelog'
+ #    exclude_pages:
+ #      - 'bugs/'
+ #      - 'appendix/contribute/'
+ #    convert_iframe:
+ #      - src: IFRAME_SRC
+ #        img: POSTER_IMAGE
+ #        text: ALTERNATE_TEXT
+ #    two_columns_level: 3
+ #    render_js: true
+ #    headless_chrome_path: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+ #    output_path: pdf/zia-guide.pdf
+ #    debug_html: true
+ #    show_anchors: true
+ #    verbose: true
+
   # Navigation automatique (optionnel)
   # - awesome-pages
   
@@ -252,12 +240,9 @@ plugins:
   # - tags:
   #     tags_file: tags.md
 
-# CSS et JavaScript personnalisés avancés
+# Custom CSS and JavaScript personnalisés avancés
 extra_css:
-  - assets/stylesheets/zia-theme.css
-  - assets/stylesheets/sidebar-advanced.css
-  - assets/stylesheets/code-highlighting.css
-  - assets/stylesheets/print-styles.css
+  #- assets/stylesheets/zia-theme.css
 
 extra_javascript:
   # MathJax pour les formules
@@ -267,13 +252,13 @@ extra_javascript:
   
   # Prism.js pour Zia syntax highlighting
   - https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js
-  - assets/javascripts/prism-zia.js
+ # - assets/javascripts/prism-zia.js
   
   # Scripts personnalisés
-  - assets/javascripts/zia-interactive.js
-  - assets/javascripts/code-runner.js
+  #- assets/javascripts/zia-interactive.js
+  #- assets/javascripts/code-runner.js
 
-# Variables extra avancées
+# Advanced Variables
 extra:
   # Informations sur le projet
   version:
@@ -288,20 +273,20 @@ extra:
     - icon: fontawesome/solid/globe
       link: https://manirdev.github.io/zia/build_wasm/
       name: "Essayer Zia en ligne"
-    - icon: fontawesome/brands/discord
-      link: https://discord.gg/zia-community
-      name: "Rejoindre la communauté Discord"
+    #- icon: fontawesome/brands/discord
+      #link: https://discord.gg/zia-community
+      #name: "Rejoindre la communauté Discord"
     - icon: fontawesome/brands/twitter
       link: https://twitter.com/ZiaLang
       name: "Suivre sur Twitter"
     - icon: fontawesome/solid/envelope
-      link: mailto:contact@zialang.fr
+      link: mailto:mhtnourmhtmjr@gmail.com
       name: "Contact par email"
   
-  # Générateur personnalisé
+  # Custom generator
   generator: false
   
-  # Analytics avancé
+  # Analytics
   analytics:
     provider: google
     property: G-XXXXXXXXXX
@@ -363,14 +348,14 @@ nav:
   - "🔧 Partie II • Fondamentaux":
     - "Chapitre 4 • Syntaxe": 
       - "syntax.md"
-      - "Règles de base": "syntax/regles.md"
-      - "Commentaires": "syntax/commentaires.md"
-      - "Conventions": "syntax/conventions.md"
+      #- "Règles de base": "syntax/regles.md"
+      #- "Commentaires": "syntax/commentaires.md"
+      #- "Conventions": "syntax/conventions.md"
     - "Chapitre 5 • Variables et Types": 
       - "types.md"
-      - "Types primitifs": "types/primitifs.md"
-      - "Types composés": "types/composes.md"
-      - "Conversion de types": "types/conversion.md"
+      #- "Types primitifs": "types/primitifs.md"
+      #- "Types composés": "types/composes.md"
+      #- "Conversion de types": "types/conversion.md"
     - "Chapitre 6 • Opérateurs et Priorité": 
       - "operators.md"
       - "Opérateurs arithmétiques": "operators/arithmetiques.md"

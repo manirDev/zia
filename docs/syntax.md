@@ -85,7 +85,7 @@ Zia supporte naturellement les commentaires français avec les accents :
    sur plusieurs lignes
    parfait pour les explications détaillées */
 
-var âge = 25; // Les accents sont parfaitement supportés
+var age = 25;
 ```
 
 ---
@@ -98,9 +98,9 @@ En Zia, créer une variable, c'est donner naissance à un concept dans l'univers
 
 ```zia
 var nom = "Marie";           // Une identité textuelle
-var âge = 28;                // Un nombre entier
+var age = 28;                // Un nombre entier
 var taille = 1.65;           // Un nombre décimal
-var estÉtudiante = vrai;     // Une vérité logique
+var estEtudiante = vrai;     // Une vérité logique
 var hobby = nul;             // Une valeur encore indéterminée
 ```
 
@@ -111,13 +111,9 @@ Zia encourage l'utilisation de noms expressifs en français :
 ```zia
 // ✅ Style français recommandé
 var nombreDEtudiants = 42;
-var moyenneGénérale = 15.8;
-var estConnecté = faux;
+var moyenneGenerale = 15.8;
+var estConnecte = faux;
 
-// ✅ Accents supportés naturellement
-var prénom = "François";
-var numéroTéléphone = "0123456789";
-var estMajeur = vrai;
 ```
 
 ### **Types de données : la richesse de l'expression**
@@ -125,7 +121,7 @@ var estMajeur = vrai;
 ```zia
 // Nombres entiers
 var population = 67000000;
-var température = -5;
+var temperature = -5;
 
 // Nombres décimaux
 var pi = 3.14159;
@@ -137,10 +133,10 @@ var email = "contact@exemple.fr";
 
 // Valeurs logiques
 var estValide = vrai;
-var estTerminé = faux;
+var estTermine = faux;
 
 // Valeur nulle
-var résultat = nul; // En attente d'une valeur
+var resultat = nul; // En attente d'une valeur
 ```
 
 ---
@@ -164,12 +160,12 @@ si (note >= 10) {
 ### **Conditions complexes : nuancer la pensée**
 
 ```zia
-var âge = 25;
+var age = 25;
 var aLepermis = vrai;
 
-si (âge >= 18 et aLepermis) {
+si (age >= 18 et aLepermis) {
     afficher "Vous pouvez conduire !";
-} sinon si (âge >= 18) {
+} sinon si (age >= 18) {
     afficher "Pensez à passer votre permis.";
 } sinon {
     afficher "Vous êtes encore mineur.";
@@ -192,12 +188,12 @@ afficher "Décollage !";
 
 ```zia
 var essais = 0;
-var réussi = faux;
+var reussi = faux;
 
-tantque (essais < 3 et !réussi) {
-    afficher "Tentative numéro : " + (essais + 1);
+tantque (essais < 3 et !reussi) {
+    afficher "Tentative numéro : ", (essais + 1), "\n";
     // Simulation d'un test
-    réussi = (essais == 2); // Réussit à la 3ème tentative
+    reussi = (essais == 2); // Réussit à la 3ème tentative
     essais = essais + 1;
 }
 ```
@@ -209,15 +205,16 @@ tantque (essais < 3 et !réussi) {
 ### **Définition : créer ses propres actions**
 
 ```zia
-fonction direBonjour(prénom) {
-    afficher "Bonjour " + prénom + " !";
-    afficher "Comment allez-vous ?";
+fonction direBonjour(prenom) {
+    afficher "Bonjour " + prenom + " !";
+    afficher " Comment allez-vous ?";
 }
 
 fonction calculerAire(longueur, largeur) {
     var aire = longueur * largeur;
     retourner aire;
 }
+
 ```
 
 ### **Utilisation : donner vie aux fonctions**
@@ -229,7 +226,7 @@ direBonjour("Thomas");
 
 // Utilisation avec valeur de retour
 var surfaceSalon = calculerAire(5.2, 4.8);
-afficher "La surface du salon est : " + surfaceSalon + " m²";
+afficher "La surface du salon est : ", surfaceSalon, " m²";
 ```
 
 ---
@@ -244,18 +241,18 @@ fonction calculatrice() {
     var nombre2 = 7;
     
     afficher "=== Calculatrice Zia ===";
-    afficher "Premier nombre : " + nombre1;
-    afficher "Second nombre : " + nombre2;
+    afficher "Premier nombre : ", nombre1;
+    afficher "Second nombre : ", nombre2;
     
-    afficher "Addition : " + (nombre1 + nombre2);
-    afficher "Soustraction : " + (nombre1 - nombre2);
-    afficher "Multiplication : " + (nombre1 * nombre2);
-    afficher "Division : " + (nombre1 / nombre2);
+    afficher "Addition : ", (nombre1 + nombre2);
+    afficher "Soustraction : ", (nombre1 - nombre2);
+    afficher "Multiplication : ", (nombre1 * nombre2);
+    afficher "Division : ", (nombre1 / nombre2);
 }
 
 calculatrice();
 ```
-
+<!---
 ### **Générateur de compliments**
 
 ```zia
@@ -267,43 +264,25 @@ fonction complimenter(nom, adjectif) {
     ];
     
     pour (var i = 0; i < 3; i = i + 1) {
-        afficher nom + ", " + compliments[i] + " !";
+        afficher nom, ", ", compliments[i], " !";
     }
 }
 
 complimenter("Marie", "brillante");
 ```
-
+-->
 ---
 
-## 🌟 Spécificités françaises de Zia
-
-### **Support naturel des accents**
-
-```zia
-var créativité = "infinie";
-var rêve = "réalisable";
-var qualité = "française";
-
-fonction vérifierMaîtrise(niveau) {
-    si (niveau >= 80) {
-        retourner "Maîtrise excellente !";
-    } sinon {
-        retourner "Continuez à progresser.";
-    }
-}
-```
-
-### **Logique de lecture naturelle**
+### 🌟 **Logique de lecture naturelle**
 
 Zia privilégie la lecture fluide, presque littéraire :
 
 ```zia
 var utilisateur = "Pierre";
-var estConnecté = vrai;
+var estConnecte = vrai;
 
-si (utilisateur != nul et estConnecté) {
-    afficher "Bienvenue " + utilisateur + " !";
+si (utilisateur != nul et estConnecte) {
+    afficher "Bienvenue ", utilisateur, " !";
     afficher "Vous êtes maintenant connecté.";
 } sinon {
     afficher "Veuillez vous connecter.";
@@ -335,8 +314,7 @@ fonction exempleIndentation() {
 ```zia
 // ✅ Noms expressifs et français
 var compteurVisiteurs = 0;
-var listeÉtudiants = [];
-var estAuthentifié = faux;
+var estAuthentifie = faux;
 
 fonction calculerMoyenneClasse(notes) {
     // Code clair et bien nommé
@@ -344,14 +322,14 @@ fonction calculerMoyenneClasse(notes) {
 
 // ❌ Éviter les abréviations obscures
 var cptVst = 0;        // Pas assez clair
-var lstEtd = [];       // Difficile à comprendre
+var lstEtd = nul;       // Difficile à comprendre
 ```
 
 ---
 
 ## 🚀 Vers la maîtrise syntaxique
 
-La syntaxe de Zia n'est pas qu'un ensemble de règles techniques : c'est un langage d'expression qui vous permet de traduire vos idées en instructions compréhensibles par la machine, tout en conservant l'élégance et la précision de la langue française.
+La syntaxe de Zia n'est pas qu'un ensemble de règles techniques : c'est un langage d'expression qui vous permet de traduire vos idées en instructions compréhensibles par la machine, tout en conservant l'élégance et la précision de la programmation.
 
 Chaque mot-clé, chaque structure, chaque convention a été pensée pour créer une harmonie entre votre pensée naturelle en français et les exigences de la programmation moderne. En maîtrisant cette syntaxe, vous acquérez non seulement les bases techniques nécessaires, mais aussi une nouvelle façon de structurer et d'exprimer vos idées créatrices.
 
