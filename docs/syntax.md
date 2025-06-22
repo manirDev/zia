@@ -32,6 +32,7 @@ Chaque mot-clé de Zia a été soigneusement sélectionné pour respecter l'usag
 | `tantque` | *Répétition conditionnelle* | while |
 | `selon` | *Sélection parmi plusieurs cas* | switch |
 | `cas` | *Option spécifique dans une sélection* | case |
+| `defaut` | *Cas par défaut dans une sélection* | default |
 | `quitter` | *Sortir d'une boucle ou d'un bloc* | break |
 | `continuer` | *Passer à l'itération suivante* | continue |
 | `et` | *Conjonction logique inclusive* | and/&& |
@@ -51,6 +52,10 @@ Chaque terme français de Zia porte en lui une richesse sémantique qui dépasse
 - **`retourner`** suggère un voyage de la donnée qui revient vers son origine
 - **`tantque`** exprime la persistence dans le temps, la continuation d'un état
 - **`sinon`** apporte cette nuance française de l'alternative courtoise
+- **`selon`** introduit une analyse méthodique des possibilités
+- **`defaut`** représente le choix de sagesse quand rien d'autre ne convient
+- **`quitter`** évoque la sortie élégante, l'abandon maîtrisé
+- **`continuer`** exprime la persévérance, l'élan vers l'avant
 
 ---
 
@@ -172,6 +177,39 @@ si (age >= 18 et aLepermis) {
 }
 ```
 
+### **Sélection multiple : l'élégance du `selon-cas`**
+
+Pour les situations où plusieurs choix s'offrent à vous, Zia propose la structure `selon-cas` :
+
+```zia
+var jourSemaine = 3;
+
+selon (jourSemaine) {
+    cas 1:
+        afficher "Lundi - Début de semaine !";
+        quitter;
+    
+    cas 2:
+        afficher "Mardi - On continue !";
+        quitter;
+    
+    cas 3:
+        afficher "Mercredi - Milieu de semaine";
+        quitter;
+        
+    cas 4:
+        afficher "Jeudi - Bientôt le weekend";
+        quitter;
+        
+    cas 5:
+        afficher "Vendredi - Dernier jour !";
+        quitter;
+        
+    defaut:
+        afficher "Weekend - Repos bien mérité !";
+}
+```
+
 ### **Boucles : la répétition maîtrisée**
 
 **La boucle `pour` - itération déterminée :**
@@ -191,14 +229,47 @@ var essais = 0;
 var reussi = faux;
 
 tantque (essais < 3 et !reussi) {
-    afficher "Tentative numéro : ", (essais + 1), "\n";
+    afficher "Tentative numéro : ", (essais + 1);
     // Simulation d'un test
     reussi = (essais == 2); // Réussit à la 3ème tentative
     essais = essais + 1;
 }
 ```
 
----
+### **Contrôle de flux : `quitter` et `continuer`**
+
+**Utilisation de `quitter` dans une boucle :**
+
+```zia
+var compteur = 0;
+
+tantque (vrai) {
+    si (compteur > 5) {
+        afficher "Arrêt de la boucle !";
+        quitter; // Sort de la boucle tantque
+    }
+    
+    afficher "Compteur : ", compteur;
+    compteur = compteur + 1;
+}
+
+afficher "Fin du programme.";
+```
+
+**Utilisation de `continuer` pour passer à l'itération suivante :**
+
+```zia
+afficher "Nombres pairs de 1 à 10 :";
+
+pour (var i = 1; i <= 10; i = i + 1) {
+    si (i % 2 != 0) {
+        continuer; // Passe à l'itération suivante si impair
+    }
+    
+    afficher i; // Affiche seulement les nombres pairs
+}
+```
+
 
 ## 🔧 Fonctions : la modularité élégante
 
@@ -252,25 +323,90 @@ fonction calculatrice() {
 
 calculatrice();
 ```
-<!---
-### **Générateur de compliments**
+
+### **Menu interactif avec selon-cas**
 
 ```zia
-fonction complimenter(nom, adjectif) {
-    var compliments = [
-        "Vous êtes formidable",
-        "Votre travail est excellent", 
-        "Continuez ainsi"
-    ];
-    
-    pour (var i = 0; i < 3; i = i + 1) {
-        afficher nom, ", ", compliments[i], " !";
+fonction menuPrincipal() {
+    var choix = 2; // Simuler un choix utilisateur
+
+    afficher "\n=== Menu Principal ===";
+    afficher "\n1. Nouveau fichier";
+    afficher "\n2. Ouvrir fichier";
+    afficher "\n3. Sauvegarder";
+    afficher "\n4. Quitter";
+
+    selon (choix) {
+        cas 1:
+            afficher "\nCréation d'un nouveau fichier...";
+            quitter;
+
+        cas 2:
+            afficher "\nOuverture d'un fichier existant...";
+            quitter;
+
+        cas 3:
+            afficher "\nSauvegarde en cours...";
+            quitter;
+
+        cas 4:
+            afficher "\nAu revoir !";
+            quitter;
+
+        defaut:
+            afficher "\nChoix invalide. Veuillez réessayer.";
     }
 }
 
-complimenter("Marie", "brillante");
+menuPrincipal();
 ```
--->
+
+### **Recherche avec contrôle de flux**
+
+```zia
+fonction rechercherNombre(cible) {
+    var trouve = faux;
+    var position = -1;
+    var compteur = 1;
+
+    // Simuler une série de nombres à examiner
+    pour (var nombre = 10; nombre <= 50; nombre = nombre + 3) {
+        si (nombre % 7 == 0) {
+            afficher "\nMultiple de 7 ignoré : ", nombre;
+            continuer; // Ignorer les multiples de 7
+        }
+
+        afficher "\nVérification du nombre : ", nombre;
+
+        si (nombre == cible) {
+            trouve = vrai;
+            position = compteur;
+            afficher "\nNombre trouvé ! Position : ", position;
+            quitter; // Sortir dès qu'on trouve
+        }
+
+        compteur = compteur + 1;
+
+        // Limiter la recherche pour éviter une boucle infinie
+        si (compteur > 10) {
+            afficher "\nLimite de recherche atteinte";
+            quitter;
+        }
+    }
+
+    si (!trouve) {
+        afficher "\nNombre ", cible, " non trouvé dans la séquence.";
+    }
+
+    retourner position;
+}
+
+// Test de la fonction
+var resultat = rechercherNombre(25);
+afficher "\nRésultat de la recherche : ", resultat;
+
+```
+
 ---
 
 ### 🌟 **Logique de lecture naturelle**
@@ -325,13 +461,49 @@ var cptVst = 0;        // Pas assez clair
 var lstEtd = nul;       // Difficile à comprendre
 ```
 
+### **Usage optimal des structures de contrôle**
+
+```zia
+// ✅ Bon usage de selon-cas
+selon (typeUtilisateur) {
+    cas "admin":
+        // Actions d'administration
+        quitter;
+    cas "moderateur":
+        // Actions de modération
+        quitter;
+    cas "utilisateur":
+        // Actions utilisateur standard
+        quitter;
+    defaut:
+        // Gestion des cas non prévus
+}
+
+// ✅ Bon usage de quitter et continuer
+pour (var nombre = 1; nombre <= 20; nombre = nombre + 1) {
+    si (nombre % 2 == 0) {
+        continuer; // Ignorer les nombres pairs
+    }
+    
+    si (nombre > 15) {
+        afficher "Limite atteinte !";
+        quitter; // Arrêter le traitement
+    }
+    
+    // Traitement des nombres impairs inférieurs à 15
+    afficher "Nombre impair : ", nombre;
+}
+```
+
 ---
 
 ## 🚀 Vers la maîtrise syntaxique
 
-La syntaxe de Zia n'est pas qu'un ensemble de règles techniques : c'est un langage d'expression qui vous permet de traduire vos idées en instructions compréhensibles par la machine, tout en conservant l'élégance et la précision de la programmation.
+La syntaxe de Zia n'est pas qu'un ensemble de règles techniques : c'est un langage d'expression qui vous permet de traduire vos idées en instructions compréhensibles par la machine, tout en conservant l'élégance et la précision de la programmation française.
 
-Chaque mot-clé, chaque structure, chaque convention a été pensée pour créer une harmonie entre votre pensée naturelle en français et les exigences de la programmation moderne. En maîtrisant cette syntaxe, vous acquérez non seulement les bases techniques nécessaires, mais aussi une nouvelle façon de structurer et d'exprimer vos idées créatrices.
+Chaque mot-clé, chaque structure, chaque convention a été pensée pour créer une harmonie entre votre pensée naturelle en français et les exigences de la programmation moderne. Les structures de contrôle comme `selon-cas`, `quitter`, et `continuer` vous donnent le pouvoir de créer des programmes qui non seulement fonctionnent efficacement, mais se lisent comme une prose française bien structurée.
+
+En maîtrisant cette syntaxe complète, vous acquérez non seulement les bases techniques nécessaires, mais aussi une nouvelle façon de structurer et d'exprimer vos idées créatrices avec la précision d'un algorithme et l'élégance du français.
 
 Dans le chapitre suivant, nous explorerons en détail les variables et les types de données, approfondissant ainsi votre compréhension des fondements de Zia.
 

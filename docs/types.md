@@ -239,50 +239,46 @@ var total = calculerTTC(prixHT, taux);
 afficher "\ntotal: ", total, "\n";
 ```
 
-### **Système de notation française**
+### **Exemple complexe avec quitter et continuer:**
 
 ```zia
-fonction evaluerNote(note) {
-    var appreciation = "";
-    var estRecu = faux;
-
-    si (note >= 16) {
-        appreciation = "Très bien";
-        estRecu = vrai;
-    } sinon si (note >= 14) {
-        appreciation = "Bien";
-        estRecu = vrai;
-    } sinon si (note >= 12) {
-        appreciation = "Assez bien";
-        estRecu = vrai;
-    } sinon si (note >= 10) {
-        appreciation = "Passable";
-        estRecu = vrai;
-    } sinon {
-        appreciation = "Insuffisant";
-        estRecu = faux;
+fonction calculerSommeNombres() {
+    var somme = 0;
+    var compteurPositifs = 0;
+    var nombreNegatifs = 0;
+    
+    pour (var nombre = -5; nombre <= 15; nombre = nombre + 1) {
+        // Ignorer la valeur zéro
+        si (nombre == 0) {
+            afficher "Zéro ignoré";
+            continuer;
+        }
+        
+        // Compter et traiter les nombres négatifs
+        si (nombre < 0) {
+            nombreNegatifs = nombreNegatifs + 1;
+            afficher "Nombre négatif détecté : ", nombre;
+            
+            // Arrêter si trop de nombres négatifs
+            si (nombreNegatifs > 3) {
+                afficher "Trop de nombres négatifs, arrêt !";
+                quitter;
+            }
+            continuer; // Ignorer ce nombre négatif
+        }
+        
+        // Traiter seulement les nombres positifs
+        somme = somme + nombre;
+        compteurPositifs = compteurPositifs + 1;
+        afficher "Ajout de ", nombre, " à la somme";
     }
-
-    var resultat = {
-        note: note,
-        appreciation: appreciation,
-        estRecu: estRecu,
-        mention: (note >= 14) ? "Avec mention" : "Sans mention"
-    };
-
-    retourner resultat;
+    
+    afficher "Somme finale : ", somme;
+    afficher "Nombres positifs traités : ", compteurPositifs;
 }
 
-var etudiant = "Pierre Durand";
-var noteMaths = 15.5;
-var evaluation = evaluerNote(noteMaths);
-
-afficher etudiant + " - Note : ", evaluation.note + "/20";
-afficher "Appreciation : " + evaluation.appreciation;
-afficher "Resultat : " + (evaluation.estRecu ? "ADMIS" : "AJOURNE");
+calculerSommeNombres();
 ```
-
----
 
 <!--## 🔍 Vérification et validation de types
 
