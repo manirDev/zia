@@ -9,6 +9,24 @@
 
 Imaginez pouvoir écrire du code avec la même fluidité que vous rédigez une lettre en français. C'est exactement ce que propose Zia : une syntaxe qui respecte non seulement les règles techniques de la programmation, mais aussi l'esprit et la logique de la langue française.
 
+```mermaid
+graph TD
+    A[💭 Pensée en français] --> B[✍️ Code Zia]
+    B --> C[🤖 Exécution machine]
+    
+    A1[Logique naturelle]
+    A2[Vocabulaire français]
+    A3[Structure claire]
+    
+    A --> A1
+    A --> A2
+    A --> A3
+    
+    style A fill:#e1f5fe
+    style B fill:#f3e5f5
+    style C fill:#e8f5e8
+```
+
 Zia hérite de la robustesse structurelle du langage C tout en substituant ses mots-clés anglais par leurs équivalents français naturels. Cette approche crée une harmonie unique entre la rigueur algorithmique et l'élégance linguistique française.
 
 ---
@@ -16,6 +34,42 @@ Zia hérite de la robustesse structurelle du langage C tout en substituant ses m
 ## 🗝️ Le vocabulaire fondamental de Zia
 
 ### **Les mots-clés : votre palette d'expression**
+
+```mermaid
+mindmap
+  root((Mots-clés Zia))
+    Affichage
+      afficher
+    Variables
+      var
+    Fonctions
+      fonction
+      retourner
+    Conditions
+      si
+      sinon si
+      sinon
+    Boucles
+      pour
+      tantque
+    Sélection
+      selon
+      cas
+      defaut
+    Contrôle
+      quitter
+      continuer
+    Logique
+      et
+      ou
+      vrai
+      faux
+      nul
+    Objets
+      classe
+      ceci
+      super
+```
 
 Chaque mot-clé de Zia a été soigneusement sélectionné pour respecter l'usage français tout en conservant la précision technique nécessaire. Voici votre vocabulaire de base :
 
@@ -63,6 +117,25 @@ Chaque terme français de Zia porte en lui une richesse sémantique qui dépasse
 
 ### **Structure générale : la logique française**
 
+```mermaid
+graph TD
+    A[📋 Déclarations] --> B[🔧 Actions/Fonctions]
+    B --> C[▶️ Exécution]
+    
+    A1[Variables] --> A
+    A2[Constantes] --> A
+    
+    B1[Définition fonctions] --> B
+    B2[Logique métier] --> B
+    
+    C1[Appels de fonctions] --> C
+    C2[Programme principal] --> C
+    
+    style A fill:#fff3e0
+    style B fill:#e8f5e8
+    style C fill:#e3f2fd
+```
+
 Un programme Zia suit une architecture claire qui respecte l'ordre naturel de la pensée française :
 
 ```zia
@@ -99,6 +172,28 @@ var age = 25;
 
 ### **Déclaration : l'acte de naissance des données**
 
+```mermaid
+graph LR
+    A[var nom] --> B[Allocation mémoire]
+    B --> C[Attribution valeur]
+    C --> D[Variable prête]
+    
+    subgraph Types
+        E[Texte]
+        F[Nombre]
+        G[Logique]
+        H[Nul]
+    end
+    
+    C --> E
+    C --> F
+    C --> G
+    C --> H
+    
+    style A fill:#ffecb3
+    style D fill:#c8e6c9
+```
+
 En Zia, créer une variable, c'est donner naissance à un concept dans l'univers de votre programme :
 
 ```zia
@@ -122,6 +217,30 @@ var estConnecte = faux;
 ```
 
 ### **Types de données : la richesse de l'expression**
+
+```mermaid
+graph TD
+    A[Types de données Zia] --> B[Nombres]
+    A --> C[Textes]
+    A --> D[Logiques]
+    A --> E[Nul]
+    
+    B --> B1[Entiers<br/>42, -5, 0]
+    B --> B2[Décimaux<br/>3.14, -2.7]
+    
+    C --> C1[Chaînes<br/>Bonjour, Zia]
+    
+    D --> D1[vrai]
+    D --> D2[faux]
+    
+    E --> E1[nul<br/>absence de valeur]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#e8f5e8
+    style D fill:#fce4ec
+    style E fill:#f3e5f5
+```
 
 ```zia
 // Nombres entiers
@@ -150,6 +269,20 @@ var resultat = nul; // En attente d'une valeur
 
 ### **Conditions : l'art de décider**
 
+```mermaid
+flowchart TD
+    A[🤔 Évaluation condition] --> B{Condition vraie ?}
+    B -->|Oui| C[✅ Bloc SI]
+    B -->|Non| D[❌ Bloc SINON]
+    C --> E[📤 Fin]
+    D --> E
+    
+    style A fill:#fff3e0
+    style B fill:#e1f5fe
+    style C fill:#c8e6c9
+    style D fill:#ffcdd2
+```
+
 La structure conditionnelle en Zia reflète la logique française naturelle :
 
 ```zia
@@ -163,6 +296,25 @@ si (note >= 10) {
 ```
 
 ### **Conditions complexes : nuancer la pensée**
+
+```mermaid
+flowchart TD
+    A[Début] --> B{age >= 18 ?}
+    B -->|Non| F[❌ Vous êtes encore mineur]
+    B -->|Oui| C{aLepermis ?}
+    C -->|Oui| D[✅ Vous pouvez conduire !]
+    C -->|Non| E[⚠️ Pensez à passer votre permis]
+    
+    D --> G[Fin]
+    E --> G
+    F --> G
+    
+    style A fill:#e8f5e8
+    style G fill:#e8f5e8
+    style D fill:#c8e6c9
+    style E fill:#fff3e0
+    style F fill:#ffcdd2
+```
 
 ```zia
 var age = 25;
@@ -178,6 +330,28 @@ si (age >= 18 et aLepermis) {
 ```
 
 ### **Sélection multiple : l'élégance du `selon-cas`**
+
+```mermaid
+flowchart TD
+    A[📥 Valeur d'entrée] --> B{selon jourSemaine}
+    B --> C[cas 1: Lundi]
+    B --> D[cas 2: Mardi]
+    B --> E[cas 3: Mercredi]
+    B --> F[cas 4: Jeudi]
+    B --> G[cas 5: Vendredi]
+    B --> H[defaut: Weekend]
+    
+    C --> I[📤 quitter]
+    D --> I
+    E --> I
+    F --> I
+    G --> I
+    H --> I
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style I fill:#e8f5e8
+```
 
 Pour les situations où plusieurs choix s'offrent à vous, Zia propose la structure `selon-cas` :
 
@@ -212,7 +386,22 @@ selon (jourSemaine) {
 
 ### **Boucles : la répétition maîtrisée**
 
-**La boucle `pour` - itération déterminée :**
+#### **La boucle `pour` - itération déterminée :**
+
+```mermaid
+flowchart TD
+    A[🔄 Initialisation<br/>var i = 10] --> B{Condition<br/>i > 0 ?}
+    B -->|Oui| C[📋 Corps de boucle<br/>afficher i]
+    C --> D[➕ Modification<br/>i = i - 1]
+    D --> B
+    B -->|Non| E[🏁 Fin boucle]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#e8f5e8
+    style D fill:#fce4ec
+    style E fill:#c8e6c9
+```
 
 ```zia
 afficher "Compte à rebours :";
@@ -222,7 +411,22 @@ pour (var i = 10; i > 0; i = i - 1) {
 afficher "Décollage !";
 ```
 
-**La boucle `tantque` - persévérance conditionnelle :**
+#### **La boucle `tantque` - persévérance conditionnelle :**
+
+```mermaid
+flowchart TD
+    A[🎯 Initialisation<br/>essais = 0, reussi = faux] --> B{Condition<br/>essais < 3 ET !reussi}
+    B -->|Oui| C[📋 Corps de boucle<br/>Tentative + Test]
+    C --> D[🔄 Mise à jour<br/>essais++]
+    D --> B
+    B -->|Non| E[🏁 Fin boucle]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#e8f5e8
+    style D fill:#fce4ec
+    style E fill:#c8e6c9
+```
 
 ```zia
 var essais = 0;
@@ -237,6 +441,24 @@ tantque (essais < 3 et !reussi) {
 ```
 
 ### **Contrôle de flux : `quitter` et `continuer`**
+
+```mermaid
+flowchart TD
+    A[🔄 Boucle en cours] --> B{Condition de sortie ?}
+    B -->|Oui| C[🚪 quitter<br/>Sort de la boucle]
+    B -->|Non| D{Condition de saut ?}
+    D -->|Oui| E[⏭️ continuer<br/>Itération suivante]
+    D -->|Non| F[📋 Exécution normale]
+    E --> A
+    F --> A
+    C --> G[📤 Après la boucle]
+    
+    style A fill:#e1f5fe
+    style C fill:#ffcdd2
+    style E fill:#fff3e0
+    style F fill:#e8f5e8
+    style G fill:#c8e6c9
+```
 
 **Utilisation de `quitter` dans une boucle :**
 
@@ -270,8 +492,31 @@ pour (var i = 1; i <= 10; i = i + 1) {
 }
 ```
 
-
 ## 🔧 Fonctions : la modularité élégante
+
+### **Architecture des fonctions**
+
+```mermaid
+graph TD
+    A[📥 Paramètres d'entrée] --> B[🔧 Traitement]
+    B --> C[📤 Valeur de retour]
+    
+    subgraph Fonction
+        B1[Logique métier]
+        B2[Calculs]
+        B3[Affichages]
+        B4[Décisions]
+    end
+    
+    B --> B1
+    B --> B2
+    B --> B3
+    B --> B4
+    
+    style A fill:#e1f5fe
+    style C fill:#c8e6c9
+    style B fill:#fff3e0
+```
 
 ### **Définition : créer ses propres actions**
 
@@ -306,6 +551,22 @@ afficher "La surface du salon est : ", surfaceSalon, " m²";
 
 ### **Programme calculatrice simple**
 
+```mermaid
+flowchart TD
+    A[🔢 Entrée des nombres] --> B[➕ Addition]
+    A --> C[➖ Soustraction]
+    A --> D[✖️ Multiplication]
+    A --> E[➗ Division]
+    
+    B --> F[📊 Affichage résultats]
+    C --> F
+    D --> F
+    E --> F
+    
+    style A fill:#e1f5fe
+    style F fill:#c8e6c9
+```
+
 ```zia
 fonction calculatrice() {
     var nombre1 = 15;
@@ -325,6 +586,28 @@ calculatrice();
 ```
 
 ### **Menu interactif avec selon-cas**
+
+```mermaid
+flowchart TD
+    A[📋 Affichage menu] --> B[👤 Saisie utilisateur]
+    B --> C{selon choix}
+    
+    C --> D[1️⃣ Nouveau fichier]
+    C --> E[2️⃣ Ouvrir fichier]
+    C --> F[3️⃣ Sauvegarder]
+    C --> G[4️⃣ Quitter]
+    C --> H[❓ Choix invalide]
+    
+    D --> I[🏁 Fin]
+    E --> I
+    F --> I
+    G --> I
+    H --> I
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style I fill:#c8e6c9
+```
 
 ```zia
 fonction menuPrincipal() {
@@ -362,6 +645,28 @@ menuPrincipal();
 ```
 
 ### **Recherche avec contrôle de flux**
+
+```mermaid
+flowchart TD
+    A[🎯 Début recherche] --> B[🔄 Pour chaque nombre]
+    B --> C{Multiple de 7 ?}
+    C -->|Oui| D[⏭️ continuer<br/>Ignorer]
+    C -->|Non| E{Nombre = cible ?}
+    E -->|Oui| F[✅ Trouvé !<br/>quitter]
+    E -->|Non| G{Limite atteinte ?}
+    G -->|Oui| H[🚪 quitter<br/>Limite]
+    G -->|Non| I[➕ Compteur++]
+    
+    D --> B
+    I --> B
+    F --> J[📊 Retour position]
+    H --> K[❌ Non trouvé]
+    
+    style A fill:#e1f5fe
+    style F fill:#c8e6c9
+    style K fill:#ffcdd2
+    style J fill:#c8e6c9
+```
 
 ```zia
 fonction rechercherNombre(cible) {
@@ -411,6 +716,18 @@ afficher "\nRésultat de la recherche : ", resultat;
 
 ### 🌟 **Logique de lecture naturelle**
 
+```mermaid
+graph LR
+    A[💭 Pensée française] --> B[✍️ Code Zia]
+    B --> C[👁️ Lecture fluide]
+    C --> D[🤖 Exécution]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#e8f5e8
+    style D fill:#c8e6c9
+```
+
 Zia privilégie la lecture fluide, presque littéraire :
 
 ```zia
@@ -428,6 +745,29 @@ si (utilisateur != nul et estConnecte) {
 ---
 
 ## 🎓 Règles de style recommandées
+
+### **Architecture de code propre**
+
+```mermaid
+graph TD
+    A[📏 Code propre] --> B[🏗️ Structure claire]
+    A --> C[📝 Nommage expressif]
+    A --> D[🎯 Logique lisible]
+    
+    B --> B1[Indentation cohérente]
+    B --> B2[Espacement logique]
+    
+    C --> C1[Français naturel]
+    C --> C2[Éviter abréviations]
+    
+    D --> D1[Flux clair]
+    D --> D2[Responsabilités uniques]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#e8f5e8
+    style D fill:#fce4ec
+```
 
 ### **Indentation : la respiration du code**
 
@@ -462,6 +802,30 @@ var lstEtd = nul;       // Difficile à comprendre
 ```
 
 ### **Usage optimal des structures de contrôle**
+
+```mermaid
+flowchart TD
+    A[🏗️ Structure de contrôle] --> B{Type ?}
+    
+    B --> C[📋 selon-cas<br/>Sélection multiple]
+    B --> D[🔄 Boucles<br/>Répétition]
+    B --> E[🎯 Conditions<br/>Décisions]
+    
+    C --> C1[cas spécifiques]
+    C --> C2[defaut général]
+    C --> C3[quitter après action]
+    
+    D --> D1[continuer si saut]
+    D --> D2[quitter si arrêt]
+    
+    E --> E1[si/sinon si/sinon]
+    E --> E2[Conditions claires]
+    
+    style A fill:#e1f5fe
+    style C fill:#fff3e0
+    style D fill:#e8f5e8
+    style E fill:#fce4ec
+```
 
 ```zia
 // ✅ Bon usage de selon-cas
@@ -498,6 +862,36 @@ pour (var nombre = 1; nombre <= 20; nombre = nombre + 1) {
 ---
 
 ## 🚀 Vers la maîtrise syntaxique
+
+```mermaid
+graph TD
+  A[🧭 Parcours d'apprentissage Zia]
+  
+  A --> B1[🟢 Découverte]
+  B1 --> C1[📘 Premiers mots-clés<br/>Niveau 3 – Débutant]
+  B1 --> C2[🧱 Structure simple<br/>Niveau 4 – Débutant]
+
+  A --> B2[🟡 Apprentissage]
+  B2 --> C3[🔤 Variables et types<br/>Niveau 5 – Apprenti]
+  B2 --> C4[❓ Conditions basiques<br/>Niveau 5 – Apprenti]
+  B2 --> C5[🔁 Boucles simples<br/>Niveau 4 – Apprenti]
+
+  A --> B3[🔵 Maîtrise]
+  B3 --> C6[🧩 Fonctions complexes<br/>Niveau 5 – Développeur]
+  B3 --> C7[🔄 Contrôle de flux<br/>Niveau 5 – Développeur]
+  B3 --> C8[🏛️ Architecture élégante<br/>Niveau 5 – Développeur]
+
+  A --> B4[🟣 Excellence]
+  B4 --> C9[✨ Code idiomatique<br/>Niveau 5 – Expert]
+  B4 --> C10[🧠 Pensée française<br/>Niveau 5 – Expert]
+
+  style A fill:#e1f5fe,stroke:#ffffff,color:#000
+  style B1 fill:#fff3e0
+  style B2 fill:#e8f5e8
+  style B3 fill:#fce4ec
+  style B4 fill:#ede7f6
+
+```
 
 La syntaxe de Zia n'est pas qu'un ensemble de règles techniques : c'est un langage d'expression qui vous permet de traduire vos idées en instructions compréhensibles par la machine, tout en conservant l'élégance et la précision de la programmation française.
 

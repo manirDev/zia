@@ -253,7 +253,8 @@ extra_javascript:
   # Prism.js pour Zia syntax highlighting
   - https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js
  # - assets/javascripts/prism-zia.js
-  
+  - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js  # Mermaid
+  - ./docs/assets/js/mermaid-init.js
   # Scripts personnalisés
   #- assets/javascripts/zia-interactive.js
   #- assets/javascripts/code-runner.js
