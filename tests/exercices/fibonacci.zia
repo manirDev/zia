@@ -4,7 +4,7 @@
 
 afficher "\n-----Test: Fibonacci-----\n";
 
-fon fib(n) {
+fonction fib(n) {
   si (n < 2) {
     retourner n;
   }
@@ -23,7 +23,7 @@ pour (var i = 0; i <= 10; i = i + 1) {
 }
 
 afficher "\nFibo recursion\n";
-fon fib(n) {
+fonction fib(n) {
   si (n < 2) retourner n;
   var num = fib(n - 2) + fib(n - 1);
   retourner num;

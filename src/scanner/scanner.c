@@ -226,7 +226,7 @@ static TokenType identifierType()
             switch (scanner.start[1])
             {
             case 'o':
-                return checkKeyword(2, 1, "n", TOKEN_FUN);
+                return checkKeyword(2, 6, "nction", TOKEN_FUN);
             case 'a':
                 return checkKeyword(2, 2, "ux", TOKEN_FALSE);
             }

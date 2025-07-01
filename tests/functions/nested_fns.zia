@@ -3,9 +3,9 @@
 // @tag function
 
 afficher "-----Example1------\n";
-fon outer() {
+fonction outer() {
   var x = "outside\n";
-  fon inner() {
+  fonction inner() {
     afficher x;
   }
   inner();
@@ -13,10 +13,10 @@ fon outer() {
 outer();
 
 afficher "-----Example2------\n";
-fon outer() {
+fonction outer() {
   var x = "outside\n";
 
-  fon inner() {
+  fonction inner() {
     afficher x;
   }
 
@@ -28,10 +28,10 @@ closure();
 
 afficher "-----Example3------\n";
 
-fon outer() {
+fonction outer() {
   var x = "value\n";
-  fon middle() {
-    fon inner() {
+  fonction middle() {
+    fonction inner() {
       afficher x;
     }
 

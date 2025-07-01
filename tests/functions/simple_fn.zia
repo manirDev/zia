@@ -6,7 +6,7 @@
 afficher "-----Test 1------\n";
 var x = "global\n";
 
-fon outer() {
+fonction outer() {
   var x = "outer";
   afficher x;
 }
@@ -16,9 +16,9 @@ outer();
 // ----- Test 2 : Closure retournée -----
 afficher "\n-----Test 2------\n";
 
-fon makeCompteur() {
+fonction makeCompteur() {
   var count = 0;
-  fon inner(){
+  fonction inner(){
     count = count + 1;
     afficher count, "\n";
   }
@@ -37,7 +37,7 @@ c1();
 // ----- Test 3 : Conditionnelle et closure -----
 afficher "\n-----Test 3------\n";
 
-fon testCond(i) {
+fonction testCond(i) {
   var result = 0;
   si (i < 0) {
     result = -1;
@@ -48,7 +48,7 @@ fon testCond(i) {
   sinon {
     result = 1;
   }
-  fon printResult() {
+  fonction printResult() {
     afficher result, "\n";
   }
   retourner printResult;
@@ -65,7 +65,7 @@ cPos();
 // ----- Test 4 : Boucle POUR avec continuer et quitter -----
 afficher "\n-----Test 4------\n";
 
-fon loopTest() {
+fonction loopTest() {
   var sum = 0;
   pour (var i = 1; i <= 5; i++) {
     si (i == 3) {
@@ -85,7 +85,7 @@ afficher sum;
 // ----- Test 5 : Boucle TANTQUE et closure -----
 afficher "\n-----Test 5------\n";
 
-fon whileTest() {
+fonction whileTest() {
   var total = 0;
   var i = 0;
   tantque (i < 5) {

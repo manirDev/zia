@@ -5,7 +5,7 @@
 afficher "\n-----Test : Parfaits-----\n";
 
 // Check if n is a perfect number
-fon isPerfect(n) {
+fonction isPerfect(n) {
   si (n <= 1) {
     retourner 0;
   }

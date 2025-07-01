@@ -4,7 +4,7 @@
 
 afficher "\n-----Test : Premiers-----\n";
 
-fon isPrime(n) {
+fonction isPrime(n) {
   si (n < 2) {
     retourner 0;
   }

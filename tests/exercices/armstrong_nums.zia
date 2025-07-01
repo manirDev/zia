@@ -4,7 +4,7 @@
 
 afficher "\n-----Test: Armstrong-----\n";
 
-fon isArmstrong(n) {
+fonction isArmstrong(n) {
   var temp = n;
   var sum = 0;
   var digits = 0;
