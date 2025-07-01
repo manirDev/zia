@@ -50,19 +50,18 @@ ZInt32 runCompiler(ZChar* sourceCode, ZBool activateBC, ZBool activateTE, ZBool 
 
     initVM();
     InterpretResult result = interpret(sourceCode);
+    printf("\n");
     free(sourceCode);
     freeVM();
 
-    printf("\n");
-
     if (INTERPRET_COMPILE_ERROR == result)
     {
-        printf("Stopped with: INTERPRET_COMPILE_ERROR!\n");
+        printf("Arrêté avec: INTERPRET_COMPILE_ERROR!\n");
         return COMPILE_TIME_EXIT_CODE;
     }
     if (INTERPRET_RUNTIME_ERROR == result)
     {
-        printf("Stopped with: INTERPRET_RUNTIME_ERROR!\n");
+        printf("Arrêté avec: INTERPRET_RUNTIME_ERROR!\n");
         return RUN_TIME_EXIT_CODE;
     }
     return 0;

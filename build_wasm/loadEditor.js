@@ -17,7 +17,7 @@ const sampleFiles = {
     var message = "Bonjour le monde!";
     afficher message;
 
-    fon addition(a, b) {
+    fonction addition(a, b) {
         retourner a + b;
     }
 
@@ -28,9 +28,9 @@ const sampleFiles = {
 
     var x = "global";
     afficher "Example avec les closures";
-    fon extern() {
+    fonction extern() {
         var x = "extern";
-        fon intern() {
+        fonction intern() {
             afficher x;
         }
         intern();
@@ -40,9 +40,9 @@ const sampleFiles = {
 
     // Exemple avec compteurs
     afficher "Example avec compteurs, en utilisant une fonction";
-    fon createCounter(debut) {
+    fonction createCounter(debut) {
         var compte = debut;
-        fon increment() {
+        fonction increment() {
             compte = compte + 1;
             afficher compte;
         }
@@ -136,7 +136,7 @@ function initMonacoEditor(containerId, initialContent = "") {
       base: "vs-dark",
       inherit: true,
       rules: [
-        { token: "keyword", foreground: "569CD6", fontStyle: "bold" },
+        { token: "keyword", foreground: "569CD6", fonctiontStyle: "bold" },
         { token: "identifier", foreground: "9CDCFE" },
         { token: "string", foreground: "CE9178" },
         { token: "number", foreground: "B5CEA8" },
@@ -160,7 +160,7 @@ function initMonacoEditor(containerId, initialContent = "") {
       // French keywords for zia language
       keywords: [
         "var",
-        "fonction",
+        "fonctionction",
         "si",
         "sinon",
         "pour",
@@ -274,8 +274,8 @@ function initMonacoEditor(containerId, initialContent = "") {
       minimap: { enabled: true },
       scrollBeyondLastLine: false,
       renderLineHighlight: "all",
-      fontFamily: 'Consolas, "Courier New", monospace',
-      fontSize: 14,
+      fonctiontFamily: 'Consolas, "Courier New", monospace',
+      fonctiontSize: 14,
       lineNumbers: "on",
       roundedSelection: false,
       wordWrap: "on",
