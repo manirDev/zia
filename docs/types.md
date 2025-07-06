@@ -11,6 +11,42 @@ Dans l'univers de Zia, chaque donnée est un personnage de votre histoire algori
 
 Zia adopte une philosophie de **typage dynamique intelligent** : vous n'avez pas besoin de déclarer explicitement le type de vos données, mais le langage comprend intuitivement leur nature et adapte son comportement en conséquence. C'est la liberté dans la structure, l'élégance dans la simplicité.
 
+```mermaid
+mindmap
+  root)Variables et Types Zia(
+    Déclaration
+      var unique
+      Simplicité
+      Universalité
+    Types
+      Texte
+        Chaînes
+        Accents français
+        Caractères spéciaux
+      Nombres
+        Entiers
+        Décimaux
+        Opérations
+      Logique
+        vrai/faux
+        Conditions
+        Évaluations
+      Nullité
+        nul
+        Absence
+        Vérification
+    Philosophie
+      Typage dynamique
+      Inférence intelligente
+      Liberté responsable
+      Élégance française
+    Bonnes pratiques
+      Nommage expressif
+      Documentation
+      Commentaires
+      Validation
+```
+
 ---
 
 ## 🔤 Le mot magique : `var`
@@ -28,6 +64,82 @@ var enfants = nul;           // Zia comprend : "C'est une absence de valeur"
 ```
 
 Cette simplicité cache une sophistication remarquable : Zia analyse la valeur que vous assignez et détermine automatiquement le type le plus approprié. C'est ce qu'on appelle l'**inférence de type** - votre programme devient plus intelligent et vous, plus libre.
+
+```mermaid
+graph TD
+    A["`**Déclaration Variable Zia**
+    var nom = valeur`"] --> B{Type de la valeur}
+    
+    B --> C["`**Texte**
+    'Sophie'
+    'Bonjour !'`"]
+    B --> D["`**Entier**
+    42
+    -12
+    2024`"]
+    B --> E["`**Décimal**
+    3.14
+    1.68
+    29.99`"]
+    B --> F["`**Logique**
+    vrai
+    faux`"]
+    B --> G["`**Null**
+    nul`"]
+    
+    C --> H["`**Chaîne de caractères**
+    Manipulation textuelle
+    Concaténation avec +`"]
+    D --> I["`**Nombre entier**
+    Opérations arithmétiques
+    Précision absolue`"]
+    E --> J["`**Nombre décimal**
+    Calculs fractionnaires
+    Précision mathématique`"]
+    F --> K["`**Valeur booléenne**
+    Conditions logiques
+    Évaluations contextuelles`"]
+    G --> L["`**Absence de valeur**
+    État d'attente
+    Vérification de nullité`"]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff3e0
+    style C fill:#e8f5e8
+    style D fill:#fff8e1
+    style E fill:#f3e5f5
+    style F fill:#e0f2f1
+    style G fill:#fce4ec
+```
+
+### **Le processus d'inférence de type**
+
+```mermaid
+flowchart LR
+    A["`**Typage Dynamique Zia**`"] --> B["`**Inférence automatique**
+    Zia analyse la valeur
+    Détermine le type optimal`"]
+    
+    B --> C["`**Exemples d'inférence**`"]
+    C --> D["`var nom = 'Sophie'
+    → Type: Texte`"]
+    C --> E["`var age = 28
+    → Type: Entier`"]
+    C --> F["`var taille = 1.68
+    → Type: Décimal`"]
+    C --> G["`var marie = vrai
+    → Type: Logique`"]
+    
+    B --> H["`**Avantages**`"]
+    H --> I["`Liberté de programmation`"]
+    H --> J["`Code plus lisible`"]
+    H --> K["`Moins de déclarations`"]
+    
+    style A fill:#e3f2fd
+    style B fill:#f1f8e9
+    style C fill:#fff3e0
+    style H fill:#fce4ec
+```
 
 ---
 
@@ -162,60 +274,41 @@ si (donnees != nul) {
 }
 ```
 
----
-<!--
-## 🔄 Conversion et transformation : la fluidité des types
-
-### **Conversions automatiques intelligentes**
-
-Zia excelle dans l'art de la conversion contextuelle :
-
-```zia
-var nombre = 42;
-var texte = "Le nombre magique est : " + nombre;  // Conversion automatique
-afficher texte;  // Affiche : "Le nombre magique est : 42"
-
-var prix = 29.99;
-var message = "Prix : " + prix + "€";             // Conversion fluide
-afficher message;  // Affiche : "Prix : 29.99€"
+```mermaid
+graph LR
+    A["`**Gestion de la Nullité**`"] --> B["`**Déclaration**
+    var donnees = nul`"]
+    
+    B --> C["`**Vérification**`"]
+    C --> D["`si (donnees != nul)`"]
+    C --> E["`si (donnees == nul)`"]
+    
+    D --> F["`**Traitement des données**
+    Données disponibles
+    Opérations possibles`"]
+    
+    E --> G["`**Gestion de l'absence**
+    Aucune donnée
+    Actions alternatives`"]
+    
+    F --> H["`**Sécurité**
+    Évite les erreurs
+    Code robuste`"]
+    G --> H
+    
+    style A fill:#e3f2fd
+    style B fill:#fff3e0
+    style C fill:#f1f8e9
+    style D fill:#e8f5e8
+    style E fill:#ffebee
+    style F fill:#e0f2f1
+    style G fill:#fce4ec
+    style H fill:#f3e5f5
 ```
 
-### **Conversions explicites avancées**
-
-```zia
-var texteNombre = "123";
-var nombre = parseInt(texteNombre);    // Conversion texte vers entier
-var decimal = parseFloat("45.67");     // Conversion texte vers décimal
-
-var boolean = Boolean(1);              // Conversion vers booléen (vrai)
-var chaîne = String(789);              // Conversion vers texte
-```
-
 ---
--->
 
 ## 🎯 Exemples pratiques avancés
-
-<!--### **Gestion d'un profil utilisateur**
-
-```zia
-fonction créerProfil(nom, prénom, âge, email) {
-    var profil = {};
-    
-    profil.nomComplet = prénom + " " + nom;
-    profil.âge = âge;
-    profil.estMajeur = (âge >= 18);
-    profil.email = email;
-    profil.dateInscription = "2024-05-29";
-    profil.estActif = vrai;
-    
-    retourner profil;
-}
-
-var utilisateur = créerProfil("Martin", "Sophie", 25, "sophie.martin@email.fr");
-afficher "Bienvenue " + utilisateur.nomComplet + " !";
-```
--->
 
 ### **Calculatrice financière française**
 
@@ -237,6 +330,34 @@ var taux = 20.0;
 
 var total = calculerTTC(prixHT, taux);
 afficher "\ntotal: ", total, "\n";
+```
+
+```mermaid
+graph TD
+    A["`**Exemple Pratique: Calculatrice TTC**`"] --> B["`**Entrées**`"]
+    B --> C["`var prixHT = 1000.0`"]
+    B --> D["`var tauxTVA = 20.0`"]
+    
+    A --> E["`**Calculs**`"]
+    E --> F["`var montantTVA = prixHT * (tauxTVA / 100)`"]
+    E --> G["`var prixTTC = prixHT + montantTVA`"]
+    
+    A --> H["`**Affichage**`"]
+    H --> I["`Prix HT: 1000.0€`"]
+    H --> J["`TVA (20%): 200.0€`"]
+    H --> K["`Prix TTC: 1200.0€`"]
+    
+    A --> L["`**Types impliqués**`"]
+    L --> M["`Nombres décimaux`"]
+    L --> N["`Opérations arithmétiques`"]
+    L --> O["`Conversions automatiques`"]
+    L --> P["`Affichage formaté`"]
+    
+    style A fill:#e1f5fe
+    style B fill:#fff8e1
+    style E fill:#f3e5f5
+    style H fill:#e8f5e8
+    style L fill:#fff3e0
 ```
 
 ### **Exemple complexe avec quitter et continuer:**
@@ -280,37 +401,7 @@ fonction calculerSommeNombres() {
 calculerSommeNombres();
 ```
 
-<!--## 🔍 Vérification et validation de types
-
-### **Fonctions d'introspection**
-
-Zia propose des outils élégants pour examiner vos données :
-
-```zia
-fonction analyserVariable(variable, nom) {
-    afficher "=== Analyse de " + nom + " ===";
-    afficher "Valeur : " + variable;
-    afficher "Type : " + typeof(variable);
-    afficher "Est null : " + (variable == nul ? "oui" : "non");
-    afficher "Est défini : " + (variable != undefined ? "oui" : "non");
-    afficher "";
-}
-
-var exemples = [
-    42,
-    "Bonjour",
-    vrai,
-    nul,
-    3.14
-];
-
-pour (var i = 0; i < exemples.length; i++) {
-    analyserVariable(exemples[i], "Variable " + (i + 1));
-}
-```
-
 ---
--->
 
 ## 🎨 Bonnes pratiques françaises
 
@@ -377,6 +468,32 @@ donnees = 42;
 
 // Zia s'adapte gracieusement à chaque changement
 afficher "\nDonnees actuelles : ", donnees;
+```
+
+```mermaid
+sequenceDiagram
+    participant P as Programmeur
+    participant Z as Zia
+    participant M as Mémoire
+    
+    P->>Z: var nom = "Sophie"
+    Z->>Z: Analyse de "Sophie"
+    Z->>Z: Inférence: Type Texte
+    Z->>M: Stockage: nom → "Sophie" (Texte)
+    
+    P->>Z: var age = 28
+    Z->>Z: Analyse de 28
+    Z->>Z: Inférence: Type Entier
+    Z->>M: Stockage: age → 28 (Entier)
+    
+    P->>Z: var presentation = nom + " a " + " 24 ans"
+    Z->>M: Récupération: nom → "Sophie"
+    Z->>Z: Concaténation: "Sophie" + " a " + " 24 ans"
+    Z->>M: Stockage: presentation → "Sophie a 24 ans"
+    
+    P->>Z: afficher presentation
+    Z->>M: Récupération: presentation
+    Z-->>P: Affichage: "Sophie a 24 ans"
 ```
 
 ---

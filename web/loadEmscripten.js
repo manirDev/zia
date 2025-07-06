@@ -50,7 +50,7 @@ async function loadziaWasm() {
             },
             printErr: function(text) {
                 const output = document.getElementById('output');
-                //if (output) output.textContent += text + '\n';
+                if (output) output.textContent += text + '\n';
             },
             setStatus: function(text) {
                 updateStatus(text);
