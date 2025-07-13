@@ -46,8 +46,6 @@ ZInt32 runCompiler(ZChar* sourceCode, ZBool activateBC, ZBool activateTE, ZBool 
     }
 #endif
 
-    printf("========== Code En Compilation ==========\n\n");
-
     initVM();
     InterpretResult result = interpret(sourceCode);
     printf("\n");

@@ -90,7 +90,7 @@
         <div class="output-header">
           <h3>Sortie</h3>
           <div class="output-controls">
-            <div class="output-type-selector">
+            <!--<div class="output-type-selector">
               <button class="output-type-option active" data-type="all">
                 Tout
               </button>
@@ -99,8 +99,8 @@
               </button>
               <button class="output-type-option" data-type="execution">
                 Exécution
-              </button>
-            </div>
+              </button>   
+            </div> -->
             <button id="clear-output" class="clear-button">Effacer</button>
           </div>
         </div>
@@ -210,11 +210,11 @@
       </div>
     </footer>
 
-    <script src="./node_modules/monaco-editor/min/vs/loader.js"></script>
-    <script src="./loadEditorConfig.js"></script>
-    <script src="./loadEditor.js"></script>
-    <script src="./loadEmscripten.js"></script>
-    <script src="./script.js"></script>
+    <script src="./node_modules/monaco-editor/min/vs/loader.js" defer></script>
+    <script src="./loadEditorConfig.js" defer></script>
+    <script src="./loadEditor.js" defer></script>
+    <script src="./loadEmscripten.js" defer></script>
+    <script src="./script.js" defer></script>
 
     {{{ SCRIPT }}}
   </body>

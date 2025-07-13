@@ -90,9 +90,6 @@ const sampleFiles = {
  * @param {string} initialContent - Initial editor content
  */
 function initMonacoEditor(containerId, initialContent = "") {
-  require.config({
-    paths: { vs: "../build_wasm/node_modules/monaco-editor/min/vs" },
-  });
 
   require(["vs/editor/editor.main"], function () {
     // Register the zia language

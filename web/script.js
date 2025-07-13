@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM Content Loaded');
     console.log('MonacoEditorLoader:', !!window.MonacoEditorLoader);
@@ -62,9 +61,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up event listeners
     document.getElementById('run-button').addEventListener('click', function() {
         let sourceCode = '';
-        let isBytecode = document.getElementById('bytecode-toggle').checked ==true;
-        let isTrace = document.getElementById('execution-toggle').checked ==true;
-        let isGC = document.getElementById('gc-toggle').checked ==true;
+        let isBytecode = document.getElementById('bytecode-toggle').checked == true;
+        let isTrace = document.getElementById('execution-toggle').checked == true;
+        let isGC = document.getElementById('gc-toggle').checked == true;
 
         if (window.MonacoEditorLoader && window.MonacoEditorLoader.getContent) {
             sourceCode = window.MonacoEditorLoader.getContent();
@@ -78,8 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        const showBytecode = document.getElementById('bytecode-toggle').checked;
-        
         try {
             // Show toast notification for execution
             showToast('Exécution en cours...', 'info');
@@ -88,11 +85,11 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('status').textContent = 'Exécution...';
             document.querySelector('.status').classList.add('loading');
             
-            // Clear output
+            // Clear output completely
             const outputElement = document.getElementById('output');
             if (outputElement) {
                 outputElement.textContent = '';
-                outputElement.value = ''
+                outputElement.value = '';
             }
             
             if (window.MonacoEditorLoader && window.MonacoEditorLoader.setOutput) {
@@ -100,50 +97,73 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Run the code
-            let result = 'No interpreter available';
             if (window.ziaInterpreter.interpret) {
-                result = window.ziaInterpreter.interpret(sourceCode, isBytecode, isTrace, isGC);
+                // Run the interpreter
+                window.ziaInterpreter.interpret(sourceCode, isBytecode, isTrace, isGC);
                 
-            }
-            
-            // Display the result
-            if (window.MonacoEditorLoader && window.MonacoEditorLoader.formatOutput) {
-                window.MonacoEditorLoader.formatOutput(result);
+                // Set a timer to check completion and update UI
+                setTimeout(() => {
+                    const currentStatus = document.getElementById('status').textContent;
+                    
+                    // Update UI based on final status
+                    document.querySelector('.status').classList.remove('loading');
+                    
+                    if (currentStatus.includes('terminée')) {
+                        // Successful execution
+                        showToast('Exécution terminée', 'success');
+                        document.querySelector('.status').classList.remove('error');
+                    } else if (currentStatus.includes('Erreur') || currentStatus.includes('échouée')) {
+                        // Error occurred
+                        document.querySelector('.status').classList.add('error');
+                        showToast('Erreur de compilation', 'error');
+                        
+                        // Reset error status after 3 seconds
+                        setTimeout(() => {
+                            document.querySelector('.status').classList.remove('error');
+                            document.getElementById('status').textContent = 'Prêt';
+                        }, 3000);
+                    } else {
+                        // Default case
+                        document.getElementById('status').textContent = 'Prêt';
+                        showToast('Exécution terminée', 'success');
+                    }
+                }, 500); // Give enough time for the execution to complete
+                
             } else {
-                const outputElement = document.getElementById('output');
-                if (outputElement) {
-                    outputElement.textContent = result;
-                }
+                throw new Error('No interpreter available');
             }
             
-            // Update status
-            document.getElementById('status').textContent = 'Prêt';
-            document.querySelector('.status').classList.remove('loading');
-            
-            // Show success toast
-            showToast('Exécution terminée', 'success');
         } catch (error) {
             console.error('Error running code:', error);
-            const outputElement = document.getElementById('output');
-            if (outputElement) {
-                outputElement.textContent = 'Erreur: ' + error.message;
+            
+            // Only show error if it's not an abort-related error
+            if (!error.message.includes('Aborted') && !error.message.includes('abort()')) {
+                const outputElement = document.getElementById('output');
+                if (outputElement) {
+                    outputElement.textContent += 'Erreur: ' + error.message + '\n';
+                }
+                
+                if (window.MonacoEditorLoader && window.MonacoEditorLoader.setOutput) {
+                    window.MonacoEditorLoader.setOutput('Erreur: ' + error.message);
+                }
+                
+                // Update status and show error toast
+                document.getElementById('status').textContent = 'Erreur';
+                document.querySelector('.status').classList.remove('loading');
+                document.querySelector('.status').classList.add('error');
+                showToast('Erreur: ' + error.message, 'error');
+                
+                // Reset error status after 3 seconds
+                setTimeout(() => {
+                    document.querySelector('.status').classList.remove('error');
+                    document.getElementById('status').textContent = 'Prêt';
+                }, 3000);
+            } else {
+                // For abort errors, just clean up the UI
+                document.querySelector('.status').classList.remove('loading');
+                document.getElementById('status').textContent = 'Exécution terminée';
+                showToast('Exécution terminée', 'success');
             }
-            
-            if (window.MonacoEditorLoader && window.MonacoEditorLoader.setOutput) {
-                window.MonacoEditorLoader.setOutput('Erreur: ' + error.message);
-            }
-            
-            // Update status and show error toast
-            document.getElementById('status').textContent = 'Erreur';
-            document.querySelector('.status').classList.remove('loading');
-            document.querySelector('.status').classList.add('error');
-            showToast('Erreur: ' + error.message, 'error');
-            
-            // Reset error status after 3 seconds
-            setTimeout(() => {
-                document.querySelector('.status').classList.remove('error');
-                document.getElementById('status').textContent = 'Prêt';
-            }, 3000);
         }
     });
     
@@ -165,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const outputElement = document.getElementById('output');
         if (outputElement) {
             outputElement.textContent = '';
-            outputElement.value = ''
+            outputElement.value = '';
         }
         
         if (window.MonacoEditorLoader && window.MonacoEditorLoader.setOutput) {
