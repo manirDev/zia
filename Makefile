@@ -92,6 +92,8 @@ clean:
 	rm -f build_wasm/*.css
 	rm -f build_wasm/*.wasm
 
+all: clean build deps websetup serve
+
 # Help target
 help:
 	@echo "ZIA Interpreter Makefile"

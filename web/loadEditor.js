@@ -2,6 +2,7 @@
  * load_monaco.js
  *
  * This file loads and configures the Monaco editor for the zia interpreter.
+ * Enhanced version with improved French syntax support.
  */
 
 // Global variables
@@ -10,78 +11,200 @@ let outputPane = null;
 let currentFileName = "main.zia";
 let fileTabs = {};
 
-// Sample files
+// Enhanced sample files with official Zia syntax
 const sampleFiles = {
-  "main.zia": `// Programme principal
+  "main.zia": `// Programme principal Zia
 
-    var message = "Bonjour le monde!";
-    afficher message;
+var message = "Bonjour le monde!";
+afficher message;
+afficher "\\n";
 
-    fonction addition(a, b) {
-        retourner a + b;
-    }
+fonction addition(a, b) {
+    retourner a + b;
+}
 
-    var resultat = addition(5, 3);
-    afficher "5 + 3 = ", resultat;`,
+var resultat = addition(5, 3);
+afficher "5 + 3 = ", resultat;
+afficher "\\n";
 
-    "closure.zia": `// Les closures fonctionnent comme en JavaScript
+// Exemple avec conditions
+si (resultat > 7) {
+    afficher "Le résultat est grand!";
+    afficher "\\n";
+} sinon {
+    afficher "Le résultat est petit.";
+    afficher "\\n";
+}`,
 
-    var x = "global";
-    afficher "Example avec les closures";
-    fonction extern() {
-        var x = "extern";
-        fonction intern() {
-            afficher x;
-        }
-        intern();
-    }
+    "controlflow.zia": `// Structures de contrôle en Zia
 
-    extern();    // affiche "extern"
+afficher "=== Conditions ===";
+afficher "\\n";
+var temperature = 25;
 
-    // Exemple avec compteurs
-    afficher "Example avec compteurs, en utilisant une fonction";
-    fonction createCounter(debut) {
-        var compte = debut;
-        fonction increment() {
-            compte = compte + 1;
-            afficher compte;
-        }
-        retourner increment;
-    }
+si (temperature > 30) {
+    afficher "Il fait très chaud!";
+    afficher "\\n";
+} sinon si (temperature > 20) {
+    afficher "Il fait beau!";
+    afficher "\\n";
+} sinon {
+    afficher "Il fait frais!";
+    afficher "\\n";
+}
 
-    var a = createCounter(100);
-    var b = createCounter(200);
+// Boucle tantque
+afficher "=== Boucle tantque ===";
+afficher "\\n";
+var compteur = 0;
+tantque (compteur < 3) {
+    afficher "Compteur: ", compteur;
+    afficher "\\n";
+    compteur = compteur + 1;
+}
 
-    a();    // 101
-    a();    // 102
-    b();    // 201;`,
+// Boucle pour
+afficher "=== Boucle pour ===";
+afficher "\\n";
+pour (var i = 0; i < 3; i = i + 1) {
+    afficher "Pour compteur: ", i;
+    afficher "\\n";
+}
 
-    "controlflow.zia": `// Structures de contrôle
+// Structure selon
+afficher "=== Structure selon ===";
+afficher "\\n";
+var jour = 2;
+selon (jour) {
+    cas 1:
+        afficher "Lundi";
+        afficher "\\n";
+        quitter;
+    cas 2:
+        afficher "Mardi";
+        afficher "\\n";
+        quitter;
+    cas 3:
+        afficher "Mercredi";
+        afficher "\\n";
+        quitter;
+    defaut:
+        afficher "Autre jour";
+        afficher "\\n";
+}`,
 
-    afficher "Example avec condition si";
-    var temp = 22;
+    "fonctions.zia": `// Fonctions avancées en Zia
 
-    si (temp > 30) {
-        afficher "Il fait très chaud!";
-    } sinon si (temp > 20) {
-        afficher "Il fait beau!";
+// Fonction récursive
+fonction factorielle(n) {
+    si (n <= 1) {
+        retourner 1;
     } sinon {
-        afficher "Il fait frais!";
+        retourner n * factorielle(n - 1);
     }
+}
 
-    // Boucle tantque
-    afficher "Example avec boucle tantque";
-    var i = 0;
-    tantque (i < 5) {
-        afficher "Compteur: ", i;
-        i += 1;
+afficher "Factorielle de 5: ", factorielle(5);
+afficher "\\n";
+
+// Fonction avec logique complexe
+fonction calculer(operation, a, b) {
+    si (operation == "addition") {
+        retourner a + b;
+    } sinon si (operation == "soustraction") {
+        retourner a - b;
+    } sinon si (operation == "multiplication") {
+        retourner a * b;
+    } sinon si (operation == "division") {
+        si (b != 0) {
+            retourner a / b;
+        } sinon {
+            afficher "Erreur: division par zéro!";
+            afficher "\\n";
+            retourner nul;
+        }
+    } sinon {
+        afficher "Opération inconnue!";
+        afficher "\\n";
+        retourner nul;
     }
+}
 
-    // Boucle pour
-    afficher "Example avec boucle pour";
-    pour (var j = 0; j < 5; j++) {
-        afficher "Pour compteur: ", j;
-    }`,
+var resultat = calculer("addition", 10, 5);
+afficher "10 + 5 = ", resultat;
+afficher "\\n";
+
+// Utilisation des opérateurs logiques Zia
+fonction verifierAge(age) {
+    si (age >= 18 et age <= 65) {
+        afficher "Adulte en âge de travailler";
+        afficher "\\n";
+    } sinon si (age < 18 ou age > 65) {
+        afficher "Hors tranche d'âge de travail";
+        afficher "\\n";
+    }
+}
+
+verifierAge(25);`,
+
+    "variables.zia": `// Variables et types en Zia
+
+// Variables numériques
+var entier = 42;
+var decimal = 3.14159;
+var negatif = -10;
+
+// Variables chaînes de caractères
+var nom = "Alice";
+var prenom = "Bob";
+var message = "Bonjour " + nom + "!";
+
+// Variables booléennes et valeur nulle
+var estVrai = vrai;
+var estFaux = faux;
+var valeurNulle = nul;
+
+// Affichage des variables
+afficher "=== Variables numériques ===";
+afficher "\\n";
+afficher "Entier: ", entier;
+afficher "\\n";
+afficher "Décimal: ", decimal;
+afficher "\\n";
+afficher "Négatif: ", negatif;
+afficher "\\n";
+
+afficher "=== Variables texte ===";
+afficher "\\n";
+afficher "Nom: ", nom;
+afficher "\\n";
+afficher "Prénom: ", prenom;
+afficher "\\n";
+afficher "Message: ", message;
+afficher "\\n";
+
+afficher "=== Variables logiques ===";
+afficher "\\n";
+afficher "Vrai: ", estVrai;
+afficher "\\n";
+afficher "Faux: ", estFaux;
+afficher "\\n";
+afficher "Nul: ", valeurNulle;
+afficher "\\n";
+
+// Opérations arithmétiques
+afficher "=== Opérations ===";
+afficher "\\n";
+var somme = entier + decimal;
+var produit = entier * 2;
+var division = decimal / 2;
+
+afficher "Somme: ", somme;
+afficher "\\n";
+afficher "Produit: ", produit;
+afficher "\\n";
+afficher "Division: ", division;
+afficher "\\n";`
 };
 
 /**
@@ -129,20 +252,40 @@ function initMonacoEditor(containerId, initialContent = "") {
           end: /^\s*\/\/\s*#?endregion\b/,
         },
       },
+      wordPattern: /(-?\d*\.\d\w*)|([^\`\~\!\@\#\%\^\&\*\(\)\-\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\?\s]+)/g,
+      indentationRules: {
+        increaseIndentPattern: /^.*\{[^}]*$/,
+        decreaseIndentPattern: /^.*\}.*$/,
+      },
     });
 
-    // Set the editor theme
+    // Enhanced theme with better French syntax highlighting
     monaco.editor.defineTheme("ziaTheme", {
       base: "vs-dark",
       inherit: true,
       rules: [
-        { token: "keyword", foreground: "569CD6", fonctiontStyle: "bold" },
+        { token: "keyword.control", foreground: "C586C0", fontStyle: "bold" },
+        { token: "keyword.function", foreground: "DCDCAA", fontStyle: "bold" },
+        { token: "keyword.variable", foreground: "4FC1FF", fontStyle: "bold" },
+        { token: "keyword.literal", foreground: "569CD6", fontStyle: "bold" },
+        { token: "keyword.class", foreground: "4EC9B0", fontStyle: "bold" },
+        { token: "keyword.logical", foreground: "569CD6", fontStyle: "bold" },
         { token: "identifier", foreground: "9CDCFE" },
+        { token: "identifier.function", foreground: "DCDCAA" },
         { token: "string", foreground: "CE9178" },
+        { token: "string.escape", foreground: "D7BA7D" },
         { token: "number", foreground: "B5CEA8" },
-        { token: "comment", foreground: "6A9955" },
+        { token: "number.float", foreground: "B5CEA8" },
+        { token: "number.hex", foreground: "B5CEA8" },
+        { token: "comment", foreground: "6A9955", fontStyle: "italic" },
+        { token: "comment.block", foreground: "6A9955", fontStyle: "italic" },
         { token: "operator", foreground: "D4D4D4" },
+        { token: "operator.logical", foreground: "569CD6" },
+        { token: "operator.comparison", foreground: "569CD6" },
         { token: "delimiter", foreground: "D4D4D4" },
+        { token: "delimiter.parenthesis", foreground: "FFD700" },
+        { token: "delimiter.bracket", foreground: "FFD700" },
+        { token: "delimiter.curly", foreground: "FFD700" },
       ],
       colors: {
         "editor.background": "#1E1E1E",
@@ -150,103 +293,142 @@ function initMonacoEditor(containerId, initialContent = "") {
         "editorCursor.foreground": "#AEAFAD",
         "editor.lineHighlightBackground": "#2D2D30",
         "editorLineNumber.foreground": "#858585",
+        "editor.selectionBackground": "#264F78",
+        "editor.inactiveSelectionBackground": "#3A3D41",
+        "editorIndentGuide.background": "#404040",
+        "editorIndentGuide.activeBackground": "#707070",
+        "editor.wordHighlightBackground": "#575757B8",
+        "editor.wordHighlightStrongBackground": "#004972B8",
       },
     });
 
-    // Define the token provider
+    // Enhanced token provider with better French keyword support
     monaco.languages.setMonarchTokensProvider("zia", {
       defaultToken: "invalid",
 
-      // French keywords for zia language
-      keywords: [
-        "var",
-        "fonctionction",
-        "si",
-        "sinon",
-        "pour",
-        "tantque",
-        "retourne",
-        "affiche",
-        "vrai",
-        "faux",
-        "nul",
-      ],
+      // Official Zia language keywords
+      keywords: {
+        control: [
+          "si", "sinon si", "sinon", "pour", "tantque", "selon", "cas", "defaut", "quitter", "continuer"
+        ],
+        function: [
+          "fonction", "retourner"
+        ],
+        variable: [
+          "var"
+        ],
+        literal: [
+          "vrai", "faux", "nul"
+        ],
+        builtin: [
+          "afficher"
+        ],
+        class: [
+          "classe", "ceci", "super"
+        ],
+        logical: [
+          "et", "ou"
+        ]
+      },
 
+      // Zia operators
       operators: [
-        "=",
-        "+",
-        "-",
-        "*",
-        "/",
-        "==",
-        "!=",
-        ">",
-        "<",
-        ">=",
-        "<=",
-        "!",
+        "=", "+=", "-=", "*=", "/=", "%=",
+        "+", "-", "*", "/", "%", "**",
+        "==", "!=", ">", "<", ">=", "<=",
+        "&&", "||", "!",
+        "&", "|", "^", "~", "<<", ">>",
+        "?", ":", "=>", "->", "..", "..."
       ],
 
+      // Enhanced symbols
       symbols: /[=><!~?:&|+\-*\/\^%]+/,
 
-      escapes:
-        /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
+      // Enhanced escape sequences
+      escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
 
+      // Enhanced tokenizer
       tokenizer: {
         root: [
-          // identifiers and keywords
-          [
-            /[a-zA-Z_$][\w$]*/,
-            {
-              cases: {
-                "@keywords": "keyword",
-                "@default": "identifier",
-              },
-            },
-          ],
+          // Function definitions
+          [/\bfonction\b/, "keyword.function"],
+          [/\bafficher\b/, "keyword.builtin"],
+          
+          // Control flow keywords
+          [/\b(si|sinon\s+si|sinon|pour|tantque|selon|cas|defaut|quitter|continuer)\b/, "keyword.control"],
+          
+          // Variable keywords
+          [/\bvar\b/, "keyword.variable"],
+          
+          // Class keywords
+          [/\b(classe|ceci|super)\b/, "keyword.class"],
+          
+          // Literals
+          [/\b(vrai|faux|nul)\b/, "keyword.literal"],
+          
+          // Return keyword
+          [/\bretourner\b/, "keyword.function"],
+          
+          // Logical operators (French)
+          [/\b(et|ou)\b/, "keyword.logical"],
 
-          // whitespace
+          // Identifiers and function names
+          [/[a-zA-Z_$][\w$]*(?=\s*\()/, "identifier.function"],
+          [/[a-zA-Z_$][\w$]*/, "identifier"],
+
+          // Whitespace
           { include: "@whitespace" },
 
-          // numbers
-          [/\d*\.\d+([eE][\-+]?\d+)?/, "number.float"],
+          // Numbers
+          [/\d*\.\d+([eE][\-+]?\d+)?[fFdD]?/, "number.float"],
           [/0[xX][0-9a-fA-F]+/, "number.hex"],
-          [/\d+/, "number"],
+          [/0[bB][01]+/, "number.binary"],
+          [/0[oO][0-7]+/, "number.octal"],
+          [/\d+[lL]?/, "number"],
 
-          // delimiters and operators
-          [/[{}()\[\]]/, "@brackets"],
-          [/[<>](?!@symbols)/, "@brackets"],
+          // Delimiters and operators
+          [/[{}]/, "delimiter.curly"],
+          [/[[\]]/, "delimiter.bracket"],
+          [/[()]/, "delimiter.parenthesis"],
+          [/[<>](?!@symbols)/, "operator.comparison"],
           [
             /@symbols/,
             {
               cases: {
-                "@operators": "operator",
-                "@default": "",
+                "@operators": {
+                  cases: {
+                    "(==|!=|===|!==|>=|<=|>|<)": "operator.comparison",
+                    "(&&|\\|\\||!)": "operator.logical",
+                    "@default": "operator"
+                  }
+                },
+                "@default": "delimiter"
               },
             },
           ],
 
-          // delimiter: after number because of .\d floats
+          // Punctuation
           [/[;,.]/, "delimiter"],
 
-          // strings
-          [/"([^"\\]|\\.)*$/, "string.invalid"], // non-terminated string
-          [/'([^'\\]|\\.)*$/, "string.invalid"], // non-terminated string
+          // Strings
+          [/"([^"\\]|\\.)*$/, "string.invalid"],
+          [/'([^'\\]|\\.)*$/, "string.invalid"],
           [/"/, "string", "@string_double"],
           [/'/, "string", "@string_single"],
+          [/`/, "string", "@string_backtick"],
         ],
 
         whitespace: [
           [/[ \t\r\n]+/, "white"],
           [/\/\/.*$/, "comment"],
-          [/\/\*/, "comment", "@comment"],
+          [/\/\*/, "comment.block", "@comment"],
         ],
 
         comment: [
-          [/[^\/*]+/, "comment"],
-          [/\/\*/, "comment", "@push"], // nested comment
-          [/\*\//, "comment", "@pop"],
-          [/[\/*]/, "comment"],
+          [/[^\/*]+/, "comment.block"],
+          [/\/\*/, "comment.block", "@push"],
+          [/\*\//, "comment.block", "@pop"],
+          [/[\/*]/, "comment.block"],
         ],
 
         string_double: [
@@ -262,10 +444,17 @@ function initMonacoEditor(containerId, initialContent = "") {
           [/\\./, "string.escape.invalid"],
           [/'/, "string", "@pop"],
         ],
+
+        string_backtick: [
+          [/[^\\`$]+/, "string"],
+          [/@escapes/, "string.escape"],
+          [/\\./, "string.escape.invalid"],
+          [/`/, "string", "@pop"],
+        ],
       },
     });
 
-    // Create the editor
+    // Create the editor with enhanced configuration
     editor = monaco.editor.create(document.getElementById(containerId), {
       value: initialContent || sampleFiles["main.zia"],
       language: "zia",
@@ -274,11 +463,212 @@ function initMonacoEditor(containerId, initialContent = "") {
       minimap: { enabled: true },
       scrollBeyondLastLine: false,
       renderLineHighlight: "all",
-      fonctiontFamily: 'Consolas, "Courier New", monospace',
-      fonctiontSize: 14,
+      fontFamily: 'Consolas, "Cascadia Code", "Fira Code", "JetBrains Mono", Monaco, "Courier New", monospace',
+      fontSize: 14,
+      lineHeight: 20,
+      letterSpacing: 0.5,
       lineNumbers: "on",
       roundedSelection: false,
       wordWrap: "on",
+      cursorBlinking: "blink",
+      cursorSmoothCaretAnimation: "on",
+      renderWhitespace: "selection",
+      showFoldingControls: "always",
+      foldingStrategy: "indentation",
+      matchBrackets: "always",
+      autoIndent: "full",
+      formatOnType: true,
+      formatOnPaste: true,
+      suggestOnTriggerCharacters: true,
+      acceptSuggestionOnEnter: "on",
+      tabCompletion: "on",
+      wordBasedSuggestions: true,
+      parameterHints: {
+        enabled: true,
+        cycle: true
+      },
+      quickSuggestions: {
+        other: true,
+        comments: false,
+        strings: false
+      },
+    });
+
+    // Add enhanced completion provider
+    monaco.languages.registerCompletionItemProvider("zia", {
+      provideCompletionItems: function (model, position) {
+        const word = model.getWordUntilPosition(position);
+        const range = {
+          startLineNumber: position.lineNumber,
+          endLineNumber: position.lineNumber,
+          startColumn: word.startColumn,
+          endColumn: word.endColumn,
+        };
+
+        const suggestions = [
+          // Control flow structures
+          {
+            label: "si",
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            insertText: "si (${1:condition}) {\n\t${2:// code}\n}",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "Structure conditionnelle si",
+            range: range,
+          },
+          {
+            label: "sinon si",
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            insertText: "sinon si (${1:condition}) {\n\t${2:// code}\n}",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "Structure conditionnelle sinon si",
+            range: range,
+          },
+          {
+            label: "sinon",
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            insertText: "sinon {\n\t${1:// code}\n}",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "Structure conditionnelle sinon",
+            range: range,
+          },
+          {
+            label: "pour",
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            insertText: "pour (var ${1:i} = 0; ${1:i} < ${2:length}; ${1:i} = ${1:i} + 1) {\n\t${3:// code}\n}",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "Boucle pour - itération déterminée",
+            range: range,
+          },
+          {
+            label: "tantque",
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            insertText: "tantque (${1:condition}) {\n\t${2:// code}\n}",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "Boucle tantque - répétition conditionnelle",
+            range: range,
+          },
+          {
+            label: "selon",
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            insertText: "selon (${1:variable}) {\n\tcas ${2:valeur1}:\n\t\t${3:// code}\n\t\tquitter;\n\tcas ${4:valeur2}:\n\t\t${5:// code}\n\t\tquitter;\n\tdefaut:\n\t\t${6:// code par défaut}\n}",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "Structure selon - sélection parmi plusieurs cas",
+            range: range,
+          },
+          // Function and variable declarations
+          {
+            label: "fonction",
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            insertText: "fonction ${1:nom}(${2:paramètres}) {\n\t${3:// code}\n\tretourner ${4:valeur};\n}",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "Déclaration de fonction - créer un bloc d'actions réutilisable",
+            range: range,
+          },
+          {
+            label: "var",
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            insertText: "var ${1:nom} = ${2:valeur};",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "Déclaration de variable - déclarer l'existence d'une donnée",
+            range: range,
+          },
+          // Class-related
+          {
+            label: "classe",
+            kind: monaco.languages.CompletionItemKind.Class,
+            insertText: "classe ${1:NomClasse} {\n\tfonction constructeur(${2:paramètres}) {\n\t\t${3:// initialisation}\n\t}\n\t\n\tfonction ${4:methode}() {\n\t\t${5:// code de la méthode}\n\t}\n}",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "Déclaration de classe - modèle d'objet",
+            range: range,
+          },
+          // Built-in functions and keywords
+          {
+            label: "afficher",
+            kind: monaco.languages.CompletionItemKind.Function,
+            insertText: "afficher ${1:message};",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "Afficher - révéler, présenter au monde",
+            range: range,
+          },
+          {
+            label: "retourner",
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            insertText: "retourner ${1:valeur};",
+            insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: "Retourner - renvoyer un résultat vers l'appelant",
+            range: range,
+          },
+          // Flow control
+          {
+            label: "quitter",
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            insertText: "quitter;",
+            documentation: "Quitter - sortir d'une boucle ou d'un bloc",
+            range: range,
+          },
+          {
+            label: "continuer",
+            kind: monaco.languages.CompletionItemKind.Keyword,
+            insertText: "continuer;",
+            documentation: "Continuer - passer à l'itération suivante",
+            range: range,
+          },
+          // Literals
+          {
+            label: "vrai",
+            kind: monaco.languages.CompletionItemKind.Constant,
+            insertText: "vrai",
+            documentation: "Valeur de vérité positive",
+            range: range,
+          },
+          {
+            label: "faux",
+            kind: monaco.languages.CompletionItemKind.Constant,
+            insertText: "faux",
+            documentation: "Valeur de vérité négative",
+            range: range,
+          },
+          {
+            label: "nul",
+            kind: monaco.languages.CompletionItemKind.Constant,
+            insertText: "nul",
+            documentation: "Absence de valeur",
+            range: range,
+          },
+          // Logical operators
+          {
+            label: "et",
+            kind: monaco.languages.CompletionItemKind.Operator,
+            insertText: "et",
+            documentation: "Conjonction logique inclusive",
+            range: range,
+          },
+          {
+            label: "ou",
+            kind: monaco.languages.CompletionItemKind.Operator,
+            insertText: "ou",
+            documentation: "Disjonction logique",
+            range: range,
+          },
+          // Class instance references
+          {
+            label: "ceci",
+            kind: monaco.languages.CompletionItemKind.Reference,
+            insertText: "ceci",
+            documentation: "Référence à l'instance courante",
+            range: range,
+          },
+          {
+            label: "super",
+            kind: monaco.languages.CompletionItemKind.Reference,
+            insertText: "super",
+            documentation: "Référence à la classe parente",
+            range: range,
+          },
+        ];
+
+        return { suggestions: suggestions };
+      },
     });
 
     // Set up file tabs
@@ -356,20 +746,20 @@ function switchToFile(fileName) {
  */
 function createNewFile() {
   const fileName = prompt(
-    "Enter file name (must end with .zia):",
-    "new_file.zia"
+    "Entrez le nom du fichier (doit se terminer par .zia):",
+    "nouveau_fichier.zia"
   );
   if (!fileName) return;
 
   // Validate filename
   if (!fileName.endsWith(".zia")) {
-    alert("File name must end with .zia");
+    alert("Le nom du fichier doit se terminer par .zia");
     return;
   }
 
   // Check for duplicates
   if (fileTabs[fileName]) {
-    alert("A file with this name already exists");
+    alert("Un fichier avec ce nom existe déjà");
     return;
   }
 
@@ -422,7 +812,7 @@ function formatOutput(jsonString) {
 
     if (Array.isArray(tokens)) {
       tokens.forEach((token) => {
-        formattedOutput += `Line ${token.line}: [${token.type}] "${token.lexeme}"\n`;
+        formattedOutput += `Ligne ${token.line}: [${token.type}] "${token.lexeme}"\n`;
       });
     } else {
       formattedOutput = JSON.stringify(tokens, null, 2);
