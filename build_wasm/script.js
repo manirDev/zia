@@ -1,3 +1,9 @@
+/**
+ * script.js
+ * 
+ * This file contains JS related to the Interpreter UI and Execute logic
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM Content Loaded');
     console.log('MonacoEditorLoader:', !!window.MonacoEditorLoader);

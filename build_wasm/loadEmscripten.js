@@ -1,9 +1,9 @@
 /**
- * load_emscripten.js
+ * loadEmscripten.js
  * 
  * This file loads and initializes the WebAssembly module compiled with Emscripten.
- * Enhanced version with proper error handling to prevent abort() crashes.
- * MINIMAL FIX: Added input prompt prevention to existing working code.
+ * With proper error handling to prevent abort() crashes.
+ * Input prompt prevention to existing working code.
  */
 
 // Global variables to store the module and exported functions

@@ -1,5 +1,5 @@
 /**
- * load_monaco_config.js
+ * loadEditorConfig.js
  * 
  * This file contains configuration for the Monaco editor.
  */
