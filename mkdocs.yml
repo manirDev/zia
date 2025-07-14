@@ -309,24 +309,6 @@ extra:
             <a href="https://github.com/manirDev/zia/issues/new" target="_blank" rel="noopener">
             signalant un problème</a>.
   
-  # Consentement RGPD avancé
-  consent:
-    title: "Consentement aux cookies"
-    description: >-
-      Nous utilisons des cookies pour reconnaître vos visites répétées et vos préférences,
-      ainsi que pour mesurer l'efficacité de notre documentation et déterminer si les utilisateurs
-      trouvent ce qu'ils recherchent. Avec votre consentement, vous nous aidez à améliorer
-      notre documentation et l'expérience utilisateur.
-    actions:
-      - accept
-      - reject
-      - manage
-    cookies:
-      analytics:
-        name: "Google Analytics"
-        checked: false
-      github: "GitHub"
-
 # Structure de navigation avancée - Style Livre Interactif
 nav:
   - "🏠 Accueil": 
