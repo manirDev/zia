@@ -436,7 +436,7 @@ strict: false  # À activer quand tous les fichiers seront créés
 #   - hooks/auto_navigation.py
 
 # Configuration de build
-site_dir: "site"
+site_dir: "zia_docs"
 docs_dir: "docs"
 
 # Exclusions
