@@ -1,8 +1,8 @@
 /**
- * load_monaco.js
+ * loadEditor.js
  *
  * This file loads and configures the Monaco editor for the zia interpreter.
- * Enhanced version with improved French syntax support.
+ * With improved French syntax support.
  */
 
 // Global variables

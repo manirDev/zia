@@ -1,8 +1,9 @@
 /**
- * load_emscripten.js
+ * loadEmscripten.js
  * 
  * This file loads and initializes the WebAssembly module compiled with Emscripten.
- * Enhanced version with proper error handling to prevent abort() crashes.
+ * With proper error handling to prevent abort() crashes.
+ * Input prompt prevention to existing working code.
  */
 
 // Global variables to store the module and exported functions
@@ -13,6 +14,17 @@ let programOutput = '';
 
 // Status update callback
 let onStatusChange = null;
+
+// OVERRIDE window.prompt IMMEDIATELY to prevent input dialogs
+const originalPrompt = window.prompt;
+window.prompt = function(message) {
+    console.log('window.prompt intercepted:', message);
+    if (message && (message.includes('Input') || message === 'Input: ')) {
+        console.log('Prevented input prompt, returning null');
+        return null;
+    }
+    return originalPrompt.apply(window, arguments);
+};
 
 /**
  * Set the status change callback
@@ -48,17 +60,27 @@ async function loadziaWasm() {
             postRun: [],
 
             print: function(text) {
-                const output = document.getElementById('output');
-                if (output) {
-                    // Store the output for later analysis
-                    programOutput += text + '\n';
-                    output.textContent += text + '\n';
+                // FILTER INPUT PROMPTS
+                if (text && 
+                    !text.includes('Input:') && 
+                    !text.includes('Input prompt') &&
+                    text.trim() !== '') {
+                    
+                    const output = document.getElementById('output');
+                    if (output) {
+                        // Store the output for later analysis
+                        programOutput += text + '\n';
+                        output.textContent += text + '\n';
+                    }
+                } else if (text && (text.includes('Input:') || text.includes('Input prompt'))) {
+                    console.log('Filtered out input prompt:', text);
                 }
             },
             
             printErr: function(text) {
-                // Only show actual compilation errors, not abort messages
-                if (!text.includes('Aborted') && !text.includes('abort()')) {
+                // Only show actual compilation errors, not abort messages OR INPUT PROMPTS
+                if (!text.includes('Aborted') && !text.includes('abort()') &&
+                    !text.includes('Input:') && !text.includes('Input prompt')) {
                     const output = document.getElementById('output');
                     if (output) output.textContent += 'Error: ' + text + '\n';
                     console.error('Module Error:', text);
@@ -69,8 +91,16 @@ async function loadziaWasm() {
                 updateStatus(text);
             },
             
+            // ADD STDIN OVERRIDE
+            stdin: function() {
+                console.log('stdin called, returning null to prevent prompt');
+                return null;
+            },
+            
             // Handle abort() calls gracefully - completely suppress for successful runs
             onAbort: function(what) {
+                console.log('onAbort called with:', what);
+                
                 // If we're currently executing a program, check if it produced output
                 if (programExecuting) {
                     // If there's output and no explicit error messages, this is likely normal termination
@@ -87,16 +117,22 @@ async function loadziaWasm() {
                         programExecuting = false;
                         return false;
                     }
-                }
-                
-                // This might be an actual error
-                console.error('WebAssembly module aborted:', what);
-                updateStatus('Erreur de compilation');
-                
-                const output = document.getElementById('output');
-                if (output && !programOutput.includes('===')) {
-                    output.textContent += '\n=== Erreur de compilation ===\n';
-                    output.textContent += 'Le code contient des erreurs qui empêchent la compilation.\n';
+                    
+                    // Only show compilation error if we were actually executing and there are real errors
+                    if (hasErrorMessages) {
+                        console.error('WebAssembly module aborted during execution:', what);
+                        updateStatus('Erreur de compilation');
+                        
+                        const output = document.getElementById('output');
+                        if (output && !programOutput.includes('===')) {
+                            output.textContent += '\n=== Erreur de compilation ===\n';
+                            output.textContent += 'Le code contient des erreurs qui empêchent la compilation.\n';
+                        }
+                    }
+                } else {
+                    // Not currently executing a program - this might be module initialization
+                    // Don't show error messages during module loading/initialization
+                    console.log('Module abort during initialization (ignoring):', what);
                 }
                 
                 programExecuting = false;
@@ -124,6 +160,19 @@ async function loadziaWasm() {
                     updateStatus('Chargement... (' + (this.totalDependencies - left) + '/' + this.totalDependencies + ')');
                 } else {
                     updateStatus('Tous les téléchargements terminés');
+                }
+            },
+            
+            // ADD RUNTIME INITIALIZATION TO OVERRIDE FS
+            onRuntimeInitialized: function() {
+                console.log('Runtime initialized, overriding FS stdin');
+                if (typeof FS !== 'undefined' && FS.init) {
+                    var stdin_input = function() { 
+                        console.log('FS stdin called, returning null');
+                        return null; 
+                    };
+                    FS.init(stdin_input, null, null);
+                    console.log('FS.init overridden successfully');
                 }
             },
             
