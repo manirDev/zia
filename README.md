@@ -84,9 +84,9 @@ make web       # Build WebAssembly version
 ## 📚 Documentation
 
 - **[📖 Complete Documentation](https://manirdev.github.io/zia/zia_docs/)** - Comprehensive guide and tutorials (in French)
-- **[🚀 Installation Guide](https://manirdev.github.io/zia/zia_docs/installation/)** - Detailed setup instructions
-- **[📝 Language Syntax](https://manirdev.github.io/zia/zia_docs/syntax/)** - Language reference
-- **[🎓 Getting Started](https://manirdev.github.io/zia/zia_docs/first-step/)** - Your first program
+- **[🚀 Installation Guide](https://manirdev.github.io/zia/zia_docs/installation.html)** - Detailed setup instructions
+- **[📝 Language Syntax](https://manirdev.github.io/zia/zia_docs/syntax.html)** - Language reference
+- **[🎓 Getting Started](https://manirdev.github.io/zia/zia_docs/first-step.html)** - Your first program
 
 ## 🎯 Who is Zia For?
 
