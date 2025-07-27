@@ -18,31 +18,6 @@
 ## ✨ Key Features
 
 - **🇫🇷 French Syntax**: Uses `si`/`sinon` instead of `if`/`else`, `tantque` instead of `while`, making it intuitive for French speakers
-    | **Mot-clé Zia** | **Rôle et nuance** | **Équivalent technique** |
-|-----------------|-------------------|-------------------------|
-| `afficher` | *Révéler, présenter au monde* | print/printf |
-| `var` | *Déclarer l'existence d'une donnée* | var/let |
-| `fonction` | *Créer un bloc d'actions réutilisable* | function |
-| `retourner` | *Renvoyer un résultat vers l'appelant* | return |
-| `si` | *Introduire une condition* | if |
-| `sinon si` | *Condition alternative* | else if |
-| `sinon` | *Action alternative* | else |
-| `pour` | *Itération déterminée* | for |
-| `tantque` | *Répétition conditionnelle* | while |
-| `selon` | *Sélection parmi plusieurs cas* | switch |
-| `cas` | *Option spécifique dans une sélection* | case |
-| `defaut` | *Cas par défaut dans une sélection* | default |
-| `quitter` | *Sortir d'une boucle ou d'un bloc* | break |
-| `continuer` | *Passer à l'itération suivante* | continue |
-| `et` | *Conjonction logique inclusive* | and/&& |
-| `ou` | *Disjonction logique* | or/\|\| |
-| `vrai` | *Valeur de vérité positive* | true |
-| `faux` | *Valeur de vérité négative* | false |
-| `nul` | *Absence de valeur* | null |
-| `classe` | *Modèle d'objet* | class |
-| `ceci` | *Référence à l'instance courante* | this |
-| `super` | *Référence à la classe parente* | super |
-
 - **🎯 Simple and Intuitive**: Designed for beginners and experienced developers alike with straightforward syntax
 - **🚀 Modern Performance**: Optimized virtual machine with automatic memory management
 
