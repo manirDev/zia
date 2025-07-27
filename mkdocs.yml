@@ -313,8 +313,6 @@ extra:
 nav:
   - "🏠 Accueil": 
     - "index.md"
-    - "Nouveautés": "changelog.md"
-    - "Feuille de route": "roadmap.md"
   
   - "📚 Partie I • Découverte":
     - "Chapitre 1 • Introduction": 
@@ -351,7 +349,6 @@ nav:
       - "Gestion des erreurs": "control-flow/erreurs.md"
   
   - "💻 Partie III • Développement":
-    - "développement/index.md"
     - "Chapitre 8 • Fonctions": 
       - "functions.md"
       - "Définition de fonctions": "functions/definition.md"
@@ -371,41 +368,29 @@ nav:
       - "Gestionnaire de paquets": "modules/paquets.md"
   
   - "🚀 Partie IV • Projets":
-    - "projets/index.md"
     - "Chapitre 11 • Projets débutants": 
-      - "projects.md"
-      - "Calculatrice": "projects/calculatrice.md"
-      - "Jeu de devinettes": "projects/devinettes.md"
-      - "Gestionnaire de tâches": "projects/taches.md"
-    - "Chapitre 12 • Projets intermédiaires":
-      - "projects/intermediaires.md"
-      - "API REST": "projects/api-rest.md"
-      - "Interface graphique": "projects/gui.md"
-      - "Base de données": "projects/database.md"
-    - "Chapitre 13 • Projets avancés":
-      - "projects/avances.md"
-      - "Compilateur Zia": "projects/compilateur.md"
-      - "Framework web": "projects/framework.md"
-      - "Intelligence artificielle": "projects/ia.md"
+      - "projects_beginner.md"
+      - "Calculatrice": "calculatrice.md"
+      - "Gestionnaire de Tables": "tables.md"
+      - "Jeu de devinettes": "devinettes.md"
   
-  - "📖 Annexes":
-    - "annexes/index.md"
-    - "Référence du langage": 
-      - "reference.md"
-      - "Mots-clés": "reference/mots-cles.md"
-      - "Fonctions intégrées": "reference/fonctions.md"
-      - "Bibliothèque standard": "reference/bibliotheque.md"
-    - "Glossaire": "glossaire.md"
-    - "FAQ": "faq.md"
-    - "Ressources":
-      - "Tutoriels externes": "ressources/tutoriels.md"
-      - "Articles de blog": "ressources/articles.md"
-      - "Vidéos": "ressources/videos.md"
-    - "Contribuer": 
-      - "contribuer.md"
-      - "Guide de contribution": "contribuer/guide.md"
-      - "Standards de code": "contribuer/standards.md"
-      - "Tests": "contribuer/tests.md"
+  #- "📖 Annexes":
+  #  - "Référence du langage": 
+  #    - "reference.md"
+  #    - "Mots-clés": "reference/mots-cles.md"
+  #    - "Fonctions intégrées": "reference/fonctions.md"
+  #    - "Bibliothèque standard": "reference/bibliotheque.md"
+  #  - "Glossaire": "glossaire.md"
+  #  - "FAQ": "faq.md"
+  #  - "Ressources":
+  #    - "Tutoriels externes": "ressources/tutoriels.md"
+  #    - "Articles de blog": "ressources/articles.md"
+  #    - "Vidéos": "ressources/videos.md"
+  #  - "Contribuer": 
+  #    - "contribuer.md"
+  #    - "Guide de contribution": "contribuer/guide.md"
+  #    - "Standards de code": "contribuer/standards.md"
+  #    - "Tests": "contribuer/tests.md"
 
 # Configuration avancée
 use_directory_urls: false
