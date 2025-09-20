@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Zia Junior - Programmation Visuelle</title>
+    <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body data-theme="dark">
+    <div class="app-container">
+      <!-- Header -->
+      <header class="app-header">
+        <div class="header-left">
+          <div class="logo">
+            <div class="logo-icon">Z</div>
+            <span class="logo-text">zia Junior</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <label class="toggle">
+            <input type="checkbox" id="darkMode" checked />
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">Mode Sombre</span>
+          </label>
+          <label class="toggle">
+            <input type="checkbox" id="showCode" />
+            <span class="toggle-slider"></span>
+            <span class="toggle-label">Afficher Code</span>
+          </label>
+          <button class="execute-btn" onclick="executeCode()">
+            <span>▶</span>
+            Exécuter
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Left Panel - Blockly -->
+        <div class="left-panel">
+          <div class="panel-header">
+            <h3>🎨 Espace de Travail</h3>
+            <div class="panel-actions">
+              <button
+                class="btn-small"
+                onclick="clearWorkspace()"
+                title="Effacer tout"
+              >
+                🗑️
+              </button>
+              <button
+                class="btn-small"
+                onclick="saveProject()"
+                title="Sauvegarder"
+              >
+                💾
+              </button>
+              <button class="btn-small" onclick="loadProject()" title="Charger">
+                📁
+              </button>
+            </div>
+          </div>
+          <div id="blocklyDiv"></div>
+        </div>
+
+        <!-- Right Panel - Output Console -->
+        <div class="right-panel">
+          <div class="console-header">
+            <div class="console-title">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M9 12l2 2 4-4"></path>
+                <path
+                  d="M21 12c.552 0 1-.448 1-1V5c0-.552-.448-1-1-1H3c-.552 0-1 .448-1 1v6c0 .552.448 1 1 1h18z"
+                ></path>
+                <path
+                  d="M21 19c.552 0 1-.448 1-1v-2c0-.552-.448-1-1-1H3c-.552 0-1 .448-1 1v2c0 .552.448 1 1 1h18z"
+                ></path>
+              </svg>
+              <span>Sortie</span>
+            </div>
+            <div class="console-actions">
+              <button
+                class="btn-small"
+                onclick="clearOutput()"
+                title="Effacer la sortie"
+              >
+                Effacer
+              </button>
+              <button
+                class="btn-small"
+                onclick="copyOutput()"
+                title="Copier la sortie"
+              >
+                📋
+              </button>
+            </div>
+          </div>
+          <div class="console-content">
+            <div id="output" class="output-area"></div>
+          </div>
+
+          <!-- Code Preview Panel -->
+          <div class="code-preview" id="codePreview" style="display: none">
+            <div class="code-header">
+              <div class="code-title">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="16,18 22,12 16,6"></polyline>
+                  <polyline points="8,6 2,12 8,18"></polyline>
+                </svg>
+                <span>Code Zia Généré</span>
+              </div>
+              <button
+                class="btn-small"
+                onclick="copyCode()"
+                title="Copier le code"
+              >
+                📋
+              </button>
+            </div>
+            <div class="code-content">
+              <pre id="generatedCode" class="code-area"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <div class="status-left">
+          <span class="status-item">
+            <span class="status-dot ready"></span>
+            Prêt
+          </span>
+          <span class="status-item" id="blockCount">0 blocs</span>
+        </div>
+        <div class="status-right">
+          <span class="status-item">zia Interpreter © 2025</span>
+          <span class="status-item">
+            <a href="#" class="status-link">Code source sur GitHub</a>
+          </span>
+          <span class="status-item">
+            <a href="#" class="status-link">Documentation</a>
+          </span>
+          <span class="status-item">
+            <a href="#" class="status-link">Exemples</a>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <xml id="toolbox" style="display: none">
+      <category name="🎯 Actions" colour="#e74c3c">
+        <block type="afficher_text"></block>
+        <block type="demander_text"></block>
+        <block type="attendre"></block>
+        <block type="commentaire"></block>
+      </category>
+
+      <category name="🔄 Contrôle" colour="#3498db">
+        <block type="controls_pour">
+          <value name="FROM">
+            <shadow type="math_number">
+              <field name="NUM">1</field>
+            </shadow>
+          </value>
+          <value name="TO">
+            <shadow type="math_number">
+              <field name="NUM">10</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="controls_tantque"></block>
+        <block type="controls_si"></block>
+        <block type="controls_selon"></block>
+        <block type="controls_quitter"></block>
+        <block type="controls_continuer"></block>
+      </category>
+
+      <category name="⚙️ Fonctions" colour="#8b5cf6">
+        <block type="fonction_definition"></block>
+        <block type="fonction_call"></block>
+        <block type="retourner"></block>
+      </category>
+
+      <category name="📋 Listes" colour="#06b6d4">
+        <block type="liste_create"></block>
+        <block type="liste_get"></block>
+        <block type="liste_set"></block>
+      </category>
+
+      <category name="🧠 Logique" colour="#5ba55b">
+        <block type="logic_boolean"></block>
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+      </category>
+
+      <category name="📝 Texte" colour="#2ecc71">
+        <block type="text"></block>
+        <block type="text_join">
+          <mutation items="2"></mutation>
+        </block>
+        <block type="texte_longueur"></block>
+        <block type="texte_sous_chaine"></block>
+      </category>
+
+      <category name="🔢 Nombres" colour="#f39c12">
+        <block type="math_number"></block>
+        <block type="math_arithmetic">
+          <value name="A">
+            <shadow type="math_number">
+              <field name="NUM">1</field>
+            </shadow>
+          </value>
+          <value name="B">
+            <shadow type="math_number">
+              <field name="NUM">1</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="math_random"></block>
+        <block type="math_round"></block>
+      </category>
+
+      <category name="📦 Variables" colour="#9b59b6" custom="VARIABLE">
+        <block type="var_declaration"></block>
+      </category>
+
+      <category name="⚠️ Erreurs" colour="#ef4444">
+        <block type="essayer_attraper"></block>
+        <block type="lancer_erreur"></block>
+      </category>
+    </xml>
+
+    <!-- Load JavaScript modules in order -->
+    <script src="js/generator.js"></script>
+    <script src="js/blocks.js"></script>
+    <script src="js/mutators.js"></script>
+    <script src="js/code-generators.js"></script>
+    <script src="js/examples.js"></script>
+    <script src="js/interpreter.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
